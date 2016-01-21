@@ -1,0 +1,5 @@
+title: 640x277; start: 0,0
+defender: 496x112; offset from title: +80,+136; start: 0,277; frames: 12; last: 5456,277
+play: 128x64; offset from title: +256,+288; start: 0,389
+shipright: 256x125; start: 0,453
+shipleft: 256x125; start: 512,453
