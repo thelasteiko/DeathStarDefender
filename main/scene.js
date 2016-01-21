@@ -12,7 +12,7 @@ Scene.prototype.addEntity = function (entity) {
 }
 
 Scene.prototype.draw = function() {
-    this.game.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    this.game.ctx.clearRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
     this.game.ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
         this.entities[i].draw(this.game.ctx);
@@ -38,5 +38,7 @@ Scene.prototype.update = function () {
     }
 }
 
-TitleScene.prototype.startInput = function () {}
+Scene.prototype.init = function() {}
+
+Scene.prototype.startInput = function () {}
 
