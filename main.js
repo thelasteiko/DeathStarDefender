@@ -1,0 +1,77 @@
+function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
+    this.spriteSheet = spriteSheet;
+    this.startX = startX;
+    this.startY = startY;
+    this.frameWidth = frameWidth;
+    this.frameDuration = frameDuration;
+    this.frameHeight = frameHeight;
+    this.frames = frames;
+    this.totalTime = frameDuration * frames;
+    this.elapsedTime = 0;
+    this.loop = loop;
+    this.reverse = reverse;
+}
+//x and y are the location in the canvas
+Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
+    var scaleBy = scaleBy || 1; //used to scale image
+    this.elapsedTime += tick;
+    if (this.loop) {
+        if (this.isDone()) {
+            this.elapsedTime = 0;
+        }
+    } else if (this.isDone()) {
+        return;
+    }
+    var index = this.reverse ? this.frames - this.currentFrame() - 1 : this.currentFrame();
+    var vindex = 0;
+    if ((index + 1) * this.frameWidth + this.startX > this.spriteSheet.width) {
+        index -= Math.floor((this.spriteSheet.width - this.startX) / this.frameWidth);
+        vindex++;
+    }
+    while ((index + 1) * this.frameWidth > this.spriteSheet.width) {
+        index -= Math.floor(this.spriteSheet.width / this.frameWidth);
+        vindex++;
+    }
+
+    var locX = x;
+    var locY = y;
+    var offset = vindex === 0 ? this.startX : 0;
+    ctx.drawImage(this.spriteSheet,
+                  index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
+                  this.frameWidth, this.frameHeight,
+                  locX, locY,
+                  this.frameWidth * scaleBy,
+                  this.frameHeight * scaleBy);
+}
+
+Animation.prototype.currentFrame = function () {
+    return Math.floor(this.elapsedTime / this.frameDuration);
+}
+
+Animation.prototype.isDone = function () {
+    return (this.elapsedTime >= this.totalTime);
+}
+
+// the "main" code begins here
+
+var ASSET_MANAGER = new AssetManager();
+
+ASSET_MANAGER.queueDownload("./img/background.png");
+ASSET_MANAGER.queueDownload("./img/title2.png");
+
+ASSET_MANAGER.downloadAll(function () {
+    console.log("Downloading...");
+    var canvas = document.getElementById('gameWorld');
+    var ctx = canvas.getContext('2d');
+
+    var gameEngine = new GameEngine();
+    var bg = new Background(gameEngine);
+
+    gameEngine.addEntity(bg);
+    gameEngine.addEntity(new Title2(gameEngine));
+    gameEngine.addEntity(new Play(gameEngine));
+    gameEngine.addEntity(new Ship(gameEngine));
+    gameEngine.addEntity(new Title1(gameEngine));
+    gameEngine.init(ctx);
+    gameEngine.start();
+});
