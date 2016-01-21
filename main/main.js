@@ -56,8 +56,8 @@ Animation.prototype.isDone = function () {
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("../img/background.png");
-ASSET_MANAGER.queueDownload("../img/title2.png");
+ASSET_MANAGER.queueDownload("./img/background.png");
+ASSET_MANAGER.queueDownload("./img/title2.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");

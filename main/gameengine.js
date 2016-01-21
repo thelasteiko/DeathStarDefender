@@ -48,6 +48,7 @@ GameEngine.prototype.init = function (ctx) {
 GameEngine.prototype.start = function (scene) {
     console.log("starting game");
     this.scene = scene;
+    scene.init();
     var that = this;
     (function gameLoop() {
         that.loop();
@@ -55,8 +56,9 @@ GameEngine.prototype.start = function (scene) {
     })();
 }
 
-GameEngine.prototype.changeScene(scene) {
+GameEngine.prototype.changeScene = function(scene) {
     this.scene = scene;
+    scene.init();
 }
 
 GameEngine.prototype.loop = function () {

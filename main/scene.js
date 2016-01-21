@@ -38,7 +38,8 @@ Scene.prototype.update = function () {
     }
 }
 
-Scene.prototype.init = function() {}
+Scene.prototype.init = function() {
+}
 
 Scene.prototype.startInput = function () {}
 
