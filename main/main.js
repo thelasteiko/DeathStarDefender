@@ -56,8 +56,8 @@ Animation.prototype.isDone = function () {
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./img/background.png");
-ASSET_MANAGER.queueDownload("./img/title2.png");
+ASSET_MANAGER.queueDownload("../img/background.png");
+ASSET_MANAGER.queueDownload("../img/title2.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
@@ -65,13 +65,6 @@ ASSET_MANAGER.downloadAll(function () {
     var ctx = canvas.getContext('2d');
 
     var gameEngine = new GameEngine();
-    var bg = new Background(gameEngine);
-
-    gameEngine.addEntity(bg);
-    gameEngine.addEntity(new Title2(gameEngine));
-    gameEngine.addEntity(new Play(gameEngine));
-    gameEngine.addEntity(new Ship(gameEngine));
-    gameEngine.addEntity(new Title1(gameEngine));
     gameEngine.init(ctx);
-    gameEngine.start();
+    gameEngine.start(new TitleScene(gameEngine));
 });
