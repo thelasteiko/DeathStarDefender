@@ -29,4 +29,6 @@ ExplosionScene.prototype.constructor = ExplosionScene;
 
 ExplosionScene.prototype.init = function() {
     this.addEntity(new Explosion(this));
+    var music = ASSET_MANAGER.getAsset("./main/audio/radioactive.mp3");
+    music.play();
 }

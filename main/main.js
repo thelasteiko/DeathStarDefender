@@ -88,6 +88,7 @@ LayeredAnim.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
+ASSET_MANAGER.queueDownload("./main/audio/radioactive.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
