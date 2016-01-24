@@ -4,7 +4,7 @@ function Explosion(game) {
         0, 0, 96, 96, 0.09, 15, true, false, 3,
         ASSET_MANAGER.getAsset("./main/audio/bomb.mp3"));
     this.radius = 100;
-    Entity.call(this, game, 80, 100);
+    Entity.call(this, game, 400-96, 400-96);
 }
 
 Explosion.prototype = new Entity();
@@ -30,5 +30,6 @@ ExplosionScene.prototype = new Scene();
 ExplosionScene.prototype.constructor = ExplosionScene;
 
 ExplosionScene.prototype.init = function() {
+    this.addEntity(new Background(this));
     this.addEntity(new Explosion(this));
 }

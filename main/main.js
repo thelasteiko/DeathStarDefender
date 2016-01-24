@@ -98,6 +98,8 @@ LayeredAnim.prototype.isDone = function() {
 
 var ASSET_MANAGER = new AssetManager();
 
+ASSET_MANAGER.queueDownload("./main/img/background.png");
+ASSET_MANAGER.queueDownload("./main/img/title2.png");
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
 ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
 
@@ -108,5 +110,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new ExplosionScene(gameEngine));
+    gameEngine.start(new TitleScene(gameEngine));
 });

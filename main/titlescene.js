@@ -194,7 +194,7 @@ TitleScene.prototype.startInput = function () {
     this.game.ctx.canvas.addEventListener("click", function (e) {
         console.log(getXandY(e));
         that.click = getXandY(e);
-        that.game.changeScene(new NewScene(that.game));
+        that.game.changeScene(new ExplosionScene(that.game));
     }, false);
 
     console.log('Input started');
