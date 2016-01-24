@@ -4,6 +4,10 @@ function Scene(gameEngine) {
   this.click = null;
   this.mouse = null;
   this.wheel = null;
+  this.showOutlines = false;
+  this.ctx = null;
+  this.surfaceWidth = null;
+  this.surfaceHeight = null;
 }
 
 Scene.prototype.addEntity = function (entity) {
@@ -38,7 +42,10 @@ Scene.prototype.update = function () {
     }
 }
 
-Scene.prototype.init = function() {
+Scene.prototype.init = function(ctx) {
+    this.ctx = ctx;
+    this.surfaceWidth = this.ctx.canvas.width;
+    this.surfaceHeight = this.ctx.canvas.height;
 }
 
 Scene.prototype.startInput = function () {}
