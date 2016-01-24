@@ -1,4 +1,5 @@
-function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse) {
+function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
+    frameDuration, frames, loop, reverse, audio) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
     this.startY = startY;
@@ -10,10 +11,16 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight, frameDu
     this.elapsedTime = 0;
     this.loop = loop;
     this.reverse = reverse;
+    this.audio = audio;
 }
 //x and y are the location in the canvas
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     var scaleBy = scaleBy || 1; //used to scale image
+    if (this.audio && this.elapsedTime === 0) {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+        this.audio.play();
+    }
     this.elapsedTime += tick;
     if (this.loop) {
         if (this.isDone()) {
@@ -53,7 +60,7 @@ Animation.prototype.isDone = function () {
 }
 
 function LayeredAnim(spriteSheet, startX, startY, frameWidth, frameHeight,
- frameDuration, frames, loop, reverse, rows) {
+ frameDuration, frames, loop, reverse, rows, audio) {
     this.anims = [];
     this.loop = loop;
     this.rows = rows;
@@ -64,16 +71,16 @@ function LayeredAnim(spriteSheet, startX, startY, frameWidth, frameHeight,
       rf = Math.ceil(framesleft/(i+1));
       framesleft = framesleft - rf;
       var animation = new Animation(spriteSheet, startX, startY+(frameHeight*i),
-        frameWidth, frameHeight, frameDuration, rf, false, reverse);
+        frameWidth, frameHeight, frameDuration, rf, false, reverse, audio);
       this.anims.push(animation);
   }
 }
 
 LayeredAnim.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     if(this.loop) {
-        if(this.rl === this.rows-1)
+        if(this.isDone())
             this.rl = 0;
-    } else if(this.rl === this.rows-1) {
+    } else if(this.isDone()) {
         return;
     }
     this.anims[this.rl].drawFrame(tick, ctx, x, y, scaleBy);
@@ -83,12 +90,16 @@ LayeredAnim.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     }
 }
 
+LayeredAnim.prototype.isDone = function() {
+    return this.rl === this.rows-1;
+}
+
 // the "main" code begins here
 
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
-ASSET_MANAGER.queueDownload("./main/audio/radioactive.mp3");
+ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");

@@ -1,6 +1,8 @@
 function Explosion(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse, rows
-    this.explanim = new LayeredAnim(ASSET_MANAGER.getAsset("./main/img/expl.png"), 0, 0, 96, 96, 0.07, 15, true, false, 3);
+    this.explanim = new LayeredAnim(ASSET_MANAGER.getAsset("./main/img/expl.png"),
+        0, 0, 96, 96, 0.09, 15, true, false, 3,
+        ASSET_MANAGER.getAsset("./main/audio/bomb.mp3"));
     this.radius = 100;
     Entity.call(this, game, 80, 100);
 }
@@ -29,6 +31,4 @@ ExplosionScene.prototype.constructor = ExplosionScene;
 
 ExplosionScene.prototype.init = function() {
     this.addEntity(new Explosion(this));
-    var music = ASSET_MANAGER.getAsset("./main/audio/radioactive.mp3");
-    music.play();
 }
