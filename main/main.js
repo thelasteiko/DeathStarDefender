@@ -103,6 +103,11 @@ ASSET_MANAGER.queueDownload("./main/img/title2.png");
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
 ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
 
+// Go specific; delete later
+ASSET_MANAGER.queueDownload("./main/img/960px-Blank_Go_board.png");
+ASSET_MANAGER.queueDownload("./main/img/black.png");
+ASSET_MANAGER.queueDownload("./main/img/white.png");
+
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
     var canvas = document.getElementById('gameWorld');
@@ -110,5 +115,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new TitleScene(gameEngine));
+    gameEngine.start(new LevelScene(gameEngine));
 });
