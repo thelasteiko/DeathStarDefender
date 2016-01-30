@@ -15,6 +15,10 @@ Unit.prototype.attack = function (other) {
     }
 };
 
+Unit.prototype.update = function () {
+    Entity.prototype.update.call(this);
+};
+
 // SUN (may not need this class, just use unit class)
 
 function Sun(game, x, y) {
@@ -46,13 +50,14 @@ Ally.prototype.update = function () {
             this.fireProjectile();
         }
     }
+    Unit.prototype.update.call(this);
 };
 
 Ally.prototype.draw = function (ctx) {
     if (this.attacking) { // attacking
         this.attackAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     } else { // approaching from the right
-        this.approachAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y);
+        this.idleAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
 };
@@ -65,8 +70,8 @@ Ally.prototype.fireProjectile = function () {
 // Luke Ally
 // TODO: figure out why this (and LukeEnemy, which are the only two I've tested) have prototypes that point to themselves.
 function LukeAlly(game, x, y, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
-    Ally.call(this, game, x, y, idleAnim, idleAnim, attackCallback, x, LukeProjectile, 10);
+    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    Ally.call(this, game, x, y, 10, idleAnim, idleAnim, attackCallback, LukeProjectile);
 }
 
 LukeAlly.prototype = new Ally();
@@ -112,7 +117,7 @@ Enemy.prototype.draw = function (ctx) {
 
 // Luke Enemy
 function LukeEnemy(game, x, y) {
-    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
     Enemy.call(this, game, x, y, 10, 10, approachAnim, approachAnim, approachAnim);
 }
 
@@ -145,7 +150,7 @@ Projectile.prototype.draw = function (ctx) {
 
 // Luke Projectile
 function LukeProjectile(game, x, y) {
-    var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
     Projectile.call(this, game, x, y, 10, bulletAnim);
 }
 

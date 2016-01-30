@@ -48,6 +48,7 @@ LevelScene.prototype.constructor = LevelScene;
 LevelScene.prototype.init = function () {
     this.addEntity(new Background(this));
     this.addEntity(new GameBoard(this.game, 19, 19));
+    console.log(new GameBoard(this.game, 19, 19));
 }
 
 LevelScene.prototype.startInput = function () {
@@ -90,6 +91,8 @@ LevelScene.prototype.update = function () {
         this.allies[this.game.click.row][this.game.click.col] = ally;
         this.addEntity(ally); // TODO: make this stop breaking the Scene update cycle
         console.log(this.allies);
+        console.log(ally instanceof LukeAlly);
+        console.log(ally instanceof Entity);
     }
     Scene.prototype.update.call(this);
 }
