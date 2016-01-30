@@ -31,6 +31,7 @@ Scene.prototype.update = function () {
         var entity = this.entities[i];
 
         if (!entity.removeFromWorld) {
+            // TODO: get this to work with unit entities
             entity.update();
         }
     }

@@ -29,9 +29,9 @@ Sun.prototype.constructor = Sun;
 function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile) {
     Unit.call(this, game, x, y, hp, 0);
     this.attacking = false;
-    this.idleAnim = idleAnim;
-    this.attackAnim = attackAnim;
-    this.attackCallback = attackCallback;
+    this.idleAnim = idleAnim; // ally being idle between attacks
+    this.attackAnim = attackAnim; // ally attacking 
+    this.attackCallback = attackCallback; // callback function that allows the calling scene to fire the projectile correctly
     this.projectile = projectile; // projectile object of the right type
 }
 
@@ -63,6 +63,7 @@ Ally.prototype.fireProjectile = function () {
 };
 
 // Luke Ally
+// TODO: figure out why this (and LukeEnemy, which are the only two I've tested) have prototypes that point to themselves.
 function LukeAlly(game, x, y, attackCallback) {
     var idleAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
     Ally.call(this, game, x, y, idleAnim, idleAnim, attackCallback, x, LukeProjectile, 10);
@@ -78,9 +79,9 @@ function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim) {
     this.speed = speed;
     this.waiting = false;
     this.attacking = false;
-    this.approachAnim = approachAnim;
-    this.waitAnim = waitAnim;
-    this.attackAnim = attackAnim;
+    this.approachAnim = approachAnim; // enemy moving from right to left
+    this.waitAnim = waitAnim; // enemy waiting between attacks
+    this.attackAnim = attackAnim; // enemy attacking
 }
 
 Enemy.prototype = new Unit();
@@ -134,7 +135,7 @@ Projectile.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
-// This function currently breaks EVERYTHING
+// This function currently breaks EVERYTHING, probably because "super" is meaningless. Oh well.
 //Projectile.prototype.attack = function (other) {
 //    super.attack(other);
 //    if (this.hp <= 0) {
