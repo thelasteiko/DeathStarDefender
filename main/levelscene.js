@@ -1,77 +1,44 @@
 // GameBoard code below
 
-function GameBoard(game) {
+function GameBoard(game, numRows, numCols) {
     Entity.call(this, game, 20, 20);
-    this.grid = false;
-    this.player = 1;
-    this.board = [];
-    for (var i = 0; i < 19; i++) {
-        this.board.push([]);
-        for (var j = 0; j < 19; j++) {
-            this.board[i].push(0);
-        }
-    }
 }
 
 GameBoard.prototype = new Entity();
 GameBoard.prototype.constructor = GameBoard;
 
-GameBoard.prototype.update = function () {
-    if (this.game.click) {
-        this.board[this.game.click.col][this.game.click.row] = this.player;
-        this.player = this.player === 1 ? 2 : 1;
-    }
-    Entity.prototype.update.call(this);
-}
-
 GameBoard.prototype.draw = function (ctx) {
-
-    // TODO (Julia): Remove player 1 / player 2 code
-
     ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/960px-Blank_Go_board.png"), this.x, this.y, 760, 760);
 
     var size = 39.55;
-    var offset = 0; //3.5 + size/2;
-
-    for (var i = 0; i < 19; i++) {
-        for (var j = 0; j < 19; j++) {
-            //ctx.strokeStyle = "Green";
-            //ctx.strokeRect(i * size + offset, j * size + offset, size, size);
-
-            if (this.board[i][j] === 1) {
-                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), i * size + offset, j * size + offset, 40, 40);
-            }
-            if (this.board[i][j] === 2) {
-                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), i * size + offset, j * size + offset, 40, 40);
-            }
-        }
-    }
-
+    var offset = 0;
     // draw mouse shadow
     if (this.game.mouse) {
         ctx.save();
         ctx.globalAlpha = 0.5;
-        if (this.player === 1) ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
-        else ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
+        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
         ctx.restore();
     }
 }
 
-function LevelScene(gameEngine, numRows) {
+function LevelScene(gameEngine) {
     Scene.call(this, gameEngine);
+    this.numRows = 19;
+    this.numCols = 19;
     this.suns = [];
     this.allies = [];
     this.enemies = [];
     this.projectiles = [];
     // whether Vader is still active in a row
     this.vaderActive = [];
-    for (var i = 0; i < numRows; i++) {
+    for (var i = 0; i < this.numRows; i++) {
         this.suns.push([]);
         this.allies.push([]);
         this.enemies.push([]);
         this.projectiles.push([]);
-        vaderActive.push(true);
+        this.vaderActive.push(true);
     }
+    this.activeAlly = "Luke";
     this.startInput();
 }
 
@@ -80,37 +47,49 @@ LevelScene.prototype.constructor = LevelScene;
 
 LevelScene.prototype.init = function () {
     this.addEntity(new Background(this));
-    this.addEntity(new GameBoard(this.game));
-}
-
-LevelScene.prototype.getRowAndCol = function (x, y) {
-    col = x - this.game.ctx.canvas.getBoundingClientRect().left - 23.5;
-    row = y - this.game.ctx.canvas.getBoundingClientRect().top - 23.5;
-
-    col = Math.floor(x / 39.55);
-    row = Math.floor(y / 39.55);
-
-    // console.log({ row: row, col: col });
-    return { row: row, col: col };
+    this.addEntity(new GameBoard(this.game, 19, 19));
 }
 
 LevelScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
+    var getRowAndCol = function (e) {
+        x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left - 23.5;
+        y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top - 23.5;
+
+        col = Math.floor((x + 39.55/2) / 39.55);
+        row = Math.floor((y + 39.55 / 2) / 39.55);
+
+        // console.log({ row: row, col: col });
+        return { row: row, col: col };
+    }
+
     this.game.ctx.canvas.addEventListener("mousemove", function (e) {
         //console.log(getXandY(e));
-        that.game.mouse = that.getRowAndCol(e.clientX, e.clientY);
+        that.game.mouse = getRowAndCol(e);
     }, false);
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
-        //console.log(getXandY(e));
-        that.game.click = that.getRowAndCol(e.clientX, e.clientY);
+        // console.log(getRowAndCol(e));
+        that.game.click = getRowAndCol(e);
     }, false);
 
     console.log('Input started');
 }
 
-LevelScene.prototype.fireProjectile = function(projectile) {
+LevelScene.prototype.update = function () {
+    var attackCallback = function (projectile) {
+        this.projectiles.push(projectile);
+        this.addEntity(projectile);
+    }
 
+    if (this.game.click) {
+        var ally = new LukeAlly(this.game, this.game.click.col * 39.55, this.game.click.row * 39.55, attackCallback);
+        console.log(ally);
+        this.allies[this.game.click.row][this.game.click.col] = ally;
+        this.addEntity(ally);
+        console.log(this.allies);
+    }
+    Scene.prototype.update.call(this);
 }

@@ -15,7 +15,7 @@ Scene.prototype.addEntity = function (entity) {
     this.entities.push(entity);
 }
 
-Scene.prototype.draw = function() {
+Scene.prototype.draw = function () {
     this.game.ctx.clearRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
     this.game.ctx.save();
     for (var i = 0; i < this.entities.length; i++) {

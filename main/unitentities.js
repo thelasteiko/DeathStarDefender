@@ -1,24 +1,24 @@
 function Unit(game, x, y, hp, ap) {
+    Entity.call(this, game, x, y);
     this.hp = hp; // health points
     this.ap = ap; // attack points
-    Entity.call(this, game, x, y);
 }
 
 Unit.prototype = new Entity();
 Unit.prototype.constructor = Unit;
 
 // Other is another unit
-Unit.prototype.attack = function(other) {
+Unit.prototype.attack = function (other) {
     other.hp -= this.ap;
     if (other.hp <= 0) {
         other.removeFromWorld = true;
     }
-}
+};
 
 // SUN (may not need this class, just use unit class)
 
 function Sun(game, x, y) {
-    Unit.call(game, x, y, 0, 0);
+    Unit.call(this, game, x, y, 0, 0);
 }
 
 Sun.prototype = new Unit();
@@ -26,13 +26,13 @@ Sun.prototype.constructor = Sun;
 
 // ALLIES
 
-function Ally(game, idleAnim, attackAnim, attackCallback, x, y, hp, projectile, projectileAp) {
+function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile) {
+    Unit.call(this, game, x, y, hp, 0);
     this.attacking = false;
     this.idleAnim = idleAnim;
     this.attackAnim = attackAnim;
     this.attackCallback = attackCallback;
     this.projectile = projectile; // projectile object of the right type
-    Unit.call(game, x, y, hp, 0);
 }
 
 Ally.prototype = new Unit();
@@ -45,13 +45,8 @@ Ally.prototype.update = function () {
             this.attacking = false;
             this.fireProjectile();
         }
-    } else { // approaching from the right
-
     }
-
-    // Inhertiting classes must call this on their own
-    // Entity.prototype.update.call(this);
-}
+};
 
 Ally.prototype.draw = function (ctx) {
     if (this.attacking) { // attacking
@@ -60,22 +55,32 @@ Ally.prototype.draw = function (ctx) {
         this.approachAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
-}
+};
 
 Ally.prototype.fireProjectile = function () {
-    var projectile = this.projectile.clone(this.x, this.y); // launches a new projectile from current ally location
+    var projectile = new this.projectile(this.game, this.x, this.y); 
     this.attackCallback(projectile);
+};
+
+// Luke Ally
+function LukeAlly(game, x, y, attackCallback) {
+    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    Ally.call(this, game, x, y, idleAnim, idleAnim, attackCallback, x, LukeProjectile, 10);
 }
+
+LukeAlly.prototype = new Ally();
+LukeAlly.prototype.constructor = LukeAlly;
 
 // ENEMIES
 
-function Enemy(game, approachAnim, waitAnim, attackAnim, x, y, hp, ap) {
+function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim) {
+    Unit.call(this, game, x, y, hp, ap);
+    this.speed = speed;
     this.waiting = false;
     this.attacking = false;
     this.approachAnim = approachAnim;
     this.waitAnim = waitAnim;
     this.attackAnim = attackAnim;
-    Unit.call(game, x, y, hp, ap);
 }
 
 Enemy.prototype = new Unit();
@@ -91,7 +96,7 @@ Enemy.prototype.update = function () {
     }
     // something happens here
     Entity.prototype.update.call(this);
-}
+};
 
 Enemy.prototype.draw = function (ctx) {
     if (this.waiting) { // waiting between attacks
@@ -102,41 +107,48 @@ Enemy.prototype.draw = function (ctx) {
         this.approachAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
+};
+
+// Luke Enemy
+function LukeEnemy(game, x, y) {
+    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    Enemy.call(this, game, x, y, 10, 10, approachAnim, approachAnim, approachAnim);
 }
 
-// Luke
-
-
+LukeEnemy.prototype = new Enemy();
+LukeEnemy.prototype.constructor = LukeEnemy;
 
 // PROJECTILES
 
-function Projectile(game, animation, x, y, ap) {
+function Projectile(game, x, y, ap, speed, animation) {
+    Unit.call(this, game, x, y, 0, ap);
+    this.speed = speed;
     this.animation = animation;
-    Unit.call(game, x, y, 0, ap);
 }
 
 Projectile.prototype = new Unit();
 Projectile.prototype.constructor = Projectile;
 
-// Clones, with the option to set a new location
-Projectile.prototype.clone = function(optX, optY) {
-    var newProjectile = new Projectile(this.game, this.animation, this.x, this.y, this.ap);
-    if (optX && optY) {
-        this.x = optX;
-        this.y = optY;
-    }
-    newProjectile.removeFromWorld = this.removeFromWorld;
-    return newProjectile;
-}
-
 Projectile.prototype.draw = function (ctx) {
     this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
+};
+
+// This function currently breaks EVERYTHING
+//Projectile.prototype.attack = function (other) {
+//    super.attack(other);
+//    if (this.hp <= 0) {
+//        this.removeFromWorld = true;
+//    }
+//};
+
+// Luke Projectile
+function LukeProjectile(game, x, y) {
+    var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./img/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    Projectile.call(this, game, x, y, 10, bulletAnim);
 }
 
-Projectile.prototype.attack = function (other) {
-    super.attack(other);
-    if (this.hp <= 0) {
-        this.removeFromWorld = true;
-    }
-}
+LukeProjectile.prototype = new Projectile();
+LukeProjectile.prototype.constructor = LukeProjectile;
+
+
