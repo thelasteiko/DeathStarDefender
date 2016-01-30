@@ -24,7 +24,7 @@ Background.prototype.draw = function (ctx) {
 
 function Title1(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
-    this.growanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 0, 640, 277, 0.05, 13, false, false);
+    this.growanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 0, 640, 277, 0.05, 13, false, false, false);
     this.radius = 100;
     //calling the constructor of entity
     //put at center of screen with an offset of 64
@@ -58,7 +58,7 @@ Title1.prototype.draw = function (ctx) {
 
 function Title2(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
-    this.swipeanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 277, 496, 112, 0.05, 12, false, false);
+    this.swipeanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 277, 496, 112, 0.05, 12, false, false, false);
     this.radius = 100;
     //calling the constructor of entity
     //put at center of screen with an offset of 64
@@ -91,8 +91,8 @@ Title2.prototype.draw = function (ctx) {
 
 function Ship(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
-    this.flyright = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 453, 256, 125, 0.06, 2, true, false);
-    this.flyleft = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 512, 453, 256, 125, 0.06, 2, true, false);
+    this.flyright = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 453, 256, 125, 0.06, 2, false, true, false);
+    this.flyleft = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 512, 453, 256, 125, 0.06, 2, false, true, false);
     this.radius = 100;
     this.reverse = false;
     //calling the constructor of entity
@@ -138,7 +138,7 @@ Ship.prototype.draw = function (ctx) {
 
 function Play(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
-    this.playanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 389, 128, 64, 0.1, 8, true, false);
+    this.playanimation = new Animation(ASSET_MANAGER.getAsset("./main/img/title2.png"), 0, 389, 128, 64, 0.1, 8, false, true, false);
     this.radius = 100;
     //calling the constructor of entity
     //put at center of screen with an offset of 64

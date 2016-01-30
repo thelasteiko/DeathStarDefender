@@ -1,5 +1,5 @@
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
-    frameDuration, frames, loop, reverse, audio) {
+                   frameDuration, frames, drawOutlines, loop, reverse, audio) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
     this.startY = startY;
@@ -12,6 +12,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.loop = loop;
     this.reverse = reverse;
     this.audio = audio;
+    this.drawOutlines = drawOutlines;
 }
 //x and y are the location in the canvas
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
@@ -44,11 +45,16 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     var locY = y;
     var offset = vindex === 0 ? this.startX : 0;
     ctx.drawImage(this.spriteSheet,
-                  index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
-                  this.frameWidth, this.frameHeight,
-                  locX, locY,
-                  this.frameWidth * scaleBy,
-                  this.frameHeight * scaleBy);
+        index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
+        this.frameWidth, this.frameHeight,
+        locX, locY,
+        this.frameWidth * scaleBy,
+        this.frameHeight * scaleBy);
+
+    if (this.drawOutlines) {
+        ctx.strokeStyle = "Red"
+        ctx.strokeRect(locX, locY, this.frameWidth * scaleBy, this.frameHeight * scaleBy);
+    }
 }
 
 Animation.prototype.currentFrame = function () {
@@ -60,38 +66,35 @@ Animation.prototype.isDone = function () {
 }
 
 function LayeredAnim(spriteSheet, startX, startY, frameWidth, frameHeight,
- frameDuration, frames, loop, reverse, rows, audio) {
+                     frameDuration, frames, loop, reverse, rows, audio) {
     this.anims = [];
     this.loop = loop;
     this.rows = rows;
     this.rl = 0;
     var framesleft = frames;
     var rf = 0;
-  for(var i = 0; i < rows; i++) {
-      rf = Math.ceil(framesleft/(i+1));
-      framesleft = framesleft - rf;
-      var animation = new Animation(spriteSheet, startX, startY+(frameHeight*i),
-        frameWidth, frameHeight, frameDuration, rf, false, reverse, audio);
-      this.anims.push(animation);
-  }
+    for (var i = 0; i < rows; i++) {
+        rf = Math.ceil(framesleft / (i + 1));
+        framesleft = framesleft - rf;
+        var animation = new Animation(spriteSheet, startX, startY + (frameHeight * i),
+            frameWidth, frameHeight, frameDuration, rf, false, false, reverse, audio);
+        this.anims.push(animation);
+    }
 }
 
 LayeredAnim.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    if(this.loop) {
-        if(this.isDone())
-            this.rl = 0;
-    } else if(this.isDone()) {
-        return;
-    }
+    if (this.loop && this.isDone()) this.rl = 0;
+    else if (this.isDone()) return;
+
     this.anims[this.rl].drawFrame(tick, ctx, x, y, scaleBy);
-    if(this.anims[this.rl].isDone()) {
+    if (this.anims[this.rl].isDone()) {
         this.anims[this.rl].elapsedTime = 0;
         this.rl += 1;
     }
 }
 
-LayeredAnim.prototype.isDone = function() {
-    return this.rl === this.rows-1;
+LayeredAnim.prototype.isDone = function () {
+    return this.rl === this.rows - 1;
 }
 
 // the "main" code begins here

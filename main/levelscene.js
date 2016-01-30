@@ -62,7 +62,7 @@ LevelScene.prototype.getRowAndCol = function (x, y) {
     row = Math.floor((y + 39.55 / 2) / 39.55);
 
     // console.log({ row: row, col: col });
-    return { row: row, col: col };
+    return {row: row, col: col};
 }
 
 LevelScene.prototype.startInput = function () {
@@ -76,6 +76,7 @@ LevelScene.prototype.startInput = function () {
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
         // console.log(getRowAndCol(e));
+        console.log({x: e.clientX, y: e.clientY});
         that.game.click = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
@@ -91,10 +92,11 @@ LevelScene.prototype.update = function () {
         that.addEntity(projectile);
     }
 
-    if (this.game.click) {
-        var ally = new LukeAlly(this.game, this.game.click.col * 39.55, this.game.click.row * 39.55, attackCallback);
+    var coord = this.game.click;
+    if (coord && coord.col < this.numCols && coord.row < this.numRows) {
+        var ally = new LukeAlly(this.game, coord.col * 39.55, coord.row * 39.55, attackCallback);
         // console.log(ally);
-        this.allies[this.game.click.row][this.game.click.col] = ally;
+        this.allies[coord.row][coord.col] = ally;
         this.addEntity(ally); // TODO: make this stop breaking the Scene update cycle
     }
     Scene.prototype.update.call(this);

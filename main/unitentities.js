@@ -45,9 +45,9 @@ Ally.prototype.constructor = Ally;
 Ally.prototype.update = function () {
     if (this.attacking) { // attacking
         //if (this.attackAnim.isDone()) { // currently launching projectile at end of attack animation
-            this.attackAnim.elapsedTime = 0;
-            this.attacking = false;
-            this.fireProjectile();
+        this.attackAnim.elapsedTime = 0;
+        this.attacking = false;
+        this.fireProjectile();
         //}
     }
     Unit.prototype.update.call(this);
@@ -63,14 +63,14 @@ Ally.prototype.draw = function (ctx) {
 };
 
 Ally.prototype.fireProjectile = function () {
-    var projectile = new this.projectile(this.game, this.x, this.y); 
+    var projectile = new this.projectile(this.game, this.x, this.y);
     this.attackCallback(projectile);
 };
 
 // Luke Ally
 // TODO: figure out why this (and LukeEnemy, which are the only two I've tested) have prototypes that point to themselves.
 function LukeAlly(game, x, y, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
     Ally.call(this, game, x, y, 10, idleAnim, idleAnim, attackCallback, LukeProjectile);
 }
 
@@ -117,7 +117,7 @@ Enemy.prototype.draw = function (ctx) {
 
 // Luke Enemy
 function LukeEnemy(game, x, y) {
-    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
     Enemy.call(this, game, x, y, 10, 10, -25, approachAnim, approachAnim, approachAnim);
 }
 
@@ -146,20 +146,19 @@ Projectile.prototype.draw = function (ctx) {
 };
 
 // This function currently breaks EVERYTHING, probably because "super" is meaningless. Oh well.
-//Projectile.prototype.attack = function (other) {
-//    super.attack(other);
-//    if (this.hp <= 0) {
-//        this.removeFromWorld = true;
-//    }
-//};
+// I think this works - Grant
+Projectile.prototype.attack = function (other) {
+    Unit.prototype.attack.call(other);
+    if (this.hp <= 0) {
+        this.removeFromWorld = true;
+    }
+};
 
 // Luke Projectile
 function LukeProjectile(game, x, y) {
-    var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
+    var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
     Projectile.call(this, game, x, y, 5, 50, bulletAnim);
 }
 
 LukeProjectile.prototype = new Projectile();
 LukeProjectile.prototype.constructor = LukeProjectile;
-
-
