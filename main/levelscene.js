@@ -25,6 +25,9 @@ GameBoard.prototype.update = function () {
 }
 
 GameBoard.prototype.draw = function (ctx) {
+
+    // TODO (Julia): Remove player 1 / player 2 code
+
     ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/960px-Blank_Go_board.png"), this.x, this.y, 760, 760);
 
     var size = 39.55;
@@ -36,10 +39,10 @@ GameBoard.prototype.draw = function (ctx) {
             //ctx.strokeRect(i * size + offset, j * size + offset, size, size);
 
             if (this.board[i][j] === 1) {
-                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/black.png"), i * size + offset, j * size + offset, 40, 40);
+                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), i * size + offset, j * size + offset, 40, 40);
             }
             if (this.board[i][j] === 2) {
-                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/white.png"), i * size + offset, j * size + offset, 40, 40);
+                ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), i * size + offset, j * size + offset, 40, 40);
             }
         }
     }
@@ -48,8 +51,8 @@ GameBoard.prototype.draw = function (ctx) {
     if (this.game.mouse) {
         ctx.save();
         ctx.globalAlpha = 0.5;
-        if(this.player === 1) ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/black.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
-        else ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/white.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
+        if (this.player === 1) ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
+        else ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
         ctx.restore();
     }
 }

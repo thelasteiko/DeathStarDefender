@@ -104,6 +104,10 @@ Enemy.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 }
 
+// Luke
+
+
+
 // PROJECTILES
 
 function Projectile(game, animation, x, y, ap) {

@@ -108,6 +108,12 @@ ASSET_MANAGER.queueDownload("./main/img/960px-Blank_Go_board.png");
 ASSET_MANAGER.queueDownload("./main/img/black.png");
 ASSET_MANAGER.queueDownload("./main/img/white.png");
 
+// ENEMIES
+// Luke
+ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
+ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
+ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
+
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
     var canvas = document.getElementById('gameWorld');
