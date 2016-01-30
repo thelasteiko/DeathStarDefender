@@ -25,6 +25,8 @@ function LevelScene(gameEngine) {
     Scene.call(this, gameEngine);
     this.numRows = 19;
     this.numCols = 19;
+    this.rowHeight = 39.55;
+    this.colWidth = 39.55;
     this.suns = [];
     this.allies = [];
     this.enemies = [];
@@ -48,51 +50,60 @@ LevelScene.prototype.constructor = LevelScene;
 LevelScene.prototype.init = function () {
     this.addEntity(new Background(this));
     this.addEntity(new GameBoard(this.game, 19, 19));
-    console.log(new GameBoard(this.game, 19, 19));
+    this.sendEnemy(2);
+    this.sendEnemy(4);
+}
+
+LevelScene.prototype.getRowAndCol = function (x, y) {
+    x -= this.game.ctx.canvas.getBoundingClientRect().left - 23.5;
+    y -= this.game.ctx.canvas.getBoundingClientRect().top - 23.5;
+
+    col = Math.floor((x + 39.55 / 2) / 39.55);
+    row = Math.floor((y + 39.55 / 2) / 39.55);
+
+    // console.log({ row: row, col: col });
+    return { row: row, col: col };
 }
 
 LevelScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
-    var getRowAndCol = function (e) {
-        x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left - 23.5;
-        y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top - 23.5;
-
-        col = Math.floor((x + 39.55/2) / 39.55);
-        row = Math.floor((y + 39.55 / 2) / 39.55);
-
-        // console.log({ row: row, col: col });
-        return { row: row, col: col };
-    }
-
     this.game.ctx.canvas.addEventListener("mousemove", function (e) {
         //console.log(getXandY(e));
-        that.game.mouse = getRowAndCol(e);
+        that.game.mouse = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
         // console.log(getRowAndCol(e));
-        that.game.click = getRowAndCol(e);
+        that.game.click = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
     console.log('Input started');
 }
 
 LevelScene.prototype.update = function () {
+    var that = this;
     var attackCallback = function (projectile) {
-        this.projectiles.push(projectile);
-        this.addEntity(projectile);
+        console.log(projectile);
+        row = that.getRowAndCol(projectile.x, projectile.y)["row"];
+        that.projectiles[row].push(projectile);
+        that.addEntity(projectile);
     }
 
     if (this.game.click) {
         var ally = new LukeAlly(this.game, this.game.click.col * 39.55, this.game.click.row * 39.55, attackCallback);
-        console.log(ally);
+        // console.log(ally);
         this.allies[this.game.click.row][this.game.click.col] = ally;
         this.addEntity(ally); // TODO: make this stop breaking the Scene update cycle
-        console.log(this.allies);
-        console.log(ally instanceof LukeAlly);
-        console.log(ally instanceof Entity);
     }
     Scene.prototype.update.call(this);
+}
+
+LevelScene.prototype.sendEnemy = function (row) {
+    var xCoord = (this.numCols - 1) * this.colWidth;
+    var yCoord = row * this.rowHeight;
+    var enemy = new LukeEnemy(this.game, xCoord, yCoord);
+    this.enemies[row].push(enemy);
+    this.addEntity(enemy);
 }

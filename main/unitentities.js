@@ -32,7 +32,7 @@ Sun.prototype.constructor = Sun;
 
 function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile) {
     Unit.call(this, game, x, y, hp, 0);
-    this.attacking = false;
+    this.attacking = true;
     this.idleAnim = idleAnim; // ally being idle between attacks
     this.attackAnim = attackAnim; // ally attacking 
     this.attackCallback = attackCallback; // callback function that allows the calling scene to fire the projectile correctly
@@ -44,11 +44,11 @@ Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
     if (this.attacking) { // attacking
-        if (this.attackAnim.isDone()) { // currently launching projectile at end of attack animation
+        //if (this.attackAnim.isDone()) { // currently launching projectile at end of attack animation
             this.attackAnim.elapsedTime = 0;
             this.attacking = false;
             this.fireProjectile();
-        }
+        //}
     }
     Unit.prototype.update.call(this);
 };
@@ -98,7 +98,7 @@ Enemy.prototype.update = function () {
     } else if (this.attacking) { // attacking
 
     } else { // approaching from the right
-
+        this.x += this.speed * this.game.clockTick;
     }
     // something happens here
     Entity.prototype.update.call(this);
@@ -118,7 +118,7 @@ Enemy.prototype.draw = function (ctx) {
 // Luke Enemy
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
-    Enemy.call(this, game, x, y, 10, 10, approachAnim, approachAnim, approachAnim);
+    Enemy.call(this, game, x, y, 10, 10, -25, approachAnim, approachAnim, approachAnim);
 }
 
 LukeEnemy.prototype = new Enemy();
@@ -134,6 +134,11 @@ function Projectile(game, x, y, ap, speed, animation) {
 
 Projectile.prototype = new Unit();
 Projectile.prototype.constructor = Projectile;
+
+Projectile.prototype.update = function () {
+    this.x += this.speed * this.game.clockTick;
+    Entity.prototype.update.call(this);
+};
 
 Projectile.prototype.draw = function (ctx) {
     this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
@@ -151,7 +156,7 @@ Projectile.prototype.draw = function (ctx) {
 // Luke Projectile
 function LukeProjectile(game, x, y) {
     var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, false);
-    Projectile.call(this, game, x, y, 10, bulletAnim);
+    Projectile.call(this, game, x, y, 5, 50, bulletAnim);
 }
 
 LukeProjectile.prototype = new Projectile();
