@@ -1,13 +1,13 @@
 function Scene(gameEngine) {
-  this.entities = [];
-  this.game = gameEngine;
-  this.click = null;
-  this.mouse = null;
-  this.wheel = null;
-  this.showOutlines = false;
-  this.ctx = null;
-  this.surfaceWidth = null;
-  this.surfaceHeight = null;
+    this.entities = [];
+    this.game = gameEngine;
+    this.click = null;
+    this.mouse = null;
+    this.wheel = null;
+    this.showOutlines = false;
+    this.ctx = null;
+    this.surfaceWidth = null;
+    this.surfaceHeight = null;
 }
 
 Scene.prototype.addEntity = function (entity) {
@@ -15,13 +15,13 @@ Scene.prototype.addEntity = function (entity) {
     this.entities.push(entity);
 }
 
-Scene.prototype.draw = function () {
-    this.game.ctx.clearRect(0, 0, this.game.ctx.canvas.width, this.game.ctx.canvas.height);
-    this.game.ctx.save();
+Scene.prototype.draw = function (ctx) {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
-        this.entities[i].draw(this.game.ctx);
+        this.entities[i].draw(ctx);
     }
-    this.game.ctx.restore();
+    ctx.restore();
 }
 
 Scene.prototype.update = function () {
@@ -43,11 +43,12 @@ Scene.prototype.update = function () {
     }
 }
 
-Scene.prototype.init = function(ctx) {
+Scene.prototype.init = function (ctx) {
     this.ctx = ctx;
     this.surfaceWidth = this.ctx.canvas.width;
     this.surfaceHeight = this.ctx.canvas.height;
 }
 
-Scene.prototype.startInput = function () {}
+Scene.prototype.startInput = function () {
+}
 

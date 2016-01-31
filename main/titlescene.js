@@ -14,11 +14,11 @@ Background.prototype.draw = function (ctx) {
     //I want a picture
     //console.log("Drawing background");
     ctx.drawImage(this.spriteSheet,
-                  0, 0,  // source from sheet
-                  801, 762,
-                  0, 0,
-                  this.game.game.surfaceWidth,
-                  this.game.game.surfaceHeight);
+        0, 0,  // source from sheet
+        801, 762,
+        0, 0,
+        this.game.game.surfaceWidth,
+        this.game.game.surfaceHeight);
     Entity.prototype.draw.call(this);
 }
 
@@ -36,19 +36,19 @@ Title1.prototype.constructor = Title1;
 
 //this is where I would move the x and y if there is anything to move
 Title1.prototype.update = function () {
-    
+
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
 }
 //This is where I would change the animation
 Title1.prototype.draw = function (ctx) {
     if (this.growanimation.isDone()) {
-            ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/title2.png"),
-                  7680, 0,  // source from sheet
-                  640, 277, //size
-                  80, 100, //target
-                  640, 277);
-            this.game.titleflags[0] = true;
+        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/title2.png"),
+            7680, 0,  // source from sheet
+            640, 277, //size
+            80, 100, //target
+            640, 277);
+        this.game.titleflags[0] = true;
     }
     else {
         this.growanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -62,7 +62,7 @@ function Title2(game) {
     this.radius = 100;
     //calling the constructor of entity
     //put at center of screen with an offset of 64
-    Entity.call(this, game, 80+80, 100+136);
+    Entity.call(this, game, 80 + 80, 100 + 136);
 }
 
 Title2.prototype = new Entity();
@@ -70,20 +70,20 @@ Title2.prototype.constructor = Title2;
 
 //this is where I would move the x and y if there is anything to move
 Title2.prototype.update = function () {
-    
+
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
 }
 //This is where I would change the animation
 Title2.prototype.draw = function (ctx) {
     if (this.swipeanimation.isDone()) {
-            ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/title2.png"),
-                  5456, 277,  // source from sheet
-                  496, 112, //size
-                  80+80, 100+136, //target
-                  496, 112);
+        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/title2.png"),
+            5456, 277,  // source from sheet
+            496, 112, //size
+            80 + 80, 100 + 136, //target
+            496, 112);
     }
-    else if(this.game.titleflags[1]){
+    else if (this.game.titleflags[1]) {
         this.swipeanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
@@ -97,7 +97,7 @@ function Ship(game) {
     this.reverse = false;
     //calling the constructor of entity
     //put at center of screen with an offset of 64
-    Entity.call(this, game, -256, 100+132);
+    Entity.call(this, game, -256, 100 + 132);
 }
 
 Ship.prototype = new Entity();
@@ -105,22 +105,22 @@ Ship.prototype.constructor = Ship;
 
 //this is where I would move the x and y if there is anything to move
 Ship.prototype.update = function () {
-    if(!this.reverse){
+    if (!this.reverse) {
         this.x = this.x + 10;
-        if(this.game.titleflags[0]) {
+        if (this.game.titleflags[0]) {
             this.x = this.x + 5;
-            if(this.x >= 80-20)
+            if (this.x >= 80 - 20)
                 this.game.titleflags[1] = true;
-            if(this.x >= this.game.game.surfaceWidth) {
+            if (this.x >= this.game.game.surfaceWidth) {
                 this.reverse = true;
-                this.y = 100+255;
+                this.y = 100 + 255;
             }
         }
     } else {
         this.x = this.x - 5;
-        if(this.x <= 80+187)
+        if (this.x <= 80 + 187)
             this.game.titleflags[2] = true;
-        if(this.x+256 < 0)
+        if (this.x + 256 < 0)
             this.removeFromWorld = true;
     }
     //calls the entity's update function which is not doing anything right now...
@@ -128,9 +128,9 @@ Ship.prototype.update = function () {
 }
 //This is where I would change the animation
 Ship.prototype.draw = function (ctx) {
-    if(!this.reverse)
+    if (!this.reverse)
         this.flyright.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-    else if(this.reverse) {
+    else if (this.reverse) {
         this.flyleft.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
@@ -142,7 +142,7 @@ function Play(game) {
     this.radius = 100;
     //calling the constructor of entity
     //put at center of screen with an offset of 64
-    Entity.call(this, game, 80+256, 100+288);
+    Entity.call(this, game, 80 + 256, 100 + 288);
 }
 
 Play.prototype = new Entity();
@@ -150,13 +150,13 @@ Play.prototype.constructor = Play;
 
 //this is where I would move the x and y if there is anything to move
 Play.prototype.update = function () {
-    
+
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
 }
 //This is where I would change the animation
 Play.prototype.draw = function (ctx) {
-    if(this.game.titleflags[2]){
+    if (this.game.titleflags[2]) {
         this.playanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
@@ -164,16 +164,16 @@ Play.prototype.draw = function (ctx) {
 
 
 function TitleScene(gameEngine) {
-    Scene.call(this,gameEngine);
+    Scene.call(this, gameEngine);
     //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done]
-    this.titleflags = [false,false,false,false];
+    this.titleflags = [false, false, false, false];
     this.startInput();
 }
 
 TitleScene.prototype = new Scene();
 TitleScene.prototype.constructor = TitleScene;
 
-TitleScene.prototype.init = function() {
+TitleScene.prototype.init = function () {
     this.addEntity(new Background(this));
     this.addEntity(new Title2(this));
     this.addEntity(new Play(this));
@@ -188,13 +188,13 @@ TitleScene.prototype.startInput = function () {
     var getXandY = function (e) {
         var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
         var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
-        return { x: x, y: y };
+        return {x: x, y: y};
     }
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
         console.log(getXandY(e));
         that.click = getXandY(e);
-        that.game.changeScene(new ExplosionScene(that.game));
+        that.game.changeScene(new LevelScene(that.game));
     }, false);
 
     console.log('Input started');

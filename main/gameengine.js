@@ -64,7 +64,7 @@ GameEngine.prototype.changeScene = function(scene) {
 GameEngine.prototype.loop = function () {
     this.clockTick = this.timer.tick();
     this.scene.update();
-    this.scene.draw();
+    this.scene.draw(this.ctx);
     this.click = null;
 }
 

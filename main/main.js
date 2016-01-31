@@ -124,5 +124,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new LevelScene(gameEngine));
+    gameEngine.start(new TitleScene(gameEngine));
 });

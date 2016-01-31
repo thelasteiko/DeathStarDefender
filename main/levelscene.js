@@ -9,22 +9,14 @@ GameBoard.prototype.constructor = GameBoard;
 
 GameBoard.prototype.draw = function (ctx) {
     ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/960px-Blank_Go_board.png"), this.x, this.y, 760, 760);
-
-    var size = 39.55;
-    var offset = 0;
-    // draw mouse shadow
-    if (this.game.mouse) {
-        ctx.save();
-        ctx.globalAlpha = 0.5;
-        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), this.game.mouse.col * size + offset, this.game.mouse.row * size + offset, 40, 40);
-        ctx.restore();
-    }
 }
 
 function LevelScene(gameEngine) {
     Scene.call(this, gameEngine);
-    this.numRows = 19;
-    this.numCols = 19;
+    this.numRows = 18;
+    this.numCols = 18;
+    this.cornerOffsetX = 44;
+    this.cornerOffsetY = 44;
     this.rowHeight = 39.55;
     this.colWidth = 39.55;
     this.suns = [];
@@ -55,13 +47,18 @@ LevelScene.prototype.init = function () {
 }
 
 LevelScene.prototype.getRowAndCol = function (x, y) {
-    x -= this.game.ctx.canvas.getBoundingClientRect().left - 23.5;
-    y -= this.game.ctx.canvas.getBoundingClientRect().top - 23.5;
+    //x -= this.game.ctx.canvas.getBoundingClientRect().left;
+    //y -= this.game.ctx.canvas.getBoundingClientRect().top;
 
-    col = Math.floor((x + 39.55 / 2) / 39.55);
-    row = Math.floor((y + 39.55 / 2) / 39.55);
+    var col = Math.floor((x - this.cornerOffsetX) / this.colWidth);
+    var row = Math.floor((y - this.cornerOffsetY) / this.rowHeight);
 
-    // console.log({ row: row, col: col });
+    //col = Math.floor((x + 39.55 / 2) / 39.55);
+    //row = Math.floor((y + 39.55 / 2) / 39.55);
+
+    //console.log({x: x, y: y});
+    //console.log({row: row, col: col});
+
     return {row: row, col: col};
 }
 
@@ -75,8 +72,8 @@ LevelScene.prototype.startInput = function () {
     }, false);
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
-        // console.log(getRowAndCol(e));
         console.log({x: e.clientX, y: e.clientY});
+        console.log(that.getRowAndCol(e.clientX, e.clientY));
         that.game.click = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
@@ -87,14 +84,16 @@ LevelScene.prototype.update = function () {
     var that = this;
     var attackCallback = function (projectile) {
         console.log(projectile);
-        row = that.getRowAndCol(projectile.x, projectile.y)["row"];
+        var row = that.getRowAndCol(projectile.x, projectile.y).row;
         that.projectiles[row].push(projectile);
         that.addEntity(projectile);
     }
 
     var coord = this.game.click;
     if (coord && coord.col < this.numCols && coord.row < this.numRows) {
-        var ally = new LukeAlly(this.game, coord.col * 39.55, coord.row * 39.55, attackCallback);
+        var ally = new LukeAlly(this.game,
+            coord.col * this.colWidth + this.cornerOffsetX,
+            coord.row * this.rowHeight + this.cornerOffsetY, attackCallback);
         // console.log(ally);
         this.allies[coord.row][coord.col] = ally;
         this.addEntity(ally); // TODO: make this stop breaking the Scene update cycle
@@ -102,9 +101,23 @@ LevelScene.prototype.update = function () {
     Scene.prototype.update.call(this);
 }
 
+LevelScene.prototype.draw = function (ctx) {
+    Scene.prototype.draw.call(this, ctx);
+
+    // draw mouse shadow
+    if (this.game.mouse) {
+        ctx.save();
+        ctx.globalAlpha = 0.5;
+        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"),
+            this.game.mouse.col * this.colWidth + this.cornerOffsetX,
+            this.game.mouse.row * this.rowHeight + this.cornerOffsetY, 40, 40);
+        ctx.restore();
+    }
+}
+
 LevelScene.prototype.sendEnemy = function (row) {
-    var xCoord = (this.numCols - 1) * this.colWidth;
-    var yCoord = row * this.rowHeight;
+    var xCoord = (this.numCols - 1) * this.colWidth + 4;
+    var yCoord = row * this.rowHeight + 4;
     var enemy = new LukeEnemy(this.game, xCoord, yCoord);
     this.enemies[row].push(enemy);
     this.addEntity(enemy);
