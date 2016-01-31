@@ -191,11 +191,14 @@ TitleScene.prototype.startInput = function () {
         return {x: x, y: y};
     }
 
-    this.game.ctx.canvas.addEventListener("click", function (e) {
+    var clickListener = function (e) {
         console.log(getXandY(e));
         that.click = getXandY(e);
         that.game.changeScene(new LevelScene(that.game));
-    }, false);
+        that.game.ctx.canvas.removeEventListener("click", clickListener, false);
+    }
+
+    this.game.ctx.canvas.addEventListener("click", clickListener, false);
 
     console.log('Input started');
 }

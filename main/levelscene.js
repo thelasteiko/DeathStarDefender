@@ -94,9 +94,8 @@ LevelScene.prototype.update = function () {
         var ally = new LukeAlly(this.game,
             coord.col * this.colWidth + this.cornerOffsetX,
             coord.row * this.rowHeight + this.cornerOffsetY, attackCallback);
-        // console.log(ally);
         this.allies[coord.row][coord.col] = ally;
-        this.addEntity(ally); // TODO: make this stop breaking the Scene update cycle
+        this.addEntity(ally); 
     }
     Scene.prototype.update.call(this);
 }

@@ -13,6 +13,7 @@ function Scene(gameEngine) {
 Scene.prototype.addEntity = function (entity) {
     console.log('added entity');
     this.entities.push(entity);
+    console.log(this.entities);
 }
 
 Scene.prototype.draw = function (ctx) {
@@ -31,7 +32,6 @@ Scene.prototype.update = function () {
         var entity = this.entities[i];
 
         if (!entity.removeFromWorld) {
-            // TODO: get this to work with unit entities
             entity.update();
         }
     }
