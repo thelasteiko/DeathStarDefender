@@ -13,7 +13,6 @@ function Scene(gameEngine) {
 Scene.prototype.addEntity = function (entity) {
     console.log('added entity');
     this.entities.push(entity);
-    console.log(this.entities);
 }
 
 Scene.prototype.draw = function (ctx) {

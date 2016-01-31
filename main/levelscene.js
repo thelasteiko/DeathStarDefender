@@ -72,8 +72,8 @@ LevelScene.prototype.startInput = function () {
     }, false);
 
     this.game.ctx.canvas.addEventListener("click", function (e) {
-        console.log({x: e.clientX, y: e.clientY});
-        console.log(that.getRowAndCol(e.clientX, e.clientY));
+        // console.log({x: e.clientX, y: e.clientY});
+        // console.log(that.getRowAndCol(e.clientX, e.clientY));
         that.game.click = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
@@ -83,7 +83,7 @@ LevelScene.prototype.startInput = function () {
 LevelScene.prototype.update = function () {
     var that = this;
     var attackCallback = function (projectile) {
-        console.log(projectile);
+        // console.log(projectile);
         var row = that.getRowAndCol(projectile.x, projectile.y).row;
         that.projectiles[row].push(projectile);
         that.addEntity(projectile);
