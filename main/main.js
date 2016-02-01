@@ -103,19 +103,16 @@ var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./main/img/background.png");
 ASSET_MANAGER.queueDownload("./main/img/title2.png");
-ASSET_MANAGER.queueDownload("./main/img/expl.png");
-ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
 
 // Go specific; delete later
-ASSET_MANAGER.queueDownload("./main/img/960px-Blank_Go_board.png");
-ASSET_MANAGER.queueDownload("./main/img/black.png");
-ASSET_MANAGER.queueDownload("./main/img/white.png");
+ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
 
 // ENEMIES
 // Luke
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
@@ -124,5 +121,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new TitleScene(gameEngine));
+    gameEngine.start(new LevelScene(gameEngine));
 });
