@@ -155,14 +155,15 @@ LevelScene.prototype.draw = function (ctx) {
             if (this.suns[i] && this.suns[i][j]) {
                     this.suns[i][j].draw(ctx);
             }
-            if (this.projectiles && this.projectiles[i][j]) {
+            if (this.projectiles[i] && this.projectiles[i][j]) {
                     this.projectiles[i][j].draw(ctx);
             }
         }
     }
     ctx.restore();
     // draw mouse shadow
-    if (this.mouse) {
+    if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
+        && this.mouse.col >= 0 && this.mouse.col < this.numCols) {
         ctx.save();
         ctx.globalAlpha = 0.5;
         //get current image from menu

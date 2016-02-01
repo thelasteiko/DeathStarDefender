@@ -37,30 +37,26 @@ function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile) 
     this.attackAnim = attackAnim; // ally attacking 
     this.attackCallback = attackCallback; // callback function that allows the calling scene to fire the projectile correctly
     this.projectile = projectile; // projectile object of the right type
-    this.hasProjectile = null;
+    this.projectileTime = 5;
 }
 
 Ally.prototype = new Unit();
 Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
-    if (this.hasProjectile && this.hasProjectile.removeFromWorld)
-        this.hasProjectile = null;
-    if (this.attacking && !this.hasProjectile) { // attacking
-        //if (this.attackAnim.isDone()) { // currently launching projectile at end of attack animation
-        this.fireProjectile();
-        //}
-        //console.log(this.hasProjectile);
+    if (this.attacking) {
+        this.projectileTime += this.game.game.clockTick;
+        if (this.projectileTime >= 5) {
+            this.projectileTime = 0;
+            this.fireProjectile();
+        }
     }
     //Unit.prototype.update.call(this);
     var row = this.game.getRowAndCol(this.x, this.y).row;
-    //console.log(row);
-    //console.log(this.game.enemies[row+1].length);
     if(this.game.enemies[row+1].length > 0) {
         this.attacking = true;
     } else {
         this.attacking = false;
-        //console.log(this.attacking);
     }
 }
 
