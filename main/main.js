@@ -1,5 +1,5 @@
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
-                   frameDuration, frames, drawOutlines, loop, reverse, audio) {
+                   frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
     this.startY = startY;
@@ -11,6 +11,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.elapsedTime = 0;
     this.loop = loop;
     this.reverse = reverse;
+    this.loopReverse = loopReverse; // whether the animation should run forwards then backwards
     this.audio = audio;
     this.drawOutlines = drawOutlines;
 }
@@ -30,7 +31,16 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     } else if (this.isDone()) {
         return;
     }
-    var index = this.reverse ? this.frames - this.currentFrame() - 1 : this.currentFrame();
+
+    var index = this.currentFrame();
+
+    if (this.loopReverse) { // unclear if this is compatible with multiple rows of sprites or reversing the sprites
+        if (index >= this.frames/2) {
+            index = this.frames - index; // animation goes forwards, then backwards
+        }
+    }
+
+    index = this.reverse ? this.frames - index : index;
     var vindex = 0;
     if ((index + 1) * this.frameWidth + this.startX > this.spriteSheet.width) {
         index -= Math.floor((this.spriteSheet.width - this.startX) / this.frameWidth);
@@ -116,6 +126,7 @@ ASSET_MANAGER.queueDownload("./main/img/white.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
+ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeIdle.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");

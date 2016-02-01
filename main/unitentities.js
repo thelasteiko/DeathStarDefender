@@ -70,7 +70,8 @@ Ally.prototype.fireProjectile = function () {
 // Luke Ally
 // TODO: figure out why this (and LukeEnemy, which are the only two I've tested) have prototypes that point to themselves.
 function LukeAlly(game, x, y, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
+    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, -10, 64, 76, 0.2, 10, true, true, false, false, true);
+    console.log(idleAnim);
     Ally.call(this, game, x, y, 10, idleAnim, idleAnim, attackCallback, LukeProjectile);
 }
 
