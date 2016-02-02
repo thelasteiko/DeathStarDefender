@@ -75,9 +75,14 @@ LevelScene.prototype.startInput = function () {
             // console.log(projectile);
                 var row = that2.getRowAndCol(projectile.x, projectile.y).row;
                 //that2.projectiles[row].push(projectile);
-                that2.addEntity(projectile, that2.projectiles, row);
+                if (projectile instanceof Sun) {
+                    // TODO: need to calculate col using x to insert into specific row/col grid cell
+                    that2.addEntity(projectile, that2.suns, row);
+                } else {
+                    that2.addEntity(projectile, that2.projectiles, row);
+                }
             }
-            var ally = new TieFighter(that,
+            var ally = new LukeBattery(that,
                 that.click.col * that.colWidth + that.cornerOffsetX,
                 that.click.row * that.rowHeight + that.cornerOffsetY, attackCallback);
             //that.allies[that.click.row][that.click.col] = ally;

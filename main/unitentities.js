@@ -19,25 +19,17 @@ Unit.prototype.update = function () {
     Entity.prototype.update.call(this);
 };
 
-// SUN (may not need this class, just use unit class)
-
-function Sun(game, x, y) {
-    Unit.call(this, game, x, y, 0, 0);
-}
-
-Sun.prototype = new Unit();
-Sun.prototype.constructor = Sun;
-
 // ALLIES
 
-function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile) {
+function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive, fireImmediately) {
     Unit.call(this, game, x, y, hp, 0);
-    this.attacking = false;
     this.idleAnim = idleAnim; // ally being idle between attacks
     this.attackAnim = attackAnim; // ally attacking 
     this.attackCallback = attackCallback; // callback function that allows the calling scene to fire the projectile correctly
-    this.projectile = projectile; // projectile object of the right type
-    this.projectileTime = 5;
+    this.projectile = projectile; // projectile-creation function of the right type
+    this.projectileTime = fireImmediately ? projectileInterval : 0;
+    this.projectileInterval = projectileInterval;
+    this.isOffensive = isOffensive;
 }
 
 Ally.prototype = new Unit();
@@ -45,20 +37,25 @@ Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
     if (this.attacking) {
-        this.projectileTime += this.game.game.clockTick;
-        if (this.projectileTime >= 5) {
+        if (this.attackAnim.isDone()) {
+            this.attackAnim.elapsedTime = 0;
+            this.attacking = false;
             this.projectileTime = 0;
+        }
+    } else {
+        this.projectileTime += this.game.game.clockTick;
+        if (this.projectileTime >= this.projectileInterval) {
+            this.projectileTime = 0;
+            this.attacking = true;
             this.fireProjectile();
         }
     }
     //Unit.prototype.update.call(this);
     var row = this.game.getRowAndCol(this.x, this.y).row;
-    if(this.game.enemies[row+1].length > 0) {
-        this.attacking = true;
-    } else {
+    if (this.game.enemies[row + 1].length === 0 && this.isOffensive) {
         this.attacking = false;
     }
-}
+};
 
 Ally.prototype.draw = function (ctx) {
     //var clock = this.game.game.clockTick;
@@ -76,17 +73,30 @@ Ally.prototype.fireProjectile = function () {
     this.attackCallback(projectile);
 };
 
-// Luke Ally
-// TODO: figure out why this (and LukeEnemy, which are the only two I've tested) have prototypes that point to themselves.
-function LukeAlly(game, x, y, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, -10, 64, 76, 0.2, 10, true, true, false, false, true);
-    console.log(idleAnim);
-    Ally.call(this, game, x, y, 10, idleAnim, idleAnim, attackCallback, LukeProjectile);
+// Luke Battery
+function LukeBattery(game, x, y, attackCallback) {
+    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
+    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96, 0.03, 10, true, false, false);
+    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, attackCallback, Sun, 3, false, false);
 }
+
+LukeBattery.prototype = new Ally();
+LukeBattery.prototype.constructor = LukeBattery;
+
+LukeBattery.prototype.draw = function (ctx) {
+    //var clock = this.game.game.clockTick;
+    if (this.attacking) { // attacking
+        this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x - 32, this.y - 32);
+    } else { // approaching from the right
+        this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+    }
+    Entity.prototype.draw.call(this);
+};
+
 function TieFighter(game, x, y, attackCallback) {
     var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
-    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 64, 64, 64, 0.2, 4, true, true, false);
-    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, attackCallback, LukeProjectile);
+    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 64, 64, 64, 0.2, 4, true, false, false);
+    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
 }
 
 TieFighter.prototype = new Ally();
@@ -159,8 +169,9 @@ Projectile.prototype.constructor = Projectile;
 
 Projectile.prototype.update = function () {
     this.x += this.speed * this.game.game.clockTick;
-    if (this.x > this.game.surfaceWidth)
+    if (this.x > this.game.surfaceWidth) {
         this.removeFromWorld = true;
+    }
     Entity.prototype.update.call(this);
 };
 
@@ -182,8 +193,23 @@ Projectile.prototype.attack = function (other) {
 // Luke Projectile
 function LukeProjectile(game, x, y) {
     var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
-    Projectile.call(this, game, x, y, 5, 50, bulletAnim);
+    Projectile.call(this, game, x, y - 12, 5, 50, bulletAnim);
 }
 
 LukeProjectile.prototype = new Projectile();
 LukeProjectile.prototype.constructor = LukeProjectile;
+
+// SUN (techinically a projectile, but not normally used as such)
+
+function Sun(game, x, y) {
+    var anim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, -10, 64, 76, 0.2, 10, true, true, false, false, true);
+    Projectile.call(this, game, x, y - 12, 0, 0, anim);
+}
+
+Sun.prototype = new Projectile();
+sun.prototype.constructor = sun;
+
+sun.prototype.draw = function (ctx) {
+    this.anim.drawframe(this.game.game.clocktick, ctx, this.x, this.y);
+    entity.prototype.draw.call(this);
+};
