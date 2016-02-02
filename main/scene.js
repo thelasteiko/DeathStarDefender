@@ -19,6 +19,7 @@ Scene.prototype.draw = function (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
+        //console.log(this.entities[i]);
         this.entities[i].draw(ctx);
     }
     ctx.restore();
