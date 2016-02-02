@@ -176,7 +176,7 @@ LevelScene.prototype.draw = function (ctx) {
 
 LevelScene.prototype.sendEnemy = function (row) {
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
-    var y = this.cornerOffsetY + ((row-1) * this.rowHeight);
+    var y = this.cornerOffsetY + (row * this.rowHeight);
     //console.log("[" + x + ", " + y + "]");
     var enemy = new LukeEnemy(this, x, y);
     this.addEntity(enemy, this.enemies, row);

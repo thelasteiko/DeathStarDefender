@@ -53,7 +53,7 @@ Ally.prototype.update = function () {
     }
     //Unit.prototype.update.call(this);
     var row = this.game.getRowAndCol(this.x, this.y).row;
-    if(this.game.enemies[row+1].length > 0) {
+    if(this.game.enemies[row].length > 0) {
         this.attacking = true;
     } else {
         this.attacking = false;
