@@ -58,7 +58,7 @@ GameEngine.prototype.start = function (scene) {
 
 GameEngine.prototype.changeScene = function(scene) {
     this.scene = scene;
-    scene.init();
+    scene.init(this.ctx);
 }
 
 GameEngine.prototype.loop = function () {
