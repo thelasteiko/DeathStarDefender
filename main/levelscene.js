@@ -63,6 +63,12 @@ LevelScene.prototype.startInput = function () {
         that.mouse = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
+    var clickSun = function (row, col) {
+        that.suns[row][col].removeFromWorld = true;
+        // console.log("sun clicked");
+        // TODO increment menu power counter
+    }
+
     this.ctx.canvas.addEventListener("click", function (e) {
         // console.log({x: e.clientX, y: e.clientY});
         // console.log(that.getRowAndCol(e.clientX, e.clientY));
@@ -70,24 +76,36 @@ LevelScene.prototype.startInput = function () {
         if (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0) {
-            var that2 = that;
-            var attackCallback = function (projectile) {
-            // console.log(projectile);
-                var row = that2.getRowAndCol(projectile.x, projectile.y).row;
-                //that2.projectiles[row].push(projectile);
-                if (projectile instanceof Sun) {
-                    // TODO: need to calculate col using x to insert into specific row/col grid cell
-                    // TODO: The +1 below is a workaround to the large bounding boxes, remove after that's fixed.
-                    that2.addEntity(projectile, that2.suns, row + 1);
-                } else {
-                    that2.addEntity(projectile, that2.projectiles, row);
+
+            // if the cell is occupied with an ally, check for suns
+            if (that.allies[that.click.row][that.click.col]) {
+                // this nested if could be condensed, but I want to keep the logic separate for now
+                if (that.suns[that.click.row][that.click.col]) {
+                    clickSun(that.click.row, that.click.col);
                 }
+            } else { // if the cell is not occupied, place an ally
+                var that2 = that;
+                var attackCallback = function (projectile, col, row) {
+                    // console.log(projectile);
+                    //that2.projectiles[row].push(projectile);
+                    if (projectile instanceof Sun) {
+                        // remove current sun from entities list
+                        if (that2.suns[row][col]) {
+                            that2.suns[row][col].removeFromWorld = true;
+                        }
+                        that2.addEntity(projectile, that2.suns, row, col);
+                    } else {
+                        that2.addEntity(projectile, that2.projectiles, row);
+                        that2.projectiles[row][col] = projectile;
+                    }
+                }
+                var ally = new LukeBattery(that,
+                    that.click.col * that.colWidth + that.cornerOffsetX,
+                    that.click.row * that.rowHeight + that.cornerOffsetY,
+                    that.click.col, that.click.row, attackCallback);
+                //that.allies[that.click.row][that.click.col] = ally;
+                that.addEntity(ally, that.allies, that.click.row, that.click.col);
             }
-            var ally = new LukeBattery(that,
-                that.click.col * that.colWidth + that.cornerOffsetX,
-                that.click.row * that.rowHeight + that.cornerOffsetY, attackCallback);
-            //that.allies[that.click.row][that.click.col] = ally;
-            that.addEntity(ally, that.allies, that.click.row, that.click.col); 
         }
     }, false);
 
@@ -96,10 +114,10 @@ LevelScene.prototype.startInput = function () {
 
 LevelScene.prototype.update = function () {
     Scene.prototype.update.call(this);
-    
+
     this.board.update();
-    
-    for(var i = 0; i < this.numRows; i++) {
+
+    for (var i = 0; i < this.numRows; i++) {
         for (var j = 0; j < this.numCols; j++) {
             if (this.allies[i] && this.allies[i][j]) {
                 if (!this.allies[i][j].removeFromWorld) {
@@ -123,8 +141,8 @@ LevelScene.prototype.update = function () {
             }
         }
     }
-    
-    for(var i = 0; i < this.numRows; i++) {
+
+    for (var i = 0; i < this.numRows; i++) {
         for (var j = 0; j < this.numCols; j++) {
             if (this.suns[i] && this.suns[i][j]
                 && this.suns[i][j].removeFromWorld) {
@@ -150,19 +168,19 @@ LevelScene.prototype.draw = function (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
     this.board.draw(ctx);
-    for(var i = 0; i < this.numRows; i++) {
+    for (var i = 0; i < this.numRows; i++) {
         for (var j = 0; j < this.numCols; j++) {
             if (this.allies[i] && this.allies[i][j]) {
                 this.allies[i][j].draw(ctx);
             }
             if (this.enemies[i] && this.enemies[i][j]) {
-                    this.enemies[i][j].draw(ctx);
+                this.enemies[i][j].draw(ctx);
             }
             if (this.suns[i] && this.suns[i][j]) {
-                    this.suns[i][j].draw(ctx);
+                this.suns[i][j].draw(ctx);
             }
             if (this.projectiles[i] && this.projectiles[i][j]) {
-                    this.projectiles[i][j].draw(ctx);
+                this.projectiles[i][j].draw(ctx);
             }
         }
     }
@@ -191,6 +209,7 @@ LevelScene.prototype.sendEnemy = function (row) {
 
 LevelScene.prototype.addEntity = function (entity, list, row, col) {
     console.log('added entity');
-    if (col) list[row][col] = entity;
-    else list[row].push(entity);
+    if (col == null) list[row].push(entity);
+    else  list[row][col] = entity;
+    // console.log("row", list[row]);
 }
