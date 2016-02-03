@@ -50,7 +50,7 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
         index -= Math.floor(this.spriteSheet.width / this.frameWidth);
         vindex++;
     }
-    
+
     //the y needs to change if there are multiple rows
 
     var locX = x;
@@ -79,7 +79,6 @@ Animation.prototype.isDone = function () {
 }
 
 
-
 // the "main" code begins here
 
 var ASSET_MANAGER = new AssetManager();
@@ -88,15 +87,15 @@ var ASSET_MANAGER = new AssetManager();
 //ASSET_MANAGER.queueDownload("./main/img/title2.png");
 
 // Go specific; delete later
-//ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
+ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
 
 // ENEMIES
 // Luke
-/*ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
+ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeIdle.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");*/
+ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
 
 ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
@@ -109,5 +108,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new TestScene(gameEngine));
+    gameEngine.start(new LevelScene(gameEngine));
 });
