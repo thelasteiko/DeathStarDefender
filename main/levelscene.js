@@ -168,6 +168,7 @@ LevelScene.prototype.draw = function (ctx) {
     }
     ctx.restore();
     // draw mouse shadow
+    //TODO change what is being displayed here
     if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
         && this.mouse.col >= 0 && this.mouse.col < this.numCols) {
         ctx.save();
