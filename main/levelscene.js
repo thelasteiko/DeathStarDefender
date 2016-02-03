@@ -41,6 +41,8 @@ LevelScene.prototype.constructor = LevelScene;
 LevelScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.board = new GameBoard(this, 5, 9);
+    this.menu = new Menu(this, 0, 0)
+    this.addEntity(this.menu);
     this.sendEnemy(2);
     this.sendEnemy(4);
     this.startInput();
@@ -184,19 +186,20 @@ LevelScene.prototype.draw = function (ctx) {
             }
         }
     }
-    ctx.restore();
+
     // draw mouse shadow
-    //TODO change what is being displayed here
     if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
-        && this.mouse.col >= 0 && this.mouse.col < this.numCols) {
-        ctx.save();
+        && this.mouse.col >= 0 && this.mouse.col < this.numCols //&& this.menu.current //TODO uncomment when implemented menu.current
+        && !(this.allies[this.mouse.row] && this.allies[this.mouse.row][this.mouse.col])) {
         ctx.globalAlpha = 0.5;
-        //get current image from menu
-        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"),
+        //TODO get current image from menu?
+        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), //this.menu.current, //TODO replace with above
             this.mouse.col * this.colWidth + this.cornerOffsetX,
             this.mouse.row * this.rowHeight + this.cornerOffsetY, 64, 64);
-        ctx.restore();
     }
+
+    ctx.restore();
+    Scene.prototype.draw.call(this, ctx);
 }
 
 LevelScene.prototype.sendEnemy = function (row) {
@@ -209,7 +212,8 @@ LevelScene.prototype.sendEnemy = function (row) {
 
 LevelScene.prototype.addEntity = function (entity, list, row, col) {
     console.log('added entity');
-    if (col == null) list[row].push(entity);
+    if (list == null) Scene.prototype.addEntity.call(this, entity);
+    else if (col == null) list[row].push(entity);
     else  list[row][col] = entity;
     // console.log("row", list[row]);
 }
