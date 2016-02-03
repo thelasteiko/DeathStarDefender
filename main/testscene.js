@@ -1,21 +1,3 @@
-function Explosion(game, x, y) {
-    Entity.call(this, game, x, y);
-    this.animation = new Animation(ASSET_MANAGER.getAsset("./main/img/expl.png"),
-        0, 0, 96, 96, 0.1, 15, false, true, false);
-}
-
-Explosion.prototype = new Entity();
-Explosion.prototype.constructor = Explosion;
-
-Explosion.prototype.draw = function(ctx) {
-    Entity.prototype.draw.call(this, ctx);
-    this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-}
-
-Explosion.prototype.update = function() {
-    Entity.prototype.update.call(this);
-}
-
 function TestScene(gameEngine) {
     Scene.call(this,gameEngine);
 }
@@ -25,5 +7,23 @@ TestScene.prototype.constructor = TestScene;
 
 TestScene.prototype.init = function(ctx) {
     Scene.prototype.init.call(this, ctx);
-    this.addEntity(new Explosion(this, 20, 20));
+    this.addEntity(new Menu(this, 0, 0));
+    this.startInput();
+}
+
+TestScene.prototype.startInput = function () {
+    var that = this;
+    var getXandY = function (e) {
+        var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
+        var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
+        return { x: x, y: y, radius: 1};
+    }
+    
+    this.ctx.canvas.addEventListener("click", function (e) {
+        var menu = that.entities[0];
+        that.click = getXandY(e);
+        if(!menu.setSelection(that.click.x, that.click.y)) {
+            menu.placeItem(that.click.x, that.click.y);
+        }
+    });
 }

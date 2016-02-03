@@ -98,7 +98,8 @@ ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeIdle.png");
 ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");*/
 
-ASSET_MANAGER.queueDownload("./main/img/expl.png");
+ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
+ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
