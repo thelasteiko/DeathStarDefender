@@ -205,9 +205,9 @@ function Sun(game, x, y) {
 }
 
 Sun.prototype = new Projectile();
-sun.prototype.constructor = sun;
+Sun.prototype.constructor = Projectile;
 
-sun.prototype.draw = function (ctx) {
-    this.anim.drawframe(this.game.game.clocktick, ctx, this.x, this.y);
-    entity.prototype.draw.call(this);
+Sun.prototype.draw = function (ctx) {
+    this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+    Entity.prototype.draw.call(this);
 };
