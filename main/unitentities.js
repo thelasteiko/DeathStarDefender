@@ -21,8 +21,10 @@ Unit.prototype.update = function () {
 
 // ALLIES
 
-function Ally(game, x, y, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive, fireImmediately) {
+function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive, fireImmediately) {
     Unit.call(this, game, x, y, hp, 0);
+    this.col = col;
+    this.row = row;
     this.idleAnim = idleAnim; // ally being idle between attacks
     this.attackAnim = attackAnim; // ally attacking 
     this.attackCallback = attackCallback; // callback function that allows the calling scene to fire the projectile correctly
@@ -44,17 +46,14 @@ Ally.prototype.update = function () {
         }
     } else {
         this.projectileTime += this.game.game.clockTick;
-        if (this.projectileTime >= this.projectileInterval) {
+        var row = this.game.getRowAndCol(this.x, this.y).row;
+        if (this.projectileTime >= this.projectileInterval && !(this.game.enemies[row].length === 0 && this.isOffensive)) {
             this.projectileTime = 0;
             this.attacking = true;
             this.fireProjectile();
         }
     }
     //Unit.prototype.update.call(this);
-    var row = this.game.getRowAndCol(this.x, this.y).row;
-    if (this.game.enemies[row].length === 0 && this.isOffensive) {
-        this.attacking = false;
-    }
 };
 
 Ally.prototype.draw = function (ctx) {
@@ -70,14 +69,14 @@ Ally.prototype.draw = function (ctx) {
 Ally.prototype.fireProjectile = function () {
     var projectile = new this.projectile(this.game, this.x, this.y);
     this.hasProjectile = projectile;
-    this.attackCallback(projectile);
+    this.attackCallback(projectile, this.col, this.row);
 };
 
 // Luke Battery
-function LukeBattery(game, x, y, attackCallback) {
+function LukeBattery(game, x, y, col, row, attackCallback) {
     var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96, 0.03, 10, true, false, false);
-    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, attackCallback, Sun, 3, false, false);
+    Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, Sun, 3, false, false);
 }
 
 LukeBattery.prototype = new Ally();
@@ -93,10 +92,10 @@ LukeBattery.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
-function TieFighter(game, x, y, attackCallback) {
+function TieFighter(game, x, y, col, row, attackCallback) {
     var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 64, 64, 64, 0.2, 4, true, false, false);
-    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
+    Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
 }
 
 TieFighter.prototype = new Ally();
@@ -183,11 +182,10 @@ Projectile.prototype.draw = function (ctx) {
 // This function currently breaks EVERYTHING, probably because "super" is meaningless. Oh well.
 // I think this works - Grant
 //why does a projectile have hp?
+// um. great question. it doesn't.
 Projectile.prototype.attack = function (other) {
     Unit.prototype.attack.call(other);
-    if (this.hp <= 0) {
-        this.removeFromWorld = true;
-    }
+    this.removeFromWorld = true;
 };
 
 // Luke Projectile
