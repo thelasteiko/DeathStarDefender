@@ -50,12 +50,15 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
         index -= Math.floor(this.spriteSheet.width / this.frameWidth);
         vindex++;
     }
+    
+    //the y needs to change if there are multiple rows
 
     var locX = x;
     var locY = y;
     var offset = vindex === 0 ? this.startX : 0;
     ctx.drawImage(this.spriteSheet,
-        index * this.frameWidth + offset, vindex * this.frameHeight + this.startY,  // source from sheet
+        index * this.frameWidth + offset,
+        vindex * this.frameHeight + this.startY,  // source from sheet
         this.frameWidth, this.frameHeight,
         locX, locY,
         this.frameWidth * scaleBy,
@@ -75,55 +78,29 @@ Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
 }
 
-function LayeredAnim(spriteSheet, startX, startY, frameWidth, frameHeight,
-                     frameDuration, frames, loop, reverse, rows, audio) {
-    this.anims = [];
-    this.loop = loop;
-    this.rows = rows;
-    this.rl = 0;
-    var framesleft = frames;
-    var rf = 0;
-    for (var i = 0; i < rows; i++) {
-        rf = Math.ceil(framesleft / (i + 1));
-        framesleft = framesleft - rf;
-        var animation = new Animation(spriteSheet, startX, startY + (frameHeight * i),
-            frameWidth, frameHeight, frameDuration, rf, false, false, reverse, audio);
-        this.anims.push(animation);
-    }
-}
 
-LayeredAnim.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    if (this.loop && this.isDone()) this.rl = 0;
-    else if (this.isDone()) return;
-
-    this.anims[this.rl].drawFrame(tick, ctx, x, y, scaleBy);
-    if (this.anims[this.rl].isDone()) {
-        this.anims[this.rl].elapsedTime = 0;
-        this.rl += 1;
-    }
-}
-
-LayeredAnim.prototype.isDone = function () {
-    return this.rl === this.rows - 1;
-}
 
 // the "main" code begins here
 
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./main/img/background.png");
-ASSET_MANAGER.queueDownload("./main/img/title2.png");
+//ASSET_MANAGER.queueDownload("./main/img/background.png");
+//ASSET_MANAGER.queueDownload("./main/img/title2.png");
 
 // Go specific; delete later
-ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
+//ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
 
 // ENEMIES
 // Luke
-ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
+/*ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
 ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeIdle.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");*/
+
+ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
+ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
+ASSET_MANAGER.queueDownload("./main/img/battery.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
@@ -132,5 +109,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new LevelScene(gameEngine));
+    gameEngine.start(new TestScene(gameEngine));
 });
