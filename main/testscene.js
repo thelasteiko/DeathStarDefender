@@ -1,3 +1,21 @@
+function Battery(game, x, y, callback) {
+    var pic = ASSET_MANAGER.getAsset("./main/img/battery.png");
+    var idleAnim = new SpriteImage(pic, 192, 64, 64, 64);
+    var attackAnim = new Animation(pic, 0, 0, 64, 64, 1, 8, false, true, false);
+    Ally.call(this, game, x, y, 10, idleAnim, attackAnim, callback, Sun, 3, false, false)
+}
+
+Battery.prototype = new Ally();
+Battery.prototype.constructor = Battery;
+
+Battery.prototype.draw = function(ctx) {
+    this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+}
+
+Battery.prototype.update = function () {
+    
+}
+
 function TestScene(gameEngine) {
     Scene.call(this,gameEngine);
 }
@@ -23,7 +41,11 @@ TestScene.prototype.startInput = function () {
         var menu = that.entities[0];
         that.click = getXandY(e);
         if(!menu.setSelection(that.click.x, that.click.y)) {
-            menu.placeItem(that.click.x, that.click.y);
+            var attackCallback = function (projectile) {
+                console.log(projectile);
+            }
+            var obj = menu.placeItem(that.click.x, that.click.y, attackCallback);
+            that.addEntity(obj);
         }
     });
 }

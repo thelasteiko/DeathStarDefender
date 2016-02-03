@@ -119,7 +119,8 @@ function Menu (game, x, y) {
     this.current = null;
     this.counter = new MenuCounter(game, this.x, this.y);
     this.items = [];
-    this.addItem(game, "Battery", 50, ASSET_MANAGER.getAsset("./main/img/menubattery.png"));
+    this.addItem(game, "Battery", 50, ASSET_MANAGER.getAsset("./main/img/menubattery.png"),
+        Battery);
 }
 
 Menu.prototype = new Entity();
@@ -170,9 +171,9 @@ Menu.prototype.placeItem = function(x, y, attackCallBack) {
     console.log("Placing");
     if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";
-        //var obj = new this.current.objtype(this.game, x, y, attackCallBack);
+        var obj = new this.current.objtype(this.game, x, y, attackCallBack);
         this.current = null;
-        //return obj;
+        return obj;
     }
     return null;
 }
