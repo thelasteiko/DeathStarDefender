@@ -168,12 +168,12 @@ Menu.prototype.addItem = function (game, title, price, spritesheet, objtype) {
     this.items.push(new MenuItem(game, x, y, title, price, "ready", spritesheet, objtype));
 }
 
-Menu.prototype.placeItem = function (x, y, attackCallBack) {
+Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
     /*Returns an item of the correct type or null if no item is selected.*/
     if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";
         console.log("Placing");
-        var obj = new this.current.objtype(this.game, x, y, attackCallBack);
+        var obj = new this.current.objtype(this.game, x, y, col, row, attackCallBack);
         this.current = null;
         return obj;
     }
