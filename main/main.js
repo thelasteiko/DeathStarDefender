@@ -17,7 +17,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
 }
 //x and y are the location in the canvas
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 1; //used to scale image
+    scaleBy = scaleBy || 1; //used to scale image
     if (this.audio && this.elapsedTime === 0) {
         this.audio.pause();
         this.audio.currentTime = 0;
