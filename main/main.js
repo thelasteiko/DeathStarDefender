@@ -13,7 +13,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.reverse = reverse;
     this.loopReverse = loopReverse; // whether the animation should run forwards then backwards
     this.audio = audio;
-    this.disableAllOutlines = true; //Basically just to disable boxes in gh-pages
+    this.disableAllOutlines = false; //Basically just to disable boxes in gh-pages
     this.drawOutlines = drawOutlines && !this.disableAllOutlines;
 }
 //x and y are the location in the canvas
