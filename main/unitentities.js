@@ -38,7 +38,7 @@ Ally.prototype = new Unit();
 Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
-    if (this.attacking) {
+    if (this.attackAnim && this.attacking) {
         if (this.attackAnim.isDone()) {
             this.attackAnim.elapsedTime = 0;
             this.attacking = false;
@@ -58,7 +58,8 @@ Ally.prototype.update = function () {
 
 Ally.prototype.draw = function (ctx) {
     //var clock = this.game.game.clockTick;
-    if (this.attacking) { // attacking
+    if (this.attackAnim && this.attacking) { // attacking
+        console.log(this)
         this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     } else { // approaching from the right
         this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -72,25 +73,15 @@ Ally.prototype.fireProjectile = function () {
     this.attackCallback(projectile, this.col, this.row);
 };
 
-// Luke Battery
-function LukeBattery(game, x, y, col, row, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
-    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96, 0.03, 10, true, false, false);
-    Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, Sun, 3, false, false);
+// Battery
+function Battery(game, x, y, col, row, attackCallback) {
+    var pic = ASSET_MANAGER.getAsset("./main/img/battery.png");
+    var idleAnim = new Animation(pic, 0, 0, 64, 64, 1, 8, true, true, false);
+    Ally.call(this, game, x, y, col, row, 10, idleAnim, null, attackCallback, Sun, 8, false, false);
 }
 
-LukeBattery.prototype = new Ally();
-LukeBattery.prototype.constructor = LukeBattery;
-
-LukeBattery.prototype.draw = function (ctx) {
-    //var clock = this.game.game.clockTick;
-    if (this.attacking) { // attacking
-        this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x - 32, this.y - 32);
-    } else { // approaching from the right
-        this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-    }
-    Entity.prototype.draw.call(this);
-};
+Battery.prototype = new Ally();
+Battery.prototype.constructor = Battery;
 
 function TieFighter(game, x, y, col, row, attackCallback) {
     var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
