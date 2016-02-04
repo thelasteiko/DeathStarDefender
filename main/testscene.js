@@ -45,7 +45,7 @@ TestScene.prototype.startInput = function () {
                 console.log(projectile);
             }
             var obj = menu.placeItem(that.click.x, that.click.y, attackCallback);
-            that.addEntity(obj);
+            obj ? that.addEntity(obj) : null;
         }
     });
 }

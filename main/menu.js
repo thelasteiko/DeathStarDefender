@@ -145,13 +145,15 @@ Menu.prototype.setSelection = function (x, y) {
   the menu and sets the current item if valid.*/
     //bounds x > 96, x < 96 * items.length
     //bounds y > 0, y < 96
-    console.log("Selecting");
     if (y >= 0 && y <= 96) {
         var i = Math.floor(x / 96)-1;
         if(i >= 0 && i < this.items.length){
             if (this.items[i].trySelect()) {
+                console.log("Selecting");
                 this.current = this.items[i];
                 return true;
+            } else {
+                this.current = null;
             }
         }
     }
@@ -168,9 +170,9 @@ Menu.prototype.addItem = function(game, title, price, spritesheet, objtype) {
 
 Menu.prototype.placeItem = function(x, y, attackCallBack) {
 /*Returns an item of the correct type or null if no item is selected.*/
-    console.log("Placing");
     if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";
+        console.log("Placing");
         var obj = new this.current.objtype(this.game, x, y, attackCallBack);
         this.current = null;
         return obj;
