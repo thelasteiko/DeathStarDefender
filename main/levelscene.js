@@ -101,7 +101,6 @@ LevelScene.prototype.startInput = function () {
                 that.addEntity(projectile, that.suns, row, col);
             } else {
                 that.addEntity(projectile, that.projectiles, row);
-                that.projectiles[row][col] = projectile;
             }
         }
 
