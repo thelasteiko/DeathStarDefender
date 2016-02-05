@@ -169,7 +169,7 @@ LevelScene.prototype.update = function () {
         for (var j = 0; j < this.numCols; j++) {
             if (this.suns[i] && this.suns[i][j]
                 && this.suns[i][j].removeFromWorld) {
-                this.suns[i].splice(j, 1);
+                this.suns[i][j] = undefined;
             }
             if (this.allies[i] && this.allies[i][j]
                 && this.allies[i][j].removeFromWorld) {
