@@ -149,6 +149,8 @@ Menu.prototype.setSelection = function (x, y) {
     if (y >= 0 && y <= 96) {
         var i = Math.floor(x / 96)-1;
         if(i >= 0 && i < this.items.length){
+            if (this.current)
+                this.current.state = "available";
             if (this.items[i].trySelect()) {
                 this.current = this.items[i];
                 return true;
