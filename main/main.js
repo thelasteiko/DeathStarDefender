@@ -13,11 +13,12 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.reverse = reverse;
     this.loopReverse = loopReverse; // whether the animation should run forwards then backwards
     this.audio = audio;
-    this.drawOutlines = drawOutlines;
+    this.disableAllOutlines = false; //Basically just to disable boxes in gh-pages
+    this.drawOutlines = drawOutlines && !this.disableAllOutlines;
 }
 //x and y are the location in the canvas
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
-    var scaleBy = scaleBy || 1; //used to scale image
+    scaleBy = scaleBy || 1; //used to scale image
     if (this.audio && this.elapsedTime === 0) {
         this.audio.pause();
         this.audio.currentTime = 0;

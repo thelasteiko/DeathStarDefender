@@ -1,5 +1,5 @@
 function SpriteImage(spritesheet, x, y, w, h) {
-/*Convenience object for printing images to a canvas from a spritesheet.*/
+    /*Convenience object for printing images to a canvas from a spritesheet.*/
     this.spritesheet = spritesheet;
     this.x = x;
     this.y = y;
@@ -7,13 +7,13 @@ function SpriteImage(spritesheet, x, y, w, h) {
     this.h = h;
 }
 
-SpriteImage.prototype.drawImage = function(ctx, dx, dy) {
-     ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h,
+SpriteImage.prototype.drawImage = function (ctx, dx, dy) {
+    ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h,
         dx, dy, this.w, this.h);
 }
 
-function MenuCounter (game, x, y) {
-/*Keeps track of and displays the amount of energy*/
+function MenuCounter(game, x, y) {
+    /*Keeps track of and displays the amount of energy*/
     this.energycount = 50; //initial energy
     this.energyTime = 0;
     this.textoffset = {x: 26, y: 65};
@@ -24,19 +24,19 @@ function MenuCounter (game, x, y) {
 MenuCounter.prototype = new Entity();
 MenuCounter.prototype.constructor = MenuCounter;
 
-MenuCounter.prototype.update = function() {
+MenuCounter.prototype.update = function () {
     this.energyTime += this.game.game.clockTick;
-    if(this.energyTime >= 10) {
+    if (this.energyTime >= 10) {
         this.energycount += 25;
         this.energyTime = 0;
     }
     Entity.prototype.update.call(this);
 }
 
-MenuCounter.prototype.draw = function(ctx) {
+MenuCounter.prototype.draw = function (ctx) {
     ctx.drawImage(this.spritesheet,
         this.x, this.y, 96, 96);
-    ctx.font="20px Verdana";
+    ctx.font = "20px Verdana";
     ctx.fillStyle = "white";
     ctx.fillText(this.energycount,
         this.x + this.textoffset.x, this.y + this.textoffset.y);
@@ -51,9 +51,9 @@ MenuCounter.prototype.payTheMan = function (cost) {
     return false;
 }
 
-function MenuItem (game, x, y, title, price, state, spritesheet, objtype) {
-/*Initializes a modular menu item.
-  Each spritesheet should be layed out the same.*/
+function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
+    /*Initializes a modular menu item.
+     Each spritesheet should be layed out the same.*/
     this.title = title; //string to describe item
     this.price = price;
     //charging animation
@@ -74,23 +74,23 @@ function MenuItem (game, x, y, title, price, state, spritesheet, objtype) {
 MenuItem.prototype = new Entity();
 MenuItem.prototype.constructor = MenuItem;
 
-MenuItem.prototype.draw = function(ctx) {
+MenuItem.prototype.draw = function (ctx) {
     //switch for the state
-    switch(this.state) {
+    switch (this.state) {
         case "ready": //charge has completed but price hasn't been met
-        this.shadedpic.drawImage(ctx, this.x, this.y);
-        break;
+            this.shadedpic.drawImage(ctx, this.x, this.y);
+            break;
         case "available": //can be selected
-        this.availablepic.drawImage(ctx, this.x, this.y);
-        break;
+            this.availablepic.drawImage(ctx, this.x, this.y);
+            break;
         case "selected": //item is selected by player
-        this.selectedpic.drawImage(ctx, this.x, this.y);
-        break;
+            this.selectedpic.drawImage(ctx, this.x, this.y);
+            break;
         case "charging": //item has been used recently
-        this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-        break;
+            this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+            break;
         default:
-        console.log("Error: Illegal state");
+            console.log("Error: Illegal state");
     }
     ctx.fillText(this.title, this.x + 10, this.y + 50);
     ctx.fillText(this.price, this.x + 35, this.y + 70);
@@ -106,7 +106,7 @@ MenuItem.prototype.update = function (energy) {
 }
 
 MenuItem.prototype.trySelect = function () {
-    if(this.state === "available") {
+    if (this.state === "available") {
         this.state = "selected";
         return true;
     }
@@ -114,7 +114,7 @@ MenuItem.prototype.trySelect = function () {
 }
 
 //items should appear in a row
-function Menu (game, x, y) {
+function Menu(game, x, y) {
     Entity.call(this, game, x, y);
     this.current = null;
     this.counter = new MenuCounter(game, this.x, this.y);
@@ -126,7 +126,7 @@ function Menu (game, x, y) {
 Menu.prototype = new Entity();
 Menu.prototype.constructor = Menu;
 
-Menu.prototype.update = function() {
+Menu.prototype.update = function () {
     this.counter.update();
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].update(this.counter.energycount);
@@ -141,39 +141,41 @@ Menu.prototype.draw = function (ctx) {
 }
 //this will see if an item can be selected
 Menu.prototype.setSelection = function (x, y) {
-/*Checks the given coordinates against the range of
-  the menu and sets the current item if valid.*/
+    /*Checks the given coordinates against the range of
+     the menu and sets the current item if valid.*/
     //bounds x > 96, x < 96 * items.length
     //bounds y > 0, y < 96
-    console.log("Selecting");
     if (y >= 0 && y <= 96) {
-        var i = Math.floor(x / 96)-1;
-        if(i >= 0 && i < this.items.length){
+        var i = Math.floor(x / 96) - 1;
+        if (i >= 0 && i < this.items.length) {
             if (this.current)
                 this.current.state = "available";
             if (this.items[i].trySelect()) {
+                console.log("Selecting");
                 this.current = this.items[i];
                 return true;
+            } else {
+                this.current = null;
             }
         }
     }
     return false;
 }
 
-Menu.prototype.addItem = function(game, title, price, spritesheet, objtype) {
-/*Adds a menu item to the menu using the parameters.*/
+Menu.prototype.addItem = function (game, title, price, spritesheet, objtype) {
+    /*Adds a menu item to the menu using the parameters.*/
     console.log("adding menu item :");
-    var x = (this.items.length+1) * 96;
+    var x = (this.items.length + 1) * 96;
     var y = this.y;
     this.items.push(new MenuItem(game, x, y, title, price, "ready", spritesheet, objtype));
 }
 
-Menu.prototype.placeItem = function(x, y, attackCallBack) {
-/*Returns an item of the correct type or null if no item is selected.*/
-    console.log("Placing");
+Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
+    /*Returns an item of the correct type or null if no item is selected.*/
     if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";
-        var obj = new this.current.objtype(this.game, x, y, attackCallBack);
+        console.log("Placing");
+        var obj = new this.current.objtype(this.game, x, y, col, row, attackCallBack);
         this.current = null;
         return obj;
     }

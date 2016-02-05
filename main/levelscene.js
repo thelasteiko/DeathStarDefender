@@ -41,7 +41,7 @@ LevelScene.prototype.constructor = LevelScene;
 LevelScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.board = new GameBoard(this, 5, 9);
-    this.menu = new Menu(this, 0, 0)
+    this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
     this.sendEnemy(2);
     this.sendEnemy(4);
@@ -56,6 +56,21 @@ LevelScene.prototype.getRowAndCol = function (x, y) {
     return {row: row, col: col};
 }
 
+LevelScene.prototype.attackCallback = function (projectile, col, row) {
+    // console.log(projectile);
+    //that2.projectiles[row].push(projectile);
+    if (projectile instanceof Sun) {
+        // remove current sun from entities list
+        if (this.suns[row][col]) {
+            this.suns[row][col].removeFromWorld = true;
+        }
+        this.addEntity(projectile, this.suns, row, col);
+    } else {
+        this.addEntity(projectile, this.projectiles, row);
+        this.projectiles[row][col] = projectile;
+    }
+}
+
 LevelScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
@@ -68,13 +83,40 @@ LevelScene.prototype.startInput = function () {
     var clickSun = function (row, col) {
         that.suns[row][col].removeFromWorld = true;
         // console.log("sun clicked");
-        // TODO increment menu power counter
+        that.menu.counter.energycount += 25;
     }
 
     this.ctx.canvas.addEventListener("click", function (e) {
-        // console.log({x: e.clientX, y: e.clientY});
-        // console.log(that.getRowAndCol(e.clientX, e.clientY));
+        var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
+        var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
+
         that.click = that.getRowAndCol(e.clientX, e.clientY);
+
+        var attackCallback = function (projectile, col, row) {
+            // console.log(projectile);
+            //that2.projectiles[row].push(projectile);
+            if (projectile instanceof Sun) {
+                // remove current sun from entities list
+                if (that.suns[row][col]) {
+                    that.suns[row][col].removeFromWorld = true;
+                }
+                that.addEntity(projectile, that.suns, row, col);
+            } else {
+                that.addEntity(projectile, that.projectiles, row);
+                that.projectiles[row][col] = projectile;
+            }
+        }
+        
+        if (!that.menu.setSelection(x, y) && that.click && that.click.col < that.numCols
+            && that.click.row < that.numRows
+            && that.click.col >= 0 && that.click.row >= 0) {
+            var obj = that.menu.placeItem(
+                that.click.col * that.colWidth + that.cornerOffsetX,
+                that.click.row * that.rowHeight + that.cornerOffsetY,
+                that.click.col, that.click.row, attackCallback);
+            if (obj) that.addEntity(obj, that.allies, that.click.row, that.click.col);
+        }
+
         if (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0) {
@@ -85,29 +127,8 @@ LevelScene.prototype.startInput = function () {
                 if (that.suns[that.click.row][that.click.col]) {
                     clickSun(that.click.row, that.click.col);
                 }
-            } else { // if the cell is not occupied, place an ally
-                var that2 = that;
-                var attackCallback = function (projectile, col, row) {
-                    // console.log(projectile);
-                    //that2.projectiles[row].push(projectile);
-                    if (projectile instanceof Sun) {
-                        // remove current sun from entities list
-                        if (that2.suns[row][col]) {
-                            that2.suns[row][col].removeFromWorld = true;
-                        }
-                        that2.addEntity(projectile, that2.suns, row, col);
-                    } else {
-                        that2.addEntity(projectile, that2.projectiles, row);
-                        that2.projectiles[row][col] = projectile;
-                    }
-                }
-                var ally = new Battery(that,
-                    that.click.col * that.colWidth + that.cornerOffsetX,
-                    that.click.row * that.rowHeight + that.cornerOffsetY,
-                    that.click.col, that.click.row, attackCallback);
-                //that.allies[that.click.row][that.click.col] = ally;
-                that.addEntity(ally, that.allies, that.click.row, that.click.col);
             }
+
         }
     }, false);
 
@@ -189,13 +210,13 @@ LevelScene.prototype.draw = function (ctx) {
 
     // draw mouse shadow
     if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
-        && this.mouse.col >= 0 && this.mouse.col < this.numCols //&& this.menu.current //TODO uncomment when implemented menu.current
+        && this.mouse.col >= 0 && this.mouse.col < this.numCols && this.menu.current != null
         && !(this.allies[this.mouse.row] && this.allies[this.mouse.row][this.mouse.col])) {
         ctx.globalAlpha = 0.5;
-        //TODO get current image from menu?
-        ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeImg.png"), //this.menu.current, //TODO replace with above
+        var img = this.menu.current.shadow;
+        img.drawImage(ctx,
             this.mouse.col * this.colWidth + this.cornerOffsetX,
-            this.mouse.row * this.rowHeight + this.cornerOffsetY, 64, 64);
+            this.mouse.row * this.rowHeight + this.cornerOffsetY);
     }
 
     ctx.restore();
