@@ -43,8 +43,7 @@ LevelScene.prototype.init = function (ctx) {
     this.board = new GameBoard(this, 5, 9);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
-    var that = this;
-    window.setInterval(this.sendEnemy.bind(this), 2000);
+    window.setInterval(this.sendEnemy.bind(this), 3000);
     this.startInput();
 }
 
@@ -103,10 +102,9 @@ LevelScene.prototype.startInput = function () {
                 that.addEntity(projectile, that.suns, row, col);
             } else {
                 that.addEntity(projectile, that.projectiles, row);
-                that.projectiles[row][col] = projectile;
             }
         }
-        
+
         if (!that.menu.setSelection(x, y) && that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0) {
@@ -129,6 +127,10 @@ LevelScene.prototype.startInput = function () {
                 }
             }
 
+        } else if (DEBUG && that.click && that.click.col == that.numCols
+            && that.click.row < that.numRows && that.click.col >= 0
+            && that.click.row >= 0) {
+            that.sendEnemy(that.click.row);
         }
     }, false);
 

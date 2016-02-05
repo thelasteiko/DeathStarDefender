@@ -1,3 +1,5 @@
+var DEBUG = true; //should be false on gh-pages
+
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
                    frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
     this.spriteSheet = spriteSheet;
@@ -13,8 +15,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.reverse = reverse;
     this.loopReverse = loopReverse; // whether the animation should run forwards then backwards
     this.audio = audio;
-    this.disableAllOutlines = false; //Basically just to disable boxes in gh-pages
-    this.drawOutlines = drawOutlines && !this.disableAllOutlines;
+    this.drawOutlines = drawOutlines && DEBUG;
 }
 //x and y are the location in the canvas
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {

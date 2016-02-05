@@ -48,7 +48,7 @@ MenuCounter.prototype.payTheMan = function (cost) {
         return true;
     }
     console.log("Error: item costs too much");
-    return false;
+    return DEBUG;
 }
 
 function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
@@ -113,7 +113,7 @@ MenuItem.prototype.trySelect = function () {
         this.state = "selected";
         return true;
     }
-    return false;
+    return DEBUG;
 }
 
 //items should appear in a row

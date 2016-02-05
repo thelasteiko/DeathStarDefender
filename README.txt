@@ -13,13 +13,14 @@ This will be fixed in the next iteration.
 
 The power total increments by 25 at regular intervals.
 
-Batteries drop "suns" which are currently portrayed by Idle Luke Skywalker.
-These suns are clickable and add to the power total.
+Batteries drop power sources which are currently portrayed by Idle Luke Skywalker.
+These power sources are clickable and add to the power total.
 
 TIE fighters shoot projectiles, which are currently portrayed by Moonwalking Luke Skywalker.
+They only shoot when there is an enemy in their row.
 
 Enemies are currently spawned at the end of a random row at regular intervals. The only
-enemy currently used is Sprinting Luke Skywalker.
+enemy currently used is Jogging Luke Skywalker.
 
 
 We would like to thank Luke Skywalker for giving it his all and being such a trooper 
