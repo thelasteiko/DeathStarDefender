@@ -84,8 +84,9 @@ Battery.prototype = new Ally();
 Battery.prototype.constructor = Battery;
 
 function TieFighter(game, x, y, col, row, attackCallback) {
-    var idleAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 0, 64, 64, 0.2, 4, true, true, false);
-    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png"), 0, 64, 64, 64, 0.2, 4, true, false, false);
+    var pic = ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png");
+    var idleAnim = new Animation(pic, 0, 0, 64, 64, 0.2, 4, true, true, false);
+    var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.2, 4, true, false, false);
     Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
 }
 
@@ -140,7 +141,7 @@ Enemy.prototype.draw = function (ctx) {
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7, true, true, true);
     Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, approachAnim, approachAnim);
-    console.log("[" + this.x + ", " + this.y + "]");
+    // console.log("[" + this.x + ", " + this.y + "]");
 }
 
 LukeEnemy.prototype = new Enemy();
@@ -170,10 +171,6 @@ Projectile.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
-// This function currently breaks EVERYTHING, probably because "super" is meaningless. Oh well.
-// I think this works - Grant
-//why does a projectile have hp?
-// um. great question. it doesn't.
 Projectile.prototype.attack = function (other) {
     Unit.prototype.attack.call(other);
     this.removeFromWorld = true;

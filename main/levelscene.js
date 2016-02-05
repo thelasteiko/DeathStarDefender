@@ -43,8 +43,8 @@ LevelScene.prototype.init = function (ctx) {
     this.board = new GameBoard(this, 5, 9);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
-    this.sendEnemy(2);
-    this.sendEnemy(4);
+    var that = this;
+    window.setInterval(this.sendEnemy.bind(this), 2000);
     this.startInput();
 }
 
@@ -224,11 +224,15 @@ LevelScene.prototype.draw = function (ctx) {
 }
 
 LevelScene.prototype.sendEnemy = function (row) {
+    if (!row) {
+        var row = Math.floor(Math.random() * 5);
+    }
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
     //console.log("[" + x + ", " + y + "]");
     var enemy = new LukeEnemy(this, x, y);
     this.addEntity(enemy, this.enemies, row);
+    var that = this;
 }
 
 LevelScene.prototype.addEntity = function (entity, list, row, col) {

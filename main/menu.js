@@ -54,6 +54,9 @@ MenuCounter.prototype.payTheMan = function (cost) {
 function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
     /*Initializes a modular menu item.
      Each spritesheet should be layed out the same.*/
+
+    // TODO: pull the hard-coded numbers out into constructor variables
+
     this.title = title; //string to describe item
     this.price = price;
     //charging animation

@@ -84,8 +84,8 @@ Animation.prototype.isDone = function () {
 
 var ASSET_MANAGER = new AssetManager();
 
-//ASSET_MANAGER.queueDownload("./main/img/background.png");
-//ASSET_MANAGER.queueDownload("./main/img/title2.png");
+ASSET_MANAGER.queueDownload("./main/img/background.png");
+ASSET_MANAGER.queueDownload("./main/img/title2.png");
 
 // Go specific; delete later
 ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
@@ -109,5 +109,5 @@ ASSET_MANAGER.downloadAll(function () {
 
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
-    gameEngine.start(new LevelScene(gameEngine));
+    gameEngine.start(new TitleScene(gameEngine));
 });
