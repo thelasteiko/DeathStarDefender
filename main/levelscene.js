@@ -101,7 +101,7 @@ LevelScene.prototype.startInput = function () {
                         that2.projectiles[row][col] = projectile;
                     }
                 }
-                var ally = new LukeBattery(that,
+                var ally = new Battery(that,
                     that.click.col * that.colWidth + that.cornerOffsetX,
                     that.click.row * that.rowHeight + that.cornerOffsetY,
                     that.click.col, that.click.row, attackCallback);
