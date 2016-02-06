@@ -4,6 +4,9 @@ Prototype
 
 Notes and clarifications:
 
+This is the debug version. The non-debug version is at 
+http://thelasteiko.github.io/DeathStarDefender/
+
 You must select the item you want to place from the menu every time you want
 to place a new item. If you cannot afford it or it is still recharging, you
 cannot select it.
