@@ -1,4 +1,4 @@
-var DEBUG = true; //should be false on gh-pages
+var DEBUG = false; //should be false on gh-pages
 
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
                    frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
