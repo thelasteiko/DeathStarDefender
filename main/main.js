@@ -1,4 +1,4 @@
-var DEBUG = true; //should be false on gh-pages
+var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
 
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
                    frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
