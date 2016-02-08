@@ -238,7 +238,7 @@ LevelScene.prototype.sendEnemy = function (row) {
 }
 
 LevelScene.prototype.addEntity = function (entity, list, row, col) {
-    console.log('added entity');
+    //console.log('added entity');
     if (list == null) Scene.prototype.addEntity.call(this, entity);
     else if (col == null) list[row].push(entity);
     else  list[row][col] = entity;
