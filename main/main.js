@@ -101,7 +101,11 @@ ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
 
 ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
+ASSET_MANAGER.queueDownload("./main/img/menutie.png");
+ASSET_MANAGER.queueDownload("./main/img/menustormtrooper.png");
+
 ASSET_MANAGER.queueDownload("./main/img/battery.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/stormt.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");

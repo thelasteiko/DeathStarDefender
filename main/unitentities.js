@@ -59,7 +59,6 @@ Ally.prototype.update = function () {
 Ally.prototype.draw = function (ctx) {
     //var clock = this.game.game.clockTick;
     if (this.attackAnim && this.attacking) { // attacking
-        console.log(this)
         this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     } else { // approaching from the right
         this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -68,6 +67,7 @@ Ally.prototype.draw = function (ctx) {
 };
 
 Ally.prototype.fireProjectile = function () {
+    if (!this.projectile) return;
     var projectile = new this.projectile(this.game, this.x, this.y);
     this.hasProjectile = projectile;
     this.attackCallback(projectile, this.col, this.row);
@@ -83,10 +83,22 @@ function Battery(game, x, y, col, row, attackCallback) {
 Battery.prototype = new Ally();
 Battery.prototype.constructor = Battery;
 
+// Stormtrooper
+function Stormtrooper(game, x, y, col, row) {
+    var pic = ASSET_MANAGER.getAsset("./main/img/ally/stormt.png");
+    var idleAnim = new Animation(pic, 0, 0, 64, 64, 1, 1, true, true, false);
+    var attackAnim = new Animation(pic, 0, 0, 64, 64, .07, 7, true, false, false);
+    Ally.call(this, game, x, y, col, row, 100, idleAnim, attackAnim, null, null, 1, true, true);
+}
+
+Stormtrooper.prototype = new Ally();
+Stormtrooper.prototype.constructor = Stormtrooper;
+
+// Tie Fighter
 function TieFighter(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 0.2, 4, true, true, false);
-    var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.2, 4, true, false, false);
+    var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.1, 4, true, false, false);
     Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
 }
 
@@ -121,7 +133,6 @@ Enemy.prototype.update = function () {
     } else { // approaching from the right
         this.x += this.speed * this.game.game.clockTick;
     }
-    //console.log("[" + this.x + ", " + this.y + "]");
     // something happens here
     Entity.prototype.update.call(this);
 };
@@ -141,7 +152,6 @@ Enemy.prototype.draw = function (ctx) {
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7, true, true, true);
     Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, approachAnim, approachAnim);
-    // console.log("[" + this.x + ", " + this.y + "]");
 }
 
 LukeEnemy.prototype = new Enemy();
