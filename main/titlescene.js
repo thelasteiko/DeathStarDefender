@@ -12,7 +12,6 @@ Background.prototype.update = function () {
 
 Background.prototype.draw = function (ctx) {
     //I want a picture
-    //console.log("Drawing background");
     ctx.drawImage(this.spriteSheet,
         0, 0,  // source from sheet
         801, 762,
@@ -195,7 +194,6 @@ TitleScene.prototype.startInput = function () {
     };
 
     var clickListener = function (e) {
-        console.log(getXandY(e));
         that.click = getXandY(e);
         that.game.changeScene(new LevelScene(that.game));
         that.game.ctx.canvas.removeEventListener("click", clickListener, false);

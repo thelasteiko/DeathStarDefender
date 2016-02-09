@@ -55,8 +55,6 @@ LevelScene.prototype.getRowAndCol = function (x, y) {
 };
 
 LevelScene.prototype.attackCallback = function (projectile, col, row) {
-    // console.log(projectile);
-    //that2.projectiles[row].push(projectile);
     if (projectile instanceof Sun) {
         // remove current sun from entities list
         if (this.suns[row][col]) {
@@ -74,13 +72,11 @@ LevelScene.prototype.startInput = function () {
     var that = this;
 
     this.ctx.canvas.addEventListener("mousemove", function (e) {
-        //console.log(getXandY(e));
         that.mouse = that.getRowAndCol(e.clientX, e.clientY);
     }, false);
 
     var clickSun = function (row, col) {
         that.suns[row][col].removeFromWorld = true;
-        // console.log("sun clicked");
         that.menu.counter.energycount += 25;
     };
 
@@ -91,8 +87,6 @@ LevelScene.prototype.startInput = function () {
         that.click = that.getRowAndCol(e.clientX, e.clientY);
 
         var attackCallback = function (projectile, col, row) {
-            // console.log(projectile);
-            //that2.projectiles[row].push(projectile);
             if (projectile instanceof Sun) {
                 // remove current sun from entities list
                 if (that.suns[row][col]) {
@@ -230,7 +224,6 @@ LevelScene.prototype.sendEnemy = function (row) {
     }
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
-    //console.log("[" + x + ", " + y + "]");
     var enemy = new LukeEnemy(this, x, y);
     this.addEntity(enemy, this.enemies, row);
 };
