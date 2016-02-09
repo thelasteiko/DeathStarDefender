@@ -15,39 +15,41 @@ AssetManager.prototype.isDone = function () {
 };
 
 AssetManager.prototype.downloadAll = function (callback) {
-    for (var i = 0; i < this.downloadQueue.length; i++) {
-        var that = this;
+    var that = this;
 
+    for (var i = 0; i < this.downloadQueue.length; i++) {
         var path = this.downloadQueue[i];
         console.log(path);
-        var img;
-        var ev;
-        if(path.includes(".png")) {
-            img = new Image();
-            ev = "load";
-            img.src = path;
-        } else {
-            img = new Audio(path);
-            img.autoplay = false;
-            ev = "canplay";
-        }
-        
+        var img = new Image();
+        var ev = "load";
+        img.src = path;
+
+        //if(path.indexOf(".png") < 0) {
+        //    img = new Image();
+        //    ev = "load";
+        //    img.src = path;
+        //} else {
+        //    img = new Audio(path);
+        //    img.autoplay = false;
+        //    ev = "canplay";
+        //}
+
         img.addEventListener(ev, function () {
             console.log("Loaded " + this.src);
             that.successCount++;
-            if(that.isDone()) callback();
+            if (that.isDone()) callback();
         });
-        
+
         img.addEventListener("error", function () {
             console.log("Error loading " + this.src);
             that.errorCount++;
             if (that.isDone()) callback();
         });
-        
+
         this.cache[path] = img;
     }
 };
 
 AssetManager.prototype.getAsset = function (path) {
-        return this.cache[path];
+    return this.cache[path];
 };

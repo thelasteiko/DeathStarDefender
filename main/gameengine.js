@@ -2,13 +2,13 @@
 
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (/* function */ callback) {
-                window.setTimeout(callback, 1000 / 60);
-            };
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (/* function */ callback) {
+            window.setTimeout(callback, 1000 / 60);
+        };
 })();
 
 
@@ -53,7 +53,7 @@ GameEngine.prototype.start = function (scene) {
     })();
 };
 
-GameEngine.prototype.changeScene = function(scene) {
+GameEngine.prototype.changeScene = function (scene) {
     this.scene = scene;
     scene.init(this.ctx);
 };
