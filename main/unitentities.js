@@ -57,12 +57,13 @@ Ally.prototype.update = function () {
 };
 
 Ally.prototype.draw = function (ctx) {
-    //var clock = this.game.game.clockTick;
-    if (this.attackAnim && this.attacking) { // attacking
-        this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-    } else { // approaching from the right
-        this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+    var isDrawn = false;
+    if (this.attacking && this.attackAnim) {
+        isDrawn = this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
+
+    // draw if the above did not draw
+    if(!isDrawn) this.idleAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
 };
 

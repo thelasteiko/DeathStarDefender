@@ -18,6 +18,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.drawOutlines = drawOutlines && DEBUG;
 }
 //x and y are the location in the canvas
+// returns whether or not a frame was drawn
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     scaleBy = scaleBy || 1; //used to scale image
     if (this.audio && this.elapsedTime === 0) {
@@ -31,7 +32,7 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
             this.elapsedTime = 0;
         }
     } else if (this.isDone()) {
-        return;
+        return false;
     }
 
     var index = this.currentFrame();
@@ -70,6 +71,8 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
         ctx.strokeStyle = "Red";
         ctx.strokeRect(locX, locY, this.frameWidth * scaleBy, this.frameHeight * scaleBy);
     }
+
+    return true;
 };
 
 Animation.prototype.currentFrame = function () {
