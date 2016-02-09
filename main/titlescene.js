@@ -8,7 +8,7 @@ Background.prototype = new Entity();
 Background.prototype.constructor = Background;
 
 Background.prototype.update = function () {
-}
+};
 
 Background.prototype.draw = function (ctx) {
     //I want a picture
@@ -20,7 +20,7 @@ Background.prototype.draw = function (ctx) {
         this.game.game.surfaceWidth,
         this.game.game.surfaceHeight);
     Entity.prototype.draw.call(this);
-}
+};
 
 function Title1(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
@@ -39,7 +39,8 @@ Title1.prototype.update = function () {
 
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
-}
+};
+
 //This is where I would change the animation
 Title1.prototype.draw = function (ctx) {
     if (this.growanimation.isDone()) {
@@ -54,7 +55,7 @@ Title1.prototype.draw = function (ctx) {
         this.growanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
-}
+};
 
 function Title2(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
@@ -73,7 +74,8 @@ Title2.prototype.update = function () {
 
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
-}
+};
+
 //This is where I would change the animation
 Title2.prototype.draw = function (ctx) {
     if (this.swipeanimation.isDone()) {
@@ -87,7 +89,7 @@ Title2.prototype.draw = function (ctx) {
         this.swipeanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
-}
+};
 
 function Ship(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
@@ -125,7 +127,8 @@ Ship.prototype.update = function () {
     }
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
-}
+};
+
 //This is where I would change the animation
 Ship.prototype.draw = function (ctx) {
     if (!this.reverse)
@@ -134,7 +137,7 @@ Ship.prototype.draw = function (ctx) {
         this.flyleft.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
-}
+};
 
 function Play(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
@@ -153,15 +156,15 @@ Play.prototype.update = function () {
 
     //calls the entity's update function which is not doing anything right now...
     Entity.prototype.update.call(this);
-}
+};
+
 //This is where I would change the animation
 Play.prototype.draw = function (ctx) {
     if (this.game.titleflags[2]) {
         this.playanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
     Entity.prototype.draw.call(this);
-}
-
+};
 
 function TitleScene(gameEngine) {
     Scene.call(this, gameEngine);
@@ -179,7 +182,7 @@ TitleScene.prototype.init = function () {
     this.addEntity(new Play(this));
     this.addEntity(new Ship(this));
     this.addEntity(new Title1(this));
-}
+};
 
 TitleScene.prototype.startInput = function () {
     console.log('Starting input');
@@ -189,16 +192,16 @@ TitleScene.prototype.startInput = function () {
         var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
         var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
         return {x: x, y: y};
-    }
+    };
 
     var clickListener = function (e) {
         console.log(getXandY(e));
         that.click = getXandY(e);
         that.game.changeScene(new LevelScene(that.game));
         that.game.ctx.canvas.removeEventListener("click", clickListener, false);
-    }
+    };
 
     this.game.ctx.canvas.addEventListener("click", clickListener, false);
 
     console.log('Input started');
-}
+};

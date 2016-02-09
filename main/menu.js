@@ -10,7 +10,7 @@ function SpriteImage(spritesheet, x, y, w, h) {
 SpriteImage.prototype.drawImage = function (ctx, dx, dy) {
     ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h,
         dx, dy, this.w, this.h);
-}
+};
 
 function MenuCounter(game, x, y) {
     /*Keeps track of and displays the amount of energy*/
@@ -31,7 +31,7 @@ MenuCounter.prototype.update = function () {
         this.energyTime = 0;
     }
     Entity.prototype.update.call(this);
-}
+};
 
 MenuCounter.prototype.draw = function (ctx) {
     ctx.drawImage(this.spritesheet,
@@ -40,7 +40,7 @@ MenuCounter.prototype.draw = function (ctx) {
     ctx.fillStyle = "white";
     ctx.fillText(this.energycount,
         this.x + this.textoffset.x, this.y + this.textoffset.y);
-}
+};
 
 MenuCounter.prototype.payTheMan = function (cost) {
     if (cost <= this.energycount) {
@@ -49,7 +49,7 @@ MenuCounter.prototype.payTheMan = function (cost) {
     }
     console.log("Error: item costs too much");
     return DEBUG;
-}
+};
 
 function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
     /*Initializes a modular menu item.
@@ -97,7 +97,7 @@ MenuItem.prototype.draw = function (ctx) {
     }
     ctx.fillText(this.title, this.x + 10, this.y + 50);
     ctx.fillText(this.price, this.x + 35, this.y + 70);
-}
+};
 
 MenuItem.prototype.update = function (energy) {
     if (energy >= this.price && this.state === "ready") {
@@ -106,7 +106,7 @@ MenuItem.prototype.update = function (energy) {
         this.state = "ready";
         this.animation.elapsedTime = 0;
     }
-}
+};
 
 MenuItem.prototype.trySelect = function () {
     if (this.state === "available") {
@@ -114,7 +114,7 @@ MenuItem.prototype.trySelect = function () {
         return true;
     }
     return DEBUG;
-}
+};
 
 //items should appear in a row
 function Menu(game, x, y) {
@@ -138,14 +138,15 @@ Menu.prototype.update = function () {
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].update(this.counter.energycount);
     }
-}
+};
 
 Menu.prototype.draw = function (ctx) {
     this.counter.draw(ctx);
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].draw(ctx);
     }
-}
+};
+
 //this will see if an item can be selected
 Menu.prototype.setSelection = function (x, y) {
     /*Checks the given coordinates against the range of
@@ -167,7 +168,7 @@ Menu.prototype.setSelection = function (x, y) {
         }
     }
     return false;
-}
+};
 
 Menu.prototype.addItem = function (game, title, price, spritesheet, objtype) {
     /*Adds a menu item to the menu using the parameters.*/
@@ -175,7 +176,7 @@ Menu.prototype.addItem = function (game, title, price, spritesheet, objtype) {
     var x = (this.items.length + 1) * 96;
     var y = this.y;
     this.items.push(new MenuItem(game, x, y, title, price, "ready", spritesheet, objtype));
-}
+};
 
 Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
     /*Returns an item of the correct type or null if no item is selected.*/
@@ -187,4 +188,4 @@ Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
         return obj;
     }
     return null;
-}
+};

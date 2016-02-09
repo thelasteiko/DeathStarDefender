@@ -1,6 +1,6 @@
 // GameBoard code below
 
-function GameBoard(game, numRows, numCols) {
+function GameBoard(game) {
     Entity.call(this, game, 0, 0);
 }
 
@@ -9,7 +9,7 @@ GameBoard.prototype.constructor = GameBoard;
 
 GameBoard.prototype.draw = function (ctx) {
     ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/gameboard.png"), this.x, this.y, 800, 797);
-}
+};
 
 function LevelScene(gameEngine) {
     Scene.call(this, gameEngine);
@@ -32,7 +32,6 @@ function LevelScene(gameEngine) {
         this.projectiles.push([]);
         this.vaderActive.push(true);
     }
-    this.activeAlly = "Luke";
 }
 
 LevelScene.prototype = new Scene();
@@ -40,12 +39,12 @@ LevelScene.prototype.constructor = LevelScene;
 
 LevelScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
-    this.board = new GameBoard(this, 5, 9);
+    this.board = new GameBoard(this);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
     window.setInterval(this.sendEnemy.bind(this), 3000);
     this.startInput();
-}
+};
 
 LevelScene.prototype.getRowAndCol = function (x, y) {
 
@@ -53,7 +52,7 @@ LevelScene.prototype.getRowAndCol = function (x, y) {
     var row = Math.floor((y - this.cornerOffsetY) / this.rowHeight);
 
     return {row: row, col: col};
-}
+};
 
 LevelScene.prototype.attackCallback = function (projectile, col, row) {
     // console.log(projectile);
@@ -68,7 +67,7 @@ LevelScene.prototype.attackCallback = function (projectile, col, row) {
         this.addEntity(projectile, this.projectiles, row);
         this.projectiles[row][col] = projectile;
     }
-}
+};
 
 LevelScene.prototype.startInput = function () {
     console.log('Starting input');
@@ -83,7 +82,7 @@ LevelScene.prototype.startInput = function () {
         that.suns[row][col].removeFromWorld = true;
         // console.log("sun clicked");
         that.menu.counter.energycount += 25;
-    }
+    };
 
     this.ctx.canvas.addEventListener("click", function (e) {
         var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
@@ -103,7 +102,7 @@ LevelScene.prototype.startInput = function () {
             } else {
                 that.addEntity(projectile, that.projectiles, row);
             }
-        }
+        };
 
         if (!that.menu.setSelection(x, y) && that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
@@ -135,7 +134,7 @@ LevelScene.prototype.startInput = function () {
     }, false);
 
     console.log('Input started');
-}
+};
 
 LevelScene.prototype.update = function () {
     Scene.prototype.update.call(this);
@@ -167,8 +166,8 @@ LevelScene.prototype.update = function () {
         }
     }
 
-    for (var i = 0; i < this.numRows; i++) {
-        for (var j = 0; j < this.numCols; j++) {
+    for (i = 0; i < this.numRows; i++) {
+        for (j = 0; j < this.numCols; j++) {
             if (this.suns[i] && this.suns[i][j]
                 && this.suns[i][j].removeFromWorld) {
                 this.suns[i][j] = undefined;
@@ -187,7 +186,7 @@ LevelScene.prototype.update = function () {
             }
         }
     }
-}
+};
 
 LevelScene.prototype.draw = function (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -223,24 +222,21 @@ LevelScene.prototype.draw = function (ctx) {
 
     ctx.restore();
     Scene.prototype.draw.call(this, ctx);
-}
+};
 
 LevelScene.prototype.sendEnemy = function (row) {
     if (!row) {
-        var row = Math.floor(Math.random() * 5);
+        row = Math.floor(Math.random() * 5);
     }
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
     //console.log("[" + x + ", " + y + "]");
     var enemy = new LukeEnemy(this, x, y);
     this.addEntity(enemy, this.enemies, row);
-    var that = this;
-}
+};
 
 LevelScene.prototype.addEntity = function (entity, list, row, col) {
-    //console.log('added entity');
     if (list == null) Scene.prototype.addEntity.call(this, entity);
     else if (col == null) list[row].push(entity);
     else  list[row][col] = entity;
-    // console.log("row", list[row]);
-}
+};

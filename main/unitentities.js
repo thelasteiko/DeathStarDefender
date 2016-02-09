@@ -69,7 +69,6 @@ Ally.prototype.draw = function (ctx) {
 Ally.prototype.fireProjectile = function () {
     if (!this.projectile) return;
     var projectile = new this.projectile(this.game, this.x, this.y);
-    this.hasProjectile = projectile;
     this.attackCallback(projectile, this.col, this.row);
 };
 
@@ -115,7 +114,6 @@ function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim) {
     this.approachAnim = approachAnim; // enemy moving from right to left
     this.waitAnim = waitAnim; // enemy waiting between attacks
     this.attackAnim = attackAnim; // enemy attacking
-    this.isEnemy = true;
 }
 
 Enemy.prototype = new Unit();
