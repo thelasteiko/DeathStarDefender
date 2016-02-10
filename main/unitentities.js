@@ -284,8 +284,8 @@ LukeProjectile.prototype.constructor = LukeProjectile;
 // SUN (techinically a projectile, but not normally used as such)
 
 function Sun(game, x, y) {
-    var anim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, -10, 64, 76, 0.2, 10, true, true, false, false, true);
-    Projectile.call(this, game, x, y - 12, 0, 0, anim);
+    var anim = new Animation(ASSET_MANAGER.getAsset("./main/img/ally/sun.png"), 0, 0, 64, 64, 0.2, 14, false, true, false, false, false);
+    Projectile.call(this, game, x, y, 0, 0, anim);
 }
 
 Sun.prototype = new Projectile();

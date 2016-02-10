@@ -112,6 +112,7 @@ ASSET_MANAGER.queueDownload("./main/img/ally/stormt.png");
 ASSET_MANAGER.queueDownload("./main/img/ally/vader.png");
 ASSET_MANAGER.queueDownload("./main/img/ally/lightning.png");
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/sun.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
