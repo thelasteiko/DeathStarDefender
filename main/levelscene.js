@@ -23,14 +23,12 @@ function LevelScene(gameEngine) {
     this.allies = [];
     this.enemies = [];
     this.projectiles = [];
-    // whether Vader is still active in a row
-    this.vaderActive = [];
+    this.vaders = [];
     for (var i = 0; i < this.numRows; i++) {
         this.suns.push([]);
         this.allies.push([]);
         this.enemies.push([]);
         this.projectiles.push([]);
-        this.vaderActive.push(true);
     }
 }
 
@@ -42,6 +40,9 @@ LevelScene.prototype.init = function (ctx) {
     this.board = new GameBoard(this);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
+    for (var i = 0; i < this.numRows; i++)
+        this.vaders.push(new Vader(this, 0,
+            this.cornerOffsetY + (64 * i), i));
     window.setInterval(this.sendEnemy.bind(this), 3000);
     this.startInput();
 };
@@ -158,6 +159,8 @@ LevelScene.prototype.update = function () {
                 }
             }
         }
+        if (this.vaders && this.vaders[i])
+            this.vaders[i].update();
     }
 
     for (i = 0; i < this.numRows; i++) {
@@ -187,6 +190,8 @@ LevelScene.prototype.draw = function (ctx) {
     ctx.save();
     this.board.draw(ctx);
     for (var i = 0; i < this.numRows; i++) {
+        if (this.vaders && this.vaders[i])
+            this.vaders[i].draw(ctx);
         for (var j = 0; j < this.numCols; j++) {
             if (this.allies[i] && this.allies[i][j]) {
                 this.allies[i][j].draw(ctx);

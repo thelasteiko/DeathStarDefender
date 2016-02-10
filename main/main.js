@@ -107,8 +107,11 @@ ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
 ASSET_MANAGER.queueDownload("./main/img/menutie.png");
 ASSET_MANAGER.queueDownload("./main/img/menustormtrooper.png");
 
-ASSET_MANAGER.queueDownload("./main/img/battery.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/battery.png");
 ASSET_MANAGER.queueDownload("./main/img/ally/stormt.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/vader.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/lightning.png");
+ASSET_MANAGER.queueDownload("./main/img/expl.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
