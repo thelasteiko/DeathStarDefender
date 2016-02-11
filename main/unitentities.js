@@ -128,7 +128,8 @@ Vader.prototype.draw = function (ctx) {
 };
 
 // ALLIES
-function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive, fireImmediately) {
+function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive,
+              fireImmediately, defencePadding) {
     Unit.call(this, game, x, y, hp, 0);
     this.col = col;
     this.row = row;
@@ -139,6 +140,7 @@ function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, pr
     this.projectileTime = fireImmediately ? projectileInterval : 0;
     this.projectileInterval = projectileInterval;
     this.isOffensive = isOffensive;
+    this.defencePadding = defencePadding ? defencePadding : 0;
 }
 
 Ally.prototype = new Unit();
@@ -154,13 +156,28 @@ Ally.prototype.update = function () {
     } else {
         this.projectileTime += this.game.game.clockTick;
         var row = this.game.getRowAndCol(this.x, this.y).row;
-        if (this.projectileTime >= this.projectileInterval && !(this.game.enemies[row].length === 0 && this.isOffensive)) {
+        if (this.isOffensive && this.areEnemiesAhead(row) && this.projectileTime >= this.projectileInterval) {
             this.projectileTime = 0;
             this.attacking = true;
             this.fireProjectile();
         }
     }
     //Unit.prototype.update.call(this);
+};
+
+Ally.prototype.areEnemiesAhead = function (row) {
+    if (!this.game.enemies[row]) return false;
+
+    var ret = false;
+    for (var i = 0; i < this.game.enemies[row].length; i++) {
+        var enemy = this.game.enemies[row][i];
+        if (enemy.x > this.x + this.defencePadding) ret = true;
+        else {
+            enemy.attacking = true;
+            enemy.waiting = false;
+        }
+    }
+    return ret;
 };
 
 Ally.prototype.draw = function (ctx) {
@@ -195,7 +212,7 @@ function Stormtrooper(game, x, y, col, row) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/stormt.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 1, 1, true, true, false);
     var attackAnim = new Animation(pic, 0, 0, 64, 64, .07, 7, true, false, false);
-    Ally.call(this, game, x, y, col, row, 100, idleAnim, attackAnim, null, null, 1, true, true);
+    Ally.call(this, game, x, y, col, row, 100, idleAnim, attackAnim, null, null, 1, true, true, 35);
 }
 
 Stormtrooper.prototype = new Ally();
@@ -257,7 +274,11 @@ Enemy.prototype.draw = function (ctx) {
 // Luke Enemy
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7, true, true, true);
-    Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, approachAnim, approachAnim);
+    var waitingAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, 0, 64, 64, 0.25, 6,
+        true, true, false, null, null, 0, 28);
+    var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96,
+        0.05, 10, true, true, false, null, null, -38, -6);
+    Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 
 LukeEnemy.prototype = new Enemy();
