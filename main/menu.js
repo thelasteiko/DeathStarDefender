@@ -77,7 +77,6 @@ MenuItem.prototype = new Entity();
 MenuItem.prototype.constructor = MenuItem;
 
 MenuItem.prototype.draw = function (ctx) {
-    //switch for the state
     switch (this.state) {
         case "ready": //charge has completed but price hasn't been met
             this.shadedpic.drawImage(ctx, this.x, this.y);
@@ -89,10 +88,11 @@ MenuItem.prototype.draw = function (ctx) {
             this.selectedpic.drawImage(ctx, this.x, this.y);
             break;
         case "charging": //item has been used recently
-            this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+            var isDrawn = this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+            if (!isDrawn) this.shadedpic.drawImage(ctx, this.x, this.y);
             break;
         default:
-            console.log("Error: Illegal state");
+            console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
     ctx.fillText(this.title, this.x + 10, this.y + 50);
     ctx.fillText(this.price, this.x + 35, this.y + 70);

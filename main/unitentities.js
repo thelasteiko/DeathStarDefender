@@ -86,8 +86,12 @@ Vader.prototype.update = function () {
                 this.state = "done";
             break;
 
+        case "done":
+            //do nothing!
+            break;
+
         default:
-            console.log("Assertion failed: state was " + this.state);
+            console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
 };
 
@@ -114,8 +118,12 @@ Vader.prototype.draw = function (ctx) {
             this.donepic.drawImage(ctx, this.x, this.y);
             break;
 
+        case "fire":
+            //do nothing!
+            break;
+
         default:
-            console.log("Assertion failed: state was " + this.state);
+            console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
 };
 
