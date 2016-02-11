@@ -8,7 +8,7 @@ GameBoard.prototype = new Entity();
 GameBoard.prototype.constructor = GameBoard;
 
 GameBoard.prototype.draw = function (ctx) {
-    ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/gameboard.png"), this.x, this.y, 800, 797);
+    ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/gameboard.png"), this.x, this.y, 800, 576);
 };
 
 function LevelScene(gameEngine) {
