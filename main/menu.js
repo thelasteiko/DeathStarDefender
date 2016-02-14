@@ -101,6 +101,8 @@ MenuItem.prototype.draw = function (ctx) {
 MenuItem.prototype.update = function (energy) {
     if (energy >= this.price && this.state === "ready") {
         this.state = "available";
+    } else if (energy < this.price && this.state === "available") {
+        this.state = "ready";
     } else if (this.animation.isDone()) {
         this.state = "ready";
         this.animation.elapsedTime = 0;
@@ -164,6 +166,7 @@ Menu.prototype.setSelection = function (x, y) {
                 this.current = null;
             }
         }
+        this.current = null;
     }
     return false;
 };

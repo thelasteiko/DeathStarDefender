@@ -98,8 +98,12 @@ LevelScene.prototype.startInput = function () {
                 that.addEntity(projectile, that.projectiles, row);
             }
         };
+        
+        if (that.menu.setSelection(x, y)) {
+            return;
+        }
 
-        if (!that.menu.setSelection(x, y) && that.click && that.click.col < that.numCols
+        if (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0) {
             var obj = that.menu.placeItem(
