@@ -111,10 +111,11 @@ LevelScene.prototype.startInput = function () {
             return;
         }
 
-        var ingrid = (that.click && that.click.col < that.numCols
+        var inGrid = (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0);
-        if (ingrid) {
+
+        if (inGrid) {
             var row = that.click.row;
             var col = that.click.col;
             if (!that.suns[row][col]) {
@@ -124,11 +125,11 @@ LevelScene.prototype.startInput = function () {
                     col, row, attackCallback);
                 if (obj && !that.allies[row][col])
                     that.addEntity(obj, that.allies, row, col);
-            } else
+            } else {
                 clickSun(that.click.row, that.click.col);
+            }
         } else if (DEBUG && that.click && that.click.col == that.numCols
-            && that.click.row < that.numRows && that.click.col >= 0
-            && that.click.row >= 0)
+            && that.click.row < that.numRows && that.click.row >= 0)
                 that.sendEnemy(that.click.row);
     }, false);
 
