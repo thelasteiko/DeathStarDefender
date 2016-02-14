@@ -85,7 +85,6 @@ Vader.prototype.update = function () {
         for (i = 0; i < list.length; i++) {
             if (list[i].x <= margin) {
                 return true;
-                break;
             }
         }
         return false;
@@ -104,8 +103,8 @@ Vader.prototype.update = function () {
             break;
 
         case "fire":
-            list = this.game.enemies[this.row];
-            for (i = 0; i < list.length; i++) {
+            var list = this.game.enemies[this.row];
+            for (var i = 0; i < list.length; i++) {
                 list[i].triggerDeath();
             }
             this.state = "firing";

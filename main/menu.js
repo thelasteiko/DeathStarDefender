@@ -165,10 +165,10 @@ Menu.prototype.setSelection = function (x, y) {
             } else {
                 this.current = null;
             }
+        } else if (DEBUG && i == -1) {
+            this.counter.energycount += 25;
         }
-        this.current = null;
     }
-    this.current = null;
     return false;
 };
 
