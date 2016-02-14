@@ -1,4 +1,4 @@
-var DEBUG = false; //should be false on gh-pages
+var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
 
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
                    frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
@@ -18,6 +18,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.drawOutlines = drawOutlines && DEBUG;
 }
 //x and y are the location in the canvas
+// returns whether or not a frame was drawn
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
     scaleBy = scaleBy || 1; //used to scale image
     if (this.audio && this.elapsedTime === 0) {
@@ -31,7 +32,7 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
             this.elapsedTime = 0;
         }
     } else if (this.isDone()) {
-        return;
+        return false;
     }
 
     var index = this.currentFrame();
@@ -67,18 +68,20 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
         this.frameHeight * scaleBy);
 
     if (this.drawOutlines) {
-        ctx.strokeStyle = "Red"
+        ctx.strokeStyle = "Red";
         ctx.strokeRect(locX, locY, this.frameWidth * scaleBy, this.frameHeight * scaleBy);
     }
-}
+
+    return true;
+};
 
 Animation.prototype.currentFrame = function () {
     return Math.floor(this.elapsedTime / this.frameDuration);
-}
+};
 
 Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
-}
+};
 
 
 // the "main" code begins here
@@ -101,7 +104,15 @@ ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
 
 ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
-ASSET_MANAGER.queueDownload("./main/img/battery.png");
+ASSET_MANAGER.queueDownload("./main/img/menutie.png");
+ASSET_MANAGER.queueDownload("./main/img/menustormtrooper.png");
+
+ASSET_MANAGER.queueDownload("./main/img/ally/battery.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/stormt.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/vader.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/lightning.png");
+ASSET_MANAGER.queueDownload("./main/img/expl.png");
+ASSET_MANAGER.queueDownload("./main/img/ally/sun.png");
 
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
