@@ -32,7 +32,7 @@ Unit.prototype.triggerDeath = function () {
     };
 };
 
-function Vader(scene, x, y, row) {
+function Vader(scene, x, y, row, defeatCallback) {
     var spritesheet = ASSET_MANAGER.getAsset("./main/img/ally/vader.png");
     var lightning = ASSET_MANAGER.getAsset("./main/img/ally/lightning.png");
     this.readypic = new SpriteImage(spritesheet, 0, 0, 64, 64);
@@ -42,6 +42,7 @@ function Vader(scene, x, y, row) {
     this.donepic = new SpriteImage(spritesheet, 576, 128, 64, 64);
     this.projectile = new Animation(lightning, 0, 0, 576, 64, .08, 12, false, false, false);
     this.row = row;
+    this.defeatCallback = defeatCallback;
     this.state = "ready";
     Unit.call(this, scene, x, y, 1000, 1000);
 }
@@ -50,16 +51,25 @@ Vader.prototype = new Unit();
 Vader.prototype.constructor = Vader;
 
 Vader.prototype.update = function () {
-    var list, i;
+
+    var that = this;
+    function theEnemyHasBreachedOurDefenses(margin) {
+        var list, i;
+        //check row for enemies x <= 64
+        list = that.game.enemies[that.row];
+        for (i = 0; i < list.length; i++) {
+            if (list[i].x <= margin) {
+                return true;
+                break;
+            }
+        }
+        return false;
+    }
+
     switch (this.state) {
         case "ready":
-            //check row for enemies x <= 64
-            list = this.game.enemies[this.row];
-            for (i = 0; i < list.length; i++) {
-                if (list[i].x <= 64) {
-                    this.state = "popup";
-                    break;
-                }
+            if (theEnemyHasBreachedOurDefenses(64)) {
+                this.state = "popup";
             }
             break;
 
@@ -87,7 +97,9 @@ Vader.prototype.update = function () {
             break;
 
         case "done":
-            //do nothing!
+            if (theEnemyHasBreachedOurDefenses(0)) {
+                this.defeatCallback();
+            }
             break;
 
         default:
