@@ -166,9 +166,7 @@ Menu.prototype.setSelection = function (x, y) {
                 this.current = null;
             }
         }
-        this.current = null;
     }
-    this.current = null;
     return false;
 };
 

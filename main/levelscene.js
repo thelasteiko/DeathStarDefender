@@ -111,36 +111,25 @@ LevelScene.prototype.startInput = function () {
             return;
         }
 
-        if (that.click && that.click.col < that.numCols
+        var ingrid = (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
-            && that.click.col >= 0 && that.click.row >= 0) {
-                var row = that.click.row;
-                var col = that.click.col;
-            var obj = that.menu.placeItem(
-                col * that.colWidth + that.cornerOffsetX,
-                row * that.rowHeight + that.cornerOffsetY,
-                col, row, attackCallback);
-            if (obj && !that.allies[row][col])
-                that.addEntity(obj, that.allies, row, col);
-        }
-
-        if (that.click && that.click.col < that.numCols
-            && that.click.row < that.numRows
-            && that.click.col >= 0 && that.click.row >= 0) {
-
-            // if the cell is occupied with an ally, check for suns
-            if (that.allies[that.click.row][that.click.col]) {
-                // this nested if could be condensed, but I want to keep the logic separate for now
-                if (that.suns[that.click.row][that.click.col]) {
-                    clickSun(that.click.row, that.click.col);
-                }
-            }
-
+            && that.click.col >= 0 && that.click.row >= 0);
+        if (ingrid) {
+            var row = that.click.row;
+            var col = that.click.col;
+            if (!that.suns[row][col]) {
+                var obj = that.menu.placeItem(
+                    col * that.colWidth + that.cornerOffsetX,
+                    row * that.rowHeight + that.cornerOffsetY,
+                    col, row, attackCallback);
+                if (obj && !that.allies[row][col])
+                    that.addEntity(obj, that.allies, row, col);
+            } else
+                clickSun(that.click.row, that.click.col);
         } else if (DEBUG && that.click && that.click.col == that.numCols
             && that.click.row < that.numRows && that.click.col >= 0
-            && that.click.row >= 0) {
-            that.sendEnemy(that.click.row);
-        }
+            && that.click.row >= 0)
+                that.sendEnemy(that.click.row);
     }, false);
 
     console.log('Input started');
