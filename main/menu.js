@@ -47,7 +47,7 @@ MenuCounter.prototype.payTheMan = function (cost) {
         this.energycount -= cost;
         return true;
     }
-    return DEBUG;
+    return false;
 };
 
 function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
@@ -114,7 +114,7 @@ MenuItem.prototype.trySelect = function () {
         this.state = "selected";
         return true;
     }
-    return DEBUG;
+    return false;
 };
 
 //items should appear in a row
@@ -168,6 +168,7 @@ Menu.prototype.setSelection = function (x, y) {
         }
         this.current = null;
     }
+    this.current = null;
     return false;
 };
 

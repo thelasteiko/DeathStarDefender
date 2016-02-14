@@ -106,11 +106,14 @@ LevelScene.prototype.startInput = function () {
         if (that.click && that.click.col < that.numCols
             && that.click.row < that.numRows
             && that.click.col >= 0 && that.click.row >= 0) {
+                var row = that.click.row;
+                var col = that.click.col;
             var obj = that.menu.placeItem(
-                that.click.col * that.colWidth + that.cornerOffsetX,
-                that.click.row * that.rowHeight + that.cornerOffsetY,
-                that.click.col, that.click.row, attackCallback);
-            if (obj) that.addEntity(obj, that.allies, that.click.row, that.click.col);
+                col * that.colWidth + that.cornerOffsetX,
+                row * that.rowHeight + that.cornerOffsetY,
+                col, row, attackCallback);
+            if (obj && !that.allies[row][col])
+                that.addEntity(obj, that.allies, row, col);
         }
 
         if (that.click && that.click.col < that.numCols
