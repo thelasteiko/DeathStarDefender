@@ -15,6 +15,14 @@ Unit.prototype.attack = function (other) {
     }
 };
 
+Unit.prototype.takeDamage = function(damage) {
+    this.hp -= damage;
+    if (this.hp <= 0) {
+        console.log("ah I'm dying");
+        this.triggerDeath();
+    }
+}
+
 Unit.prototype.update = function () {
     Entity.prototype.update.call(this);
 };
@@ -31,6 +39,23 @@ Unit.prototype.triggerDeath = function () {
             this.removeFromWorld = true;
     };
 };
+
+// Needs to be overridden to work properly. Think of it as an abstract overloaded method.
+Unit.prototype.setBoundaries = function(left, right) {
+    this.left = left;
+    this.right = right;
+}
+
+Unit.prototype.collide = function (other) {
+    this.setBoundaries();
+    other.setBoundaries();
+    var collide = ((this.left < other.right && this.right > other.left)
+        || (this.right < other.left && this.left > other.right));
+    if (collide) {
+        console.log("Collide!", this, other);
+    }
+    return collide;
+}
 
 function Vader(scene, x, y, row, defeatCallback) {
     var spritesheet = ASSET_MANAGER.getAsset("./main/img/ally/vader.png");
@@ -192,6 +217,14 @@ Ally.prototype.fireProjectile = function () {
     this.attackCallback(projectile, this.col, this.row);
 };
 
+Ally.prototype.setBoundaries = function (idleLeft, idleRight, attackLeft, attackRight) {
+    if (this.idle) {
+        Unit.prototype.setBoundaries.call(idleLeft, idleRight);
+    } else if (this.attacking) {
+        Unit.prototype.setBoundaries.call(attackLeft, attackRight);
+    }
+}
+
 // Battery
 function Battery(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/battery.png");
@@ -201,6 +234,10 @@ function Battery(game, x, y, col, row, attackCallback) {
 
 Battery.prototype = new Ally();
 Battery.prototype.constructor = Battery;
+
+Battery.prototype.setBoundaries = function () {
+    Ally.prototype.setBoundaries.call(this.x, this.x + 64, this.x, this.x + 64);
+}
 
 // Stormtrooper
 function Stormtrooper(game, x, y, col, row) {
@@ -213,6 +250,10 @@ function Stormtrooper(game, x, y, col, row) {
 Stormtrooper.prototype = new Ally();
 Stormtrooper.prototype.constructor = Stormtrooper;
 
+Stormtrooper.prototype.setBoundaries = function () {
+    Ally.prototype.setBoundaries.call(this.x, this.x + 64, this.x, this.x + 64);
+}
+
 // Tie Fighter
 function TieFighter(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png");
@@ -223,6 +264,10 @@ function TieFighter(game, x, y, col, row, attackCallback) {
 
 TieFighter.prototype = new Ally();
 TieFighter.prototype.constructor = TieFighter;
+
+TieFighter.prototype.setBoundaries = function () {
+    Ally.prototype.setBoundaries.call(this.x, this.x + 64, this.x, this.x + 64);
+}
 
 // ENEMIES
 
@@ -266,6 +311,22 @@ Enemy.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
+Enemy.prototype.setBoundaries = function (idleLeft, idleRight, attackLeft, attackRight, approachLeft, approachRight) {
+    if (this.waiting) {
+        Unit.prototype.setBoundaries.call(idleLeft, idleRight);
+    } else if (this.attacking) {
+        Unit.prototype.setBoundaries.call(attackLeft, attackRight);
+    } else { // approaching
+        Unit.prototype.setBoundaries.call(approachLeft, approachRight);
+    }
+}
+
+Enemy.prototype.attemptAttack = function (other) {
+    if (this.collide(other)) {
+        other.takeDamage(this.ap);
+    }
+}
+
 // Luke Enemy
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7, true, true, true);
@@ -274,6 +335,10 @@ function LukeEnemy(game, x, y) {
 
 LukeEnemy.prototype = new Enemy();
 LukeEnemy.prototype.constructor = LukeEnemy;
+
+LukeEnemy.prototype.setBoundaries = function () {
+    Enemy.prototype.setBoundaries.call(this.x, this.x + 64, this.x, this.x + 64, this.x, this.x + 64);
+}
 
 // PROJECTILES
 
@@ -304,6 +369,10 @@ Projectile.prototype.attack = function (other) {
     this.removeFromWorld = true;
 };
 
+Projectile.prototype.setBoundaries = function (left, right) {
+    Unit.prototype.setBoundaries.call(left, right);
+}
+
 // Luke Projectile
 function LukeProjectile(game, x, y) {
     var bulletAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 20, 64, 76, 0.05, 8, true, true, false);
@@ -312,6 +381,10 @@ function LukeProjectile(game, x, y) {
 
 LukeProjectile.prototype = new Projectile();
 LukeProjectile.prototype.constructor = LukeProjectile;
+
+LukeProjectile.prototype.setBoundaries = function () {
+    Projectile.prototype.setBoundaries.call(this.x, this.x + 64);
+}
 
 // SUN (techinically a projectile, but not normally used as such)
 

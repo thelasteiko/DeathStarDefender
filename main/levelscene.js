@@ -43,15 +43,19 @@ LevelScene.prototype.init = function (ctx) {
 
     var that = this;
     function gameOver() {
-        window.clearInterval(that.enemyInterval);
+        if (that.enemyInterval) {
+            window.clearInterval(that.enemyInterval);
+        }
         that.game.changeScene(new TitleScene(that.game));
     }
     for (var i = 0; i < this.numRows; i++)
         this.vaders.push(new Vader(this, 0,
             this.cornerOffsetY + (64 * i), i,
             gameOver));
-
-    this.enemyInterval = window.setInterval(this.sendEnemy.bind(this), 3000);
+    window.setTimeout(function () {
+        that.enemyInterval = window.setInterval(that.sendEnemy.bind(that),
+            DEBUG ? 3000 : 6000);
+    }, DEBUG ? 1000 : 10000);
     this.startInput();
 };
 
@@ -147,9 +151,41 @@ LevelScene.prototype.startInput = function () {
 };
 
 LevelScene.prototype.update = function () {
+    var that = this;
     Scene.prototype.update.call(this);
 
     this.board.update();
+
+    for (var i = 0; i < this.numRows; i++) {
+        // enemy vs allies check
+        if (this.enemies[i]) {
+            this.enemies[i].forEach(function() {
+                for (var j = 0; j < that.numCols; j++) {
+                    if (that.allies[i] && that.allies[i][j]) {
+                        this.attemptAttack(that.allies[i][j]);
+                    }
+                }
+            });
+        }
+        //    if (this.enemies[i] && this.enemies[i][j]) {
+        //        if (!this.enemies[i][j].removeFromWorld) {
+        //            this.enemies[i][j].update();
+        //        }
+        //    }
+        //    if (this.suns[i] && this.suns[i][j]) {
+        //        if (!this.suns[i][j].removeFromWorld) {
+        //            this.suns[i][j].update();
+        //        }
+        //    }
+        //    if (this.projectiles && this.projectiles[i][j]) {
+        //        if (!this.projectiles[i][j].removeFromWorld) {
+        //            this.projectiles[i][j].update();
+        //        }
+        //    }
+        //}
+        //if (this.vaders && this.vaders[i])
+        //    this.vaders[i].update();
+    }
 
     for (var i = 0; i < this.numRows; i++) {
         for (var j = 0; j < this.numCols; j++) {
