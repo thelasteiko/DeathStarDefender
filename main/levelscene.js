@@ -40,10 +40,18 @@ LevelScene.prototype.init = function (ctx) {
     this.board = new GameBoard(this);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
+
+    var that = this;
+    function gameOver() {
+        window.clearInterval(that.enemyInterval);
+        that.game.changeScene(new TitleScene(that.game));
+    }
     for (var i = 0; i < this.numRows; i++)
         this.vaders.push(new Vader(this, 0,
-            this.cornerOffsetY + (64 * i), i));
-    window.setInterval(this.sendEnemy.bind(this), 3000);
+            this.cornerOffsetY + (64 * i), i,
+            gameOver));
+
+    this.enemyInterval = window.setInterval(this.sendEnemy.bind(this), 3000);
     this.startInput();
 };
 
