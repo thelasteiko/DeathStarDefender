@@ -147,34 +147,23 @@ LevelScene.prototype.update = function () {
     this.board.update();
 
     for (var i = 0; i < this.numRows; i++) {
-        // enemy vs allies check
-        if (this.enemies[i]) {
-            this.enemies[i].forEach(function() {
-                for (var j = 0; j < that.numCols; j++) {
-                    if (that.allies[i] && that.allies[i][j]) {
-                        this.attemptAttack(that.allies[i][j]);
-                    }
-                }
+        // projectiles vs enemies check
+        if (this.projectiles[i] && this.enemies[i]) {
+            this.projectiles[i].forEach(function (projectile) {
+                return that.enemies[i].some(function (enemy) {
+                    return projectile.attemptAttack(enemy);
+                });
             });
         }
-        //    if (this.enemies[i] && this.enemies[i][j]) {
-        //        if (!this.enemies[i][j].removeFromWorld) {
-        //            this.enemies[i][j].update();
-        //        }
-        //    }
-        //    if (this.suns[i] && this.suns[i][j]) {
-        //        if (!this.suns[i][j].removeFromWorld) {
-        //            this.suns[i][j].update();
-        //        }
-        //    }
-        //    if (this.projectiles && this.projectiles[i][j]) {
-        //        if (!this.projectiles[i][j].removeFromWorld) {
-        //            this.projectiles[i][j].update();
-        //        }
-        //    }
-        //}
-        //if (this.vaders && this.vaders[i])
-        //    this.vaders[i].update();
+        // enemy vs allies check
+        var attackSuccess;
+        if (this.enemies[i] && that.allies[i]) {
+            this.enemies[i].forEach(function(enemy) {
+                return that.allies[i].some(function (ally) {
+                    return enemy.attemptAttack(ally);
+                });
+            });
+        }
     }
 
     for (var i = 0; i < this.numRows; i++) {
