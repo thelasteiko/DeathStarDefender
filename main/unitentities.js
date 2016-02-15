@@ -17,6 +17,7 @@ Unit.prototype.attack = function (other) {
 
 Unit.prototype.takeDamage = function(damage) {
     this.hp -= damage;
+    if(this.dying) return;
     if (this.hp <= 0) {
         console.log("ah I'm dying");
         this.triggerDeath();
@@ -38,6 +39,7 @@ Unit.prototype.triggerDeath = function () {
         if (this.animation.isDone())
             this.removeFromWorld = true;
     };
+    this.dying = true;
 };
 
 // Needs to be overridden to work properly. Think of it as an abstract overloaded method.
