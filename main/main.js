@@ -1,7 +1,8 @@
 var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
 
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
-                   frameDuration, frames, drawOutlines, loop, reverse, audio, loopReverse) {
+                   frameDuration, frames, drawOutlines, loop, reverse, audio,
+                   loopReverse, offsetX, offsetY) {
     this.spriteSheet = spriteSheet;
     this.startX = startX;
     this.startY = startY;
@@ -16,6 +17,8 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.loopReverse = loopReverse; // whether the animation should run forwards then backwards
     this.audio = audio;
     this.drawOutlines = drawOutlines && DEBUG;
+    this.offsetX = offsetX || 0;
+    this.offsetY = offsetY || 0;
 }
 //x and y are the location in the canvas
 // returns whether or not a frame was drawn
@@ -56,8 +59,8 @@ Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
 
     //the y needs to change if there are multiple rows
 
-    var locX = x;
-    var locY = y;
+    var locX = x + this.offsetX;
+    var locY = y + this.offsetY;
     var offset = vindex === 0 ? this.startX : 0;
     ctx.drawImage(this.spriteSheet,
         index * this.frameWidth + offset,
