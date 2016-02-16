@@ -156,7 +156,6 @@ LevelScene.prototype.update = function () {
             });
         }
         // enemy vs allies check
-        var attackSuccess;
         if (this.enemies[i] && that.allies[i]) {
             this.enemies[i].forEach(function(enemy) {
                 return that.allies[i].some(function (ally) {
@@ -166,7 +165,7 @@ LevelScene.prototype.update = function () {
         }
     }
 
-    for (var i = 0; i < this.numRows; i++) {
+    for (i = 0; i < this.numRows; i++) {
         for (var j = 0; j < this.numCols; j++) {
             if (this.allies[i] && this.allies[i][j]) {
                 if (!this.allies[i][j].removeFromWorld) {
