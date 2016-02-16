@@ -202,9 +202,11 @@ Ally.prototype.update = function () {
     } else {
         this.projectileTime += this.game.game.clockTick;
         var row = this.game.getRowAndCol(this.x, this.y).row;
-        if (this.isOffensive && this.projectileTime >= this.projectileInterval && this.game.enemies[row].length > 0) {
+        if (this.projectileTime >= this.projectileInterval) {
+            if (this.isOffensive && this.game.enemies[row].length > 0) {
+                this.attacking = true;
+            }
             this.projectileTime = 0;
-            this.attacking = true;
             this.fireProjectile();
         }
     }
@@ -315,7 +317,7 @@ Enemy.prototype.update = function () {
 
         }
     } else if (this.waiting) { // waiting between attacks
-        if(this.target.hp <= 0) { //if someone else kills the target
+        if (this.target.hp <= 0) { //if someone else kills the target
             this.waiting = false;
         }
     } else { // approaching from the right
