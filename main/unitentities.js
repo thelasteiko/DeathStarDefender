@@ -204,10 +204,13 @@ Ally.prototype.update = function () {
         var row = this.game.getRowAndCol(this.x, this.y).row;
         if (this.projectileTime >= this.projectileInterval) {
             if (this.isOffensive && this.game.enemies[row].length > 0) {
+                this.projectileTime = 0;
                 this.attacking = true;
+                this.fireProjectile();
+            } else if (this.constructor.name === "Battery") {
+                this.projectileTime = 0;
+                this.fireProjectile();
             }
-            this.projectileTime = 0;
-            this.fireProjectile();
         }
     }
     //Unit.prototype.update.call(this);
