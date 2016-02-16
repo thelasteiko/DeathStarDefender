@@ -59,9 +59,9 @@ Unit.prototype.collide = function (other) {
     other.setBoundaries();
     var collide = ((this.left < other.right && this.right > other.left)
     || (this.right < other.left && this.left > other.right));
-    if (collide) {
-        console.log("Colliding", this.constructor.name, "with", other.constructor.name);
-    }
+    //if (collide) {
+    //    console.log("Colliding", this.constructor.name, "with", other.constructor.name);
+    //}
     return collide;
 };
 
@@ -176,7 +176,7 @@ Vader.prototype.draw = function (ctx) {
 
 // ALLIES
 function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, projectile, projectileInterval, isOffensive,
-              fireImmediately, defencePadding) {
+              fireImmediately) {
     Unit.call(this, game, x, y, hp, 0);
     this.col = col;
     this.row = row;
@@ -187,7 +187,6 @@ function Ally(game, x, y, col, row, hp, idleAnim, attackAnim, attackCallback, pr
     this.projectileTime = fireImmediately ? projectileInterval : 0;
     this.projectileInterval = projectileInterval;
     this.isOffensive = isOffensive;
-    this.defencePadding = defencePadding ? defencePadding : 0;
 }
 
 Ally.prototype = new Unit();
@@ -203,28 +202,13 @@ Ally.prototype.update = function () {
     } else {
         this.projectileTime += this.game.game.clockTick;
         var row = this.game.getRowAndCol(this.x, this.y).row;
-        if (this.isOffensive && this.areEnemiesAhead(row) && this.projectileTime >= this.projectileInterval) {
+        if (this.isOffensive && this.projectileTime >= this.projectileInterval && this.game.enemies[row].length > 0) {
             this.projectileTime = 0;
             this.attacking = true;
             this.fireProjectile();
         }
     }
     //Unit.prototype.update.call(this);
-};
-
-Ally.prototype.areEnemiesAhead = function (row) {
-    if (!this.game.enemies[row]) return false;
-
-    var ret = false;
-    for (var i = 0; i < this.game.enemies[row].length; i++) {
-        var enemy = this.game.enemies[row][i];
-        if (enemy.x > this.x + this.defencePadding) ret = true;
-        else {
-            enemy.attacking = true;
-            enemy.waiting = false;
-        }
-    }
-    return ret;
 };
 
 Ally.prototype.draw = function (ctx) {
@@ -245,10 +229,10 @@ Ally.prototype.fireProjectile = function () {
 };
 
 Ally.prototype.setBoundaries = function (idleLeft, idleRight, attackLeft, attackRight) {
-    if (this.idle) {
-        Unit.prototype.setBoundaries.call(this, idleLeft, idleRight);
-    } else if (this.attacking) {
+    if (this.attacking) {
         Unit.prototype.setBoundaries.call(this, attackLeft, attackRight);
+    } else {
+        Unit.prototype.setBoundaries.call(this, idleLeft, idleRight);
     }
 };
 
@@ -256,7 +240,7 @@ Ally.prototype.setBoundaries = function (idleLeft, idleRight, attackLeft, attack
 function Battery(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/battery.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 1, 8, true, true, false);
-    Ally.call(this, game, x, y, col, row, 10, idleAnim, null, attackCallback, Sun, 8, false, false);
+    Ally.call(this, game, x, y, col, row, 15, idleAnim, null, attackCallback, Sun, 8, false, false);
 }
 
 Battery.prototype = new Ally();
@@ -271,7 +255,7 @@ function Stormtrooper(game, x, y, col, row) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/stormt.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 1, 1, true, true, false);
     var attackAnim = new Animation(pic, 0, 0, 64, 64, .07, 7, true, false, false);
-    Ally.call(this, game, x, y, col, row, 100, idleAnim, attackAnim, null, null, 1, true, true, 35);
+    Ally.call(this, game, x, y, col, row, 100, idleAnim, attackAnim, null, null, 1, true, true);
 }
 
 Stormtrooper.prototype = new Ally();
@@ -286,7 +270,7 @@ function TieFighter(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./main/img/ally/tiefighter.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 0.2, 4, true, true, false);
     var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.1, 4, true, false, false);
-    Ally.call(this, game, x, y, col, row, 10, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
+    Ally.call(this, game, x, y, col, row, 25, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
 }
 
 TieFighter.prototype = new Ally();
@@ -298,7 +282,7 @@ TieFighter.prototype.setBoundaries = function () {
 
 // ENEMIES
 
-function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim) {
+function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim, attackInterval) {
     Unit.call(this, game, x, y, hp, ap);
     this.speed = speed;
     this.waiting = false;
@@ -306,6 +290,7 @@ function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim) {
     this.approachAnim = approachAnim; // enemy moving from right to left
     this.waitAnim = waitAnim; // enemy waiting between attacks
     this.attackAnim = attackAnim; // enemy attacking
+    this.attackInterval = attackInterval ? attackInterval : 3000;
 }
 
 Enemy.prototype = new Unit();
@@ -316,16 +301,30 @@ Enemy.prototype.update = function () {
         this.removeFromWorld = true;
         return;
     }
-    if (this.waiting) { // waiting between attacks
+    if (this.attacking) { // attacking
+        if (this.attackAnim.isDone()) {
+            this.attackAnim.reset();
+            var enemyDead = this.target.takeDamage(this.ap);
+            this.attacking = false;
+            this.waiting = !enemyDead;
 
-    } else if (this.attacking) { // attacking
+            var that = this;
+            window.setTimeout(function () {
+                that.waiting = false;
+            }, this.attackInterval);
 
+        }
+    } else if (this.waiting) { // waiting between attacks
+        if(this.target.hp <= 0) { //if someone else kills the target
+            this.waiting = false;
+        }
     } else { // approaching from the right
         this.x += this.speed * this.game.game.clockTick;
     }
-    // something happens here
+// something happens here
     Entity.prototype.update.call(this);
-};
+}
+;
 
 Enemy.prototype.draw = function (ctx) {
     if (this.waiting) { // waiting between attacks
@@ -350,7 +349,7 @@ Enemy.prototype.setBoundaries = function (idleLeft, idleRight, attackLeft, attac
 
 Enemy.prototype.attemptAttack = function (other) {
     var collision = this.collide(other);
-    if (collision) {
+    if (collision && !this.waiting) {
         this.attacking = true;
         this.target = other;
     }
@@ -359,11 +358,12 @@ Enemy.prototype.attemptAttack = function (other) {
 
 // Luke Enemy
 function LukeEnemy(game, x, y) {
-    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7, true, true, true);
+    var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7,
+        true, true, true);
     var waitingAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, 0, 64, 64, 0.25, 6,
         true, true, false, null, null, 0, 28);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96,
-        0.05, 10, true, true, false, null, null, -38, -6);
+        0.05, 10, true, false, false, null, null, -38, -6);
     Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 

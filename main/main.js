@@ -86,6 +86,9 @@ Animation.prototype.isDone = function () {
     return (this.elapsedTime >= this.totalTime);
 };
 
+Animation.prototype.reset = function () {
+    this.elapsedTime = 0;
+};
 
 // the "main" code begins here
 
