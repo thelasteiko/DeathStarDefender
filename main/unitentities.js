@@ -7,14 +7,6 @@ function Unit(game, x, y, hp, ap) {
 Unit.prototype = new Entity();
 Unit.prototype.constructor = Unit;
 
-// Other is another unit
-Unit.prototype.attack = function (other) {
-    other.hp -= this.ap;
-    if (other.hp <= 0) {
-        other.removeFromWorld = true;
-    }
-};
-
 Unit.prototype.takeDamage = function (damage) {
     if (this.dying) return;
     this.hp -= damage;
@@ -33,10 +25,10 @@ Unit.prototype.update = function () {
 
 Unit.prototype.triggerDeath = function () {
     var spritesheet = ASSET_MANAGER.getAsset("./main/img/expl.png");
-    this.animation = new Animation(spritesheet, 0, 0, 96, 96, .1, 15, false, false, false);
-    var that = this;
+    var audio = ASSET_MANAGER.getAsset("./main/audio/bomb.mp3");
+    this.animation = new Animation(spritesheet, 0, 0, 96, 96, .1, 15, false, false, false, audio);
     this.draw = function (ctx) {
-        this.animation.drawFrame(that.game.game.clockTick, ctx, that.x - 16, that.y - 8);
+        this.animation.drawFrame(this.game.game.clockTick, ctx, this.x - 16, this.y - 32);
     };
     this.update = function () {
         if (this.animation.isDone())
@@ -364,12 +356,12 @@ Enemy.prototype.attemptAttack = function (other) {
 // Luke Enemy
 function LukeEnemy(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7,
-        true, true, true);
+        true, true, true, null, null, 0, -32);
     var waitingAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, 0, 64, 64, 0.25, 6,
-        true, true, false, null, null, 0, 28);
+        true, true, false, null, null, 0, 28-32);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96,
-        0.05, 10, true, false, false, null, null, -38, -6);
-    Enemy.call(this, game, x, y - 32, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
+        0.05, 10, true, false, false, null, null, -38, -6-32);
+    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 
 LukeEnemy.prototype = new Enemy();

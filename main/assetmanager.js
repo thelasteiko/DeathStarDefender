@@ -24,15 +24,15 @@ AssetManager.prototype.downloadAll = function (callback) {
         var ev = "load";
         img.src = path;
 
-        //if(path.indexOf(".png") < 0) {
-        //    img = new Image();
-        //    ev = "load";
-        //    img.src = path;
-        //} else {
-        //    img = new Audio(path);
-        //    img.autoplay = false;
-        //    ev = "canplay";
-        //}
+        if(path.indexOf(".png") >= 0) {
+            img = new Image();
+            ev = "load";
+            img.src = path;
+        } else {
+            img = new Audio(path);
+            img.autoplay = false;
+            ev = "canplay";
+        }
 
         img.addEventListener(ev, function () {
             console.log("Loaded " + this.src);

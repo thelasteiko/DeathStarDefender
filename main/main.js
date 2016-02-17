@@ -120,6 +120,9 @@ ASSET_MANAGER.queueDownload("./main/img/ally/lightning.png");
 ASSET_MANAGER.queueDownload("./main/img/expl.png");
 ASSET_MANAGER.queueDownload("./main/img/ally/sun.png");
 
+//Audio
+ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
+
 ASSET_MANAGER.downloadAll(function () {
     console.log("Downloading...");
     var canvas = document.getElementById('gameWorld');
