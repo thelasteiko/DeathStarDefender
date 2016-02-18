@@ -1,0 +1,1 @@
+var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
