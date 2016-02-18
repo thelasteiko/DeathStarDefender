@@ -17,7 +17,7 @@ function MenuCounter(game, x, y) {
     this.energycount = 50; //initial energy
     this.energyTime = 0;
     this.textoffset = {x: 26, y: 65};
-    this.spritesheet = ASSET_MANAGER.getAsset("./main/img/menucounter.png");
+    this.spritesheet = ASSET_MANAGER.getAsset("./assets/img/menucounter.png");
     Entity.call(this, game, x, y);
 }
 
@@ -123,11 +123,11 @@ function Menu(game, x, y) {
     this.current = null;
     this.counter = new MenuCounter(game, this.x, this.y);
     this.items = [];
-    this.addItem(game, "Battery", 50, ASSET_MANAGER.getAsset("./main/img/menubattery.png"),
+    this.addItem(game, "Battery", 50, ASSET_MANAGER.getAsset("./assets/img/menubattery.png"),
         Battery);
-    this.addItem(game, "Fighter", 75, ASSET_MANAGER.getAsset("./main/img/menutie.png"),
+    this.addItem(game, "Fighter", 75, ASSET_MANAGER.getAsset("./assets/img/menutie.png"),
         TieFighter);
-    this.addItem(game, "Trooper", 75, ASSET_MANAGER.getAsset("./main/img/menustormtrooper.png"),
+    this.addItem(game, "Trooper", 75, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
         Stormtrooper);
 }
 

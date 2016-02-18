@@ -1,5 +1,3 @@
-var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
-
 function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
                    frameDuration, frames, drawOutlines, loop, reverse, audio,
                    loopReverse, offsetX, offsetY) {
@@ -20,6 +18,7 @@ function Animation(spriteSheet, startX, startY, frameWidth, frameHeight,
     this.offsetX = offsetX || 0;
     this.offsetY = offsetY || 0;
 }
+
 //x and y are the location in the canvas
 // returns whether or not a frame was drawn
 Animation.prototype.drawFrame = function (tick, ctx, x, y, scaleBy) {
@@ -89,46 +88,3 @@ Animation.prototype.isDone = function () {
 Animation.prototype.reset = function () {
     this.elapsedTime = 0;
 };
-
-// the "main" code begins here
-
-var ASSET_MANAGER = new AssetManager();
-
-ASSET_MANAGER.queueDownload("./main/img/background.png");
-ASSET_MANAGER.queueDownload("./main/img/title2.png");
-
-// Go specific; delete later
-ASSET_MANAGER.queueDownload("./main/img/gameboard.png");
-
-// ENEMIES
-// Luke
-ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeImg.png");
-ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeRun.png");
-ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeJumpAttack.png");
-ASSET_MANAGER.queueDownload("./main/img/enemy/luke/LukeIdle.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/tiefighter.png");
-
-ASSET_MANAGER.queueDownload("./main/img/menucounter.png");
-ASSET_MANAGER.queueDownload("./main/img/menubattery.png");
-ASSET_MANAGER.queueDownload("./main/img/menutie.png");
-ASSET_MANAGER.queueDownload("./main/img/menustormtrooper.png");
-
-ASSET_MANAGER.queueDownload("./main/img/ally/battery.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/stormt.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/vader.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/lightning.png");
-ASSET_MANAGER.queueDownload("./main/img/expl.png");
-ASSET_MANAGER.queueDownload("./main/img/ally/sun.png");
-
-//Audio
-ASSET_MANAGER.queueDownload("./main/audio/bomb.mp3");
-
-ASSET_MANAGER.downloadAll(function () {
-    console.log("Downloading...");
-    var canvas = document.getElementById('gameWorld');
-    var ctx = canvas.getContext('2d');
-
-    var gameEngine = new GameEngine();
-    gameEngine.init(ctx);
-    gameEngine.start(new TitleScene(gameEngine));
-});

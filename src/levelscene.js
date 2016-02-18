@@ -5,7 +5,7 @@
 var levelWaves = [
     [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
     [[1000, 4, 1, 3000], [3000, 4, 1, 2000], [3000, 4, 1, 1000]] // Wave data for level 1
-]
+];
 
 function GameBoard(game) {
     Entity.call(this, game, 0, 0);
@@ -15,7 +15,7 @@ GameBoard.prototype = new Entity();
 GameBoard.prototype.constructor = GameBoard;
 
 GameBoard.prototype.draw = function (ctx) {
-    ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/gameboard.png"), this.x, this.y, 800, 576);
+    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/gameboard.png"), this.x, this.y, 800, 576);
 };
 
 function Wave(waveDataArray) {
@@ -83,13 +83,13 @@ LevelScene.prototype.startTimerToNextWave = function () {
     window.setTimeout(function () {
         that.sendEnemyInWave(wave);
     }, wave.startDelay);
-}
+};
 
 LevelScene.prototype.sendEnemyInWave = function (wave) {
     console.log("yoooooooo", wave);
     var that = this;
     if (wave.remainingEnemies <= 0) {
-        console.log("end of wave")
+        console.log("end of wave");
         this.endWave();
     } else {
         this.sendEnemy();
@@ -98,7 +98,7 @@ LevelScene.prototype.sendEnemyInWave = function (wave) {
             that.sendEnemyInWave(wave);
         }, wave.enemyInterval);
     }
-}
+};
 
 LevelScene.prototype.endWave = function() {
     this.wave++;
@@ -108,7 +108,7 @@ LevelScene.prototype.endWave = function() {
         console.log("end of enemies");
         this.noEnemiesRemainInQueue = true;
     }
-}
+};
 
 LevelScene.prototype.getRowAndCol = function (x, y) {
 
@@ -269,7 +269,7 @@ LevelScene.prototype.update = function () {
     // Check for victory
     if (this.noEnemiesRemainInQueue) { // If the last wave has finished sending enemies
         var allEnemiesKilled = true;
-        for (var i = 0; i < this.enemies.length; i++) { // Check if all enemies dead
+        for (i = 0; i < this.enemies.length; i++) { // Check if all enemies dead
             if (this.enemies[i].length > 0) {
                 allEnemiesKilled = false;
                 break;
