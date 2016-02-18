@@ -2,10 +2,17 @@
 
 // Provides the data used to generate waves in each level. 
 // Each row is a level, each column is a wave in that level.
-var levelWaves = [
-    [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
-    [[1000, 4, 1, 3000], [3000, 4, 1, 2000], [3000, 4, 1, 1000]] // Wave data for level 1
-];
+var levelWaves = DEBUG ?
+    [
+        [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
+        [[1000, 4, 1, 3000], [3000, 4, 1, 2000], [3000, 4, 1, 1000]] // Wave data for level 1
+    ]
+    :
+    [
+        [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
+        [[30000, 4, 1, 7500], [15000, 4, 1, 5000], [15000, 4, 1, 1000]] // Wave data for level 1
+    ];
+
 
 function GameBoard(game) {
     Entity.call(this, game, 0, 0);
@@ -63,12 +70,14 @@ LevelScene.prototype.init = function (ctx) {
     this.addEntity(this.menu);
 
     var that = this;
+
     function gameOver() {
         //if (that.enemyInterval) {
         //    window.clearInterval(that.enemyInterval);
         //}
         that.game.changeScene(new TitleScene(that.game));
     }
+
     for (var i = 0; i < this.numRows; i++)
         this.vaders.push(new Vader(this, 0,
             this.cornerOffsetY + (64 * i), i,
@@ -100,7 +109,7 @@ LevelScene.prototype.sendEnemyInWave = function (wave) {
     }
 };
 
-LevelScene.prototype.endWave = function() {
+LevelScene.prototype.endWave = function () {
     this.wave++;
     if (this.wave < levelWaves[this.level].length) {
         this.startTimerToNextWave();
@@ -161,14 +170,14 @@ LevelScene.prototype.startInput = function () {
                 that.addEntity(projectile, that.projectiles, row);
             }
         };
-        
+
         if (that.menu.setSelection(x, y)) {
             return;
         }
 
         var inGrid = (that.click && that.click.col < that.numCols
-            && that.click.row < that.numRows
-            && that.click.col >= 0 && that.click.row >= 0);
+        && that.click.row < that.numRows
+        && that.click.col >= 0 && that.click.row >= 0);
 
         if (inGrid) {
             var row = that.click.row;
@@ -185,7 +194,7 @@ LevelScene.prototype.startInput = function () {
             }
         } else if (DEBUG && that.click && that.click.col == that.numCols
             && that.click.row < that.numRows && that.click.row >= 0)
-                that.sendEnemy(that.click.row);
+            that.sendEnemy(that.click.row);
     }, false);
 
     console.log('Input started');
@@ -208,7 +217,7 @@ LevelScene.prototype.update = function () {
         }
         // enemy vs allies check
         if (this.enemies[i] && that.allies[i]) {
-            this.enemies[i].forEach(function(enemy) {
+            this.enemies[i].forEach(function (enemy) {
                 return that.allies[i].some(function (ally) {
                     return enemy.attemptAttack(ally);
                 });

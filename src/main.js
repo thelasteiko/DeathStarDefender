@@ -1,5 +1,3 @@
-var DEBUG = window.location.href.indexOf("thelasteiko.github.io/DeathStarDefender") < 0;
-
 var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./assets/img/background.png");
