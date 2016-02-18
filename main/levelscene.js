@@ -1,5 +1,12 @@
 // GameBoard code below
 
+// Provides the data used to generate waves in each level. 
+// Each row is a level, each column is a wave in that level.
+var levelWaves = [
+    [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
+    [[1000, 4, 1, 3000], [3000, 4, 1, 2000], [3000, 4, 1, 1000]] // Wave data for level 1
+]
+
 function GameBoard(game) {
     Entity.call(this, game, 0, 0);
 }
@@ -11,8 +18,22 @@ GameBoard.prototype.draw = function (ctx) {
     ctx.drawImage(ASSET_MANAGER.getAsset("./main/img/gameboard.png"), this.x, this.y, 800, 576);
 };
 
-function LevelScene(gameEngine) {
+function Wave(waveDataArray) {
+    this.startDelay = waveDataArray[0]; // How long we wait before starting the wave
+    this.remainingEnemies = waveDataArray[1]; // How many enemies remain in the wave
+    this.difficulty = waveDataArray[2]; // The difficulty of the levels in the game (will be
+                                        // used in conjunction with a random number generator
+                                        // to select an enemy
+    this.enemyInterval = waveDataArray[3];  // How often an enemy gets sent. 
+}
+
+// LevelScene code
+
+function LevelScene(gameEngine, level) {
     Scene.call(this, gameEngine);
+    this.level = level; // The current level. Right now, the first level is level 1, and
+                        // level 0 is being ignored. 
+    this.wave = 0; // The current wave within the level (0-indexed)
     this.numRows = 5;
     this.numCols = 9;
     this.cornerOffsetX = 64;
@@ -43,21 +64,51 @@ LevelScene.prototype.init = function (ctx) {
 
     var that = this;
     function gameOver() {
-        if (that.enemyInterval) {
-            window.clearInterval(that.enemyInterval);
-        }
+        //if (that.enemyInterval) {
+        //    window.clearInterval(that.enemyInterval);
+        //}
         that.game.changeScene(new TitleScene(that.game));
     }
     for (var i = 0; i < this.numRows; i++)
         this.vaders.push(new Vader(this, 0,
             this.cornerOffsetY + (64 * i), i,
             gameOver));
-    window.setTimeout(function () {
-        that.enemyInterval = window.setInterval(that.sendEnemy.bind(that),
-            DEBUG ? 3000 : 6000);
-    }, DEBUG ? 1000 : 10000);
     this.startInput();
+    this.startTimerToNextWave();
 };
+
+LevelScene.prototype.startTimerToNextWave = function () {
+    var that = this;
+    var wave = new Wave(levelWaves[this.level][this.wave]);
+    window.setTimeout(function () {
+        that.sendEnemyInWave(wave);
+    }, wave.startDelay);
+}
+
+LevelScene.prototype.sendEnemyInWave = function (wave) {
+    console.log("yoooooooo", wave);
+    var that = this;
+    if (wave.remainingEnemies <= 0) {
+        console.log("end of wave")
+        this.endWave();
+    } else {
+        this.sendEnemy();
+        wave.remainingEnemies--;
+        window.setTimeout(function () {
+            that.sendEnemyInWave(wave);
+        }, wave.enemyInterval);
+    }
+}
+
+LevelScene.prototype.endWave = function() {
+    this.wave++;
+    if (this.wave < levelWaves[this.level].length) {
+        this.startTimerToNextWave();
+    } else {
+        console.log("end of enemies");
+        this.noEnemiesRemainInQueue = true;
+    }
+}
 
 LevelScene.prototype.getRowAndCol = function (x, y) {
 
@@ -172,7 +223,9 @@ LevelScene.prototype.update = function () {
                     this.allies[i][j].update();
                 }
             }
+            // 
             if (this.enemies[i] && this.enemies[i][j]) {
+                // Why are we checking enemies by their column?
                 if (!this.enemies[i][j].removeFromWorld) {
                     this.enemies[i][j].update();
                 }
@@ -210,6 +263,22 @@ LevelScene.prototype.update = function () {
                 && this.projectiles[i][j].removeFromWorld) {
                 this.projectiles[i].splice(j, 1);
             }
+        }
+    }
+
+    // Check for victory
+    if (this.noEnemiesRemainInQueue) { // If the last wave has finished sending enemies
+        var allEnemiesKilled = true;
+        for (var i = 0; i < this.enemies.length; i++) { // Check if all enemies dead
+            if (this.enemies[i].length > 0) {
+                allEnemiesKilled = false;
+                break;
+            }
+        }
+        if (allEnemiesKilled) { // If all enemies dead, win!
+            // TODO: replace with actual victory indicator
+            console.log("You must be Katniss Everdeen, because you are a victor");
+            this.game.changeScene(new TitleScene(this.game));
         }
     }
 };
@@ -258,7 +327,7 @@ LevelScene.prototype.sendEnemy = function (row) {
     }
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
-    var enemy = new LukeEnemy(this, x, y);
+    var enemy = new Luke(this, x, y);
     this.addEntity(enemy, this.enemies, row);
 };
 

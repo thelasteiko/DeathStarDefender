@@ -353,8 +353,8 @@ Enemy.prototype.attemptAttack = function (other) {
     return collision;
 };
 
-// Luke Enemy
-function LukeEnemy(game, x, y) {
+// Luke
+function Luke(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7,
         true, true, true, null, null, 0, -32);
     var waitingAnim = new Animation(ASSET_MANAGER.getAsset("./main/img/enemy/luke/LukeIdle.png"), 0, 0, 64, 64, 0.25, 6,
@@ -364,10 +364,10 @@ function LukeEnemy(game, x, y) {
     Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 
-LukeEnemy.prototype = new Enemy();
-LukeEnemy.prototype.constructor = LukeEnemy;
+Luke.prototype = new Enemy();
+Luke.prototype.constructor = Luke;
 
-LukeEnemy.prototype.setBoundaries = function () {
+Luke.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64, this.x, this.x + 64);
 };
 

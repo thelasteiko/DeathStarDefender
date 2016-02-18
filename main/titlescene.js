@@ -195,7 +195,7 @@ TitleScene.prototype.startInput = function () {
 
     var clickListener = function (e) {
         that.click = getXandY(e);
-        that.game.changeScene(new LevelScene(that.game));
+        that.game.changeScene(new LevelScene(that.game, 1));
         that.game.ctx.canvas.removeEventListener("click", clickListener, false);
     };
 
