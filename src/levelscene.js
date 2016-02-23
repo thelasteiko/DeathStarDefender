@@ -89,13 +89,14 @@ LevelScene.prototype.init = function (ctx) {
 LevelScene.prototype.startTimerToNextWave = function () {
     var that = this;
     var wave = new Wave(levelWaves[this.level][this.wave]);
+    console.log("New Wave:", wave);
     window.setTimeout(function () {
         that.sendEnemyInWave(wave);
     }, wave.startDelay);
+
 };
 
 LevelScene.prototype.sendEnemyInWave = function (wave) {
-    console.log("yoooooooo", wave);
     var that = this;
     if (wave.remainingEnemies <= 0) {
         console.log("end of wave");
