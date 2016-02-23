@@ -11,7 +11,7 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [[30000, 4, 1, 7500], [15000, 4, 1, 5000], [15000, 4, 1, 1000], // Wave data for level 1
-        [10000, 8, 1, 500], [5000, 4, 1, 1000], [10000, 10, 1, 300]]
+            [10000, 8, 1, 500], [5000, 4, 1, 1000], [10000, 10, 1, 300]]
     ];
 
 
@@ -184,15 +184,14 @@ LevelScene.prototype.startInput = function () {
         if (inGrid) {
             var row = that.click.row;
             var col = that.click.col;
-            if (!that.suns[row][col]) {
+            if (that.suns[row][col]) {
+                clickSun(that.click.row, that.click.col);
+            } else if (!that.allies[row][col]) {
                 var obj = that.menu.placeItem(
                     col * that.colWidth + that.cornerOffsetX,
                     row * that.rowHeight + that.cornerOffsetY,
                     col, row, attackCallback);
-                if (obj && !that.allies[row][col])
-                    that.addEntity(obj, that.allies, row, col);
-            } else {
-                clickSun(that.click.row, that.click.col);
+                if (obj) that.addEntity(obj, that.allies, row, col);
             }
         } else if (DEBUG && that.click && that.click.col == that.numCols
             && that.click.row < that.numRows && that.click.row >= 0)
