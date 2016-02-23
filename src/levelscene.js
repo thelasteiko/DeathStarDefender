@@ -10,7 +10,8 @@ var levelWaves = DEBUG ?
     :
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
-        [[30000, 4, 1, 7500], [15000, 4, 1, 5000], [15000, 4, 1, 1000]] // Wave data for level 1
+        [[30000, 4, 1, 7500], [15000, 4, 1, 5000], [15000, 4, 1, 1000], // Wave data for level 1
+        [10000, 8, 1, 500], [5000, 4, 1, 1000], [10000, 10, 1, 300]]
     ];
 
 
@@ -89,13 +90,14 @@ LevelScene.prototype.init = function (ctx) {
 LevelScene.prototype.startTimerToNextWave = function () {
     var that = this;
     var wave = new Wave(levelWaves[this.level][this.wave]);
+    console.log("New Wave:", wave);
     window.setTimeout(function () {
         that.sendEnemyInWave(wave);
     }, wave.startDelay);
+
 };
 
 LevelScene.prototype.sendEnemyInWave = function (wave) {
-    console.log("yoooooooo", wave);
     var that = this;
     if (wave.remainingEnemies <= 0) {
         console.log("end of wave");

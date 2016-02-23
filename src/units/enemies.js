@@ -87,7 +87,7 @@ Luke.prototype = new Enemy();
 Luke.prototype.constructor = Luke;
 
 Luke.prototype.setBoundaries = function () {
-    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64, this.x, this.x + 64);
+    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
 };
 
 function Leia(game, x, y) {
