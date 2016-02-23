@@ -75,7 +75,7 @@ Battery.prototype = new Ally();
 Battery.prototype.constructor = Battery;
 
 Battery.prototype.setBoundaries = function () {
-    Ally.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64);
+    Ally.prototype.setBoundaries.call(this, this.x + 32, this.x + 64, this.x + 32, this.x + 64);
 };
 
 // Stormtrooper
@@ -90,7 +90,7 @@ Stormtrooper.prototype = new Ally();
 Stormtrooper.prototype.constructor = Stormtrooper;
 
 Stormtrooper.prototype.setBoundaries = function () {
-    Ally.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64);
+    Ally.prototype.setBoundaries.call(this, this.x + 32, this.x + 64, this.x + 32, this.x + 64);
 };
 
 // Tie Fighter
@@ -105,5 +105,5 @@ TieFighter.prototype = new Ally();
 TieFighter.prototype.constructor = TieFighter;
 
 TieFighter.prototype.setBoundaries = function () {
-    Ally.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64);
+    Ally.prototype.setBoundaries.call(this, this.x + 32, this.x + 64, this.x + 32, this.x + 64);
 };
