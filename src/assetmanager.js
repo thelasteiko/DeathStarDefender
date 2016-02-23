@@ -24,7 +24,7 @@ AssetManager.prototype.downloadAll = function (callback) {
         var ev = "load";
         img.src = path;
 
-        if(path.indexOf(".png") >= 0) {
+        if (path.indexOf(".png") >= 0) {
             img = new Image();
             ev = "load";
             img.src = path;
@@ -32,15 +32,19 @@ AssetManager.prototype.downloadAll = function (callback) {
             img = new Audio(path);
             img.autoplay = false;
             ev = "canplay";
+            img.loaded = false;
         }
 
         img.addEventListener(ev, function () {
+            if (this.loaded) return;
+            this.loaded = true;
             console.log("Loaded " + this.src);
             that.successCount++;
             if (that.isDone()) callback();
         });
 
         img.addEventListener("error", function () {
+            if (this.loaded) return;
             console.log("Error loading " + this.src);
             that.errorCount++;
             if (that.isDone()) callback();
