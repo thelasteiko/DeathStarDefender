@@ -43,7 +43,7 @@ Enemy.prototype.update = function () {
 ;
 
 Enemy.prototype.draw = function (ctx) {
-    if (this.waiting) { // waiting between attacks
+    if (this.waiting && this.waitAnim) { // waiting between attacks
         this.waitAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     } else if (this.attacking) { // attacking
         this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -89,3 +89,15 @@ Luke.prototype.constructor = Luke;
 Luke.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x, this.x + 64, this.x, this.x + 64, this.x, this.x + 64);
 };
+
+function Leia(game, x, y) {
+    var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/leia.png");
+    var approachAnim = new Animation(spritesheet,0,0,64,64,.1,8,false,true,false,null,null,0,0);
+    var waitAnim = new Animation(spritesheet,0,192,64,64,.1,3,false,true,false,null,null,0,0);
+    var attackAnim = new Animation(spritesheet,0,64,96,64,.1,9,false,false,false,null,null,-32,0);
+    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim,waitAnim,attackAnim);
+}
+
+Leia.prototype = new Enemy();
+Leia.prototype.constructor = Leia;
+
