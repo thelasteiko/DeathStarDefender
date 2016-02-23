@@ -49,10 +49,6 @@ Unit.prototype.collide = function (other) {
     if (this.dying || other.dying) return false;
     this.setBoundaries();
     other.setBoundaries();
-    var collide = ((this.left < other.right && this.right > other.left)
+    return ((this.left < other.right && this.right > other.left)
     || (this.right < other.left && this.left > other.right));
-    //if (collide) {
-    //    console.log("Colliding", this.constructor.name, "with", other.constructor.name);
-    //}
-    return collide;
 };

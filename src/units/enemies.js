@@ -46,7 +46,9 @@ Enemy.prototype.draw = function (ctx) {
     if (this.waiting && this.waitAnim) { // waiting between attacks
         this.waitAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     } else if (this.attacking) { // attacking
-        this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+        var frameDrawn = this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
+        //if the attack is finished, then a frame will not be drawn. So draw an idle frame
+        if (!frameDrawn) this.waitAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     } else { // approaching from the right
         this.approachAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
@@ -77,9 +79,9 @@ function Luke(game, x, y) {
     var approachAnim = new Animation(ASSET_MANAGER.getAsset("./assets/img/enemy/luke/LukeRun.png"), 0, 0, 64, 96, 0.1, 7,
         true, true, true, null, null, 0, -32);
     var waitingAnim = new Animation(ASSET_MANAGER.getAsset("./assets/img/enemy/luke/LukeIdle.png"), 0, 0, 64, 64, 0.25, 6,
-        true, true, false, null, null, 0, 28-32);
+        true, true, false, null, null, 0, 28 - 32);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./assets/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96,
-        0.05, 10, true, false, false, null, null, -38, -6-32);
+        0.05, 10, true, false, false, null, null, -38, -6 - 32);
     Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 
@@ -92,12 +94,16 @@ Luke.prototype.setBoundaries = function () {
 
 function Leia(game, x, y) {
     var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/leia.png");
-    var approachAnim = new Animation(spritesheet,0,0,64,64,.1,8,false,true,false,null,null,0,0);
-    var waitAnim = new Animation(spritesheet,0,192,64,64,.1,3,false,true,false,null,null,0,0);
-    var attackAnim = new Animation(spritesheet,0,64,96,64,.1,9,false,false,false,null,null,-32,0);
-    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim,waitAnim,attackAnim);
+    var approachAnim = new Animation(spritesheet, 0, 0, 64, 64, .1, 8, true, true, false, null, null, 0, 0);
+    var waitAnim = new Animation(spritesheet, 0, 192, 64, 64, .3, 3, true, true, false, null, null, 0, 0);
+    var attackAnim = new Animation(spritesheet, 0, 64, 96, 64, .1, 9, true, false, false, null, null, -32, 0);
+    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitAnim, attackAnim);
 }
 
 Leia.prototype = new Enemy();
 Leia.prototype.constructor = Leia;
+
+Leia.prototype.setBoundaries = function () {
+    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
+};
 

@@ -45,7 +45,7 @@ FlashProjectile.prototype.constructor = FlashProjectile;
 
 FlashProjectile.prototype.draw = function (ctx) {
     this.animation.drawImage(ctx, this.x, this.y);
-}
+};
 
 FlashProjectile.prototype.setBoundaries = function () {
     Projectile.prototype.setBoundaries.call(this, this.x, this.x + 64);
