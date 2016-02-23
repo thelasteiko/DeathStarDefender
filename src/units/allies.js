@@ -98,7 +98,7 @@ function TieFighter(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./assets/img/ally/tiefighter.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 0.2, 4, true, true, false);
     var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.1, 4, true, false, false);
-    Ally.call(this, game, x, y, col, row, 25, idleAnim, attackAnim, attackCallback, LukeProjectile, 5, true, true);
+    Ally.call(this, game, x, y, col, row, 25, idleAnim, attackAnim, attackCallback, FlashProjectile, 5, true, true);
 }
 
 TieFighter.prototype = new Ally();

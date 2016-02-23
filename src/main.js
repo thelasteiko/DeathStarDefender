@@ -25,6 +25,7 @@ ASSET_MANAGER.queueDownload("./assets/img/ally/vader.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/lightning.png");
 ASSET_MANAGER.queueDownload("./assets/img/expl.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/sun.png");
+ASSET_MANAGER.queueDownload("./assets/img/ally/projectile.png");
 
 //Audio
 ASSET_MANAGER.queueDownload("./assets/audio/bomb.mp3");
