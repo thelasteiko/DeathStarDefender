@@ -4,7 +4,8 @@ ASSET_MANAGER.queueDownload("./assets/img/background.png");
 ASSET_MANAGER.queueDownload("./assets/img/title2.png");
 
 // Go specific; delete later
-ASSET_MANAGER.queueDownload("./assets/img/gameboard.png");
+ASSET_MANAGER.queueDownload("./assets/img/boardbase.png");
+ASSET_MANAGER.queueDownload("./assets/img/boardtop.png");
 
 // ENEMIES
 // Luke

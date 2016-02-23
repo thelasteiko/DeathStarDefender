@@ -15,16 +15,27 @@ var levelWaves = DEBUG ?
     ];
 
 
-function GameBoard(game) {
+function BoardBase(game) {
     Entity.call(this, game, 0, 0);
 }
 
-GameBoard.prototype = new Entity();
-GameBoard.prototype.constructor = GameBoard;
+BoardBase.prototype = new Entity();
+BoardBase.prototype.constructor = BoardBase;
 
-GameBoard.prototype.draw = function (ctx) {
-    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/gameboard.png"), this.x, this.y, 800, 576);
+BoardBase.prototype.draw = function (ctx) {
+    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/boardbase.png"), this.x, this.y, 800, 576);
 };
+
+function BoardTop(game) {
+    Entity.call(this,game,0,0);
+}
+
+BoardTop.prototype = new Entity();
+BoardTop.prototype.constructor = BoardTop;
+
+BoardTop.prototype.draw = function (ctx) {
+    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/boardtop.png"),this.x, this.y,800,576);
+}
 
 function Wave(waveDataArray) {
     this.startDelay = waveDataArray[0]; // How long we wait before starting the wave
@@ -66,7 +77,8 @@ LevelScene.prototype.constructor = LevelScene;
 
 LevelScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
-    this.board = new GameBoard(this);
+    this.boardbase = new BoardBase(this);
+    this.boardtop = new BoardTop(this);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
 
@@ -206,8 +218,6 @@ LevelScene.prototype.update = function () {
     var that = this;
     Scene.prototype.update.call(this);
 
-    this.board.update();
-
     for (var i = 0; i < this.numRows; i++) {
         // projectiles vs enemies check
         if (this.projectiles[i] && this.enemies[i]) {
@@ -297,7 +307,7 @@ LevelScene.prototype.update = function () {
 LevelScene.prototype.draw = function (ctx) {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     ctx.save();
-    this.board.draw(ctx);
+    this.boardbase.draw(ctx);
     for (var i = 0; i < this.numRows; i++) {
         if (this.vaders && this.vaders[i])
             this.vaders[i].draw(ctx);
@@ -327,7 +337,7 @@ LevelScene.prototype.draw = function (ctx) {
             this.mouse.col * this.colWidth + this.cornerOffsetX,
             this.mouse.row * this.rowHeight + this.cornerOffsetY);
     }
-
+    this.boardtop.draw(ctx);
     ctx.restore();
     Scene.prototype.draw.call(this, ctx);
 };
