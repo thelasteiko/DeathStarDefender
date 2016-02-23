@@ -13,6 +13,7 @@ ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeJumpAttack.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeIdle.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/tiefighter.png");
+ASSET_MANAGER.queueDownload("./assets/img/enemy/leia.png");
 
 ASSET_MANAGER.queueDownload("./assets/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./assets/img/menubattery.png");
@@ -25,6 +26,7 @@ ASSET_MANAGER.queueDownload("./assets/img/ally/vader.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/lightning.png");
 ASSET_MANAGER.queueDownload("./assets/img/expl.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/sun.png");
+ASSET_MANAGER.queueDownload("./assets/img/ally/projectile.png");
 
 //Audio
 ASSET_MANAGER.queueDownload("./assets/audio/bomb.mp3");

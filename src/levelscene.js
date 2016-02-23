@@ -335,9 +335,10 @@ LevelScene.prototype.sendEnemy = function (row) {
     if (!row) {
         row = Math.floor(Math.random() * 5);
     }
+    var prob = Math.floor(Math.random() * 100);
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
-    var enemy = new Luke(this, x, y);
+    var enemy = prob < 20 ? new Leia(this,x,y) : new Luke(this, x, y);
     this.addEntity(enemy, this.enemies, row);
 };
 

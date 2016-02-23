@@ -59,7 +59,7 @@ function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
     this.title = title; //string to describe item
     this.price = price;
     //charging animation
-    this.animation = new Animation(spritesheet, 0, 0, 96, 96, 1,
+    this.animation = new Animation(spritesheet, 0, 0, 96, 96, .8,
         12, false, false, false);
     this.availablepic = new SpriteImage(spritesheet, 96, 288, 96, 96);
     //item is selected by player
