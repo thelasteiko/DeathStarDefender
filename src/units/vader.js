@@ -64,9 +64,8 @@ Vader.prototype.update = function () {
 
         case "done":
             if (theEnemyHasBreachedOurDefenses(0)) {
-                if (!DEBUG) {
+                if (!DEBUG)
                     this.defeatCallback();
-                }
             }
             break;
 

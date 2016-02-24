@@ -99,17 +99,14 @@ LevelScene.prototype.init = function (ctx) {
     this.addEntity(this.menu);
 
     var that = this;
-
     function gameOver() {
-        this.ctx.canvas.removeEventListener("click", this.clickFunction);
-        this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
+        that.ctx.canvas.removeEventListener("click", this.clickFunction);
+        that.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
         that.game.changeScene(new TitleScene(that.game));
     }
 
     for (var i = 0; i < this.numRows; i++)
-        this.vaders.push(new Vader(this, 0,
-            this.cornerOffsetY + (64 * i), i,
-            gameOver));
+        this.vaders.push(new Vader(this, 0, this.cornerOffsetY + (64 * i), i, gameOver));
     this.startInput();
     this.startTimerToNextWave();
 };
