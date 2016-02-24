@@ -111,19 +111,18 @@ Scene.prototype.addEntity = function (entity) {
 };
 
 Scene.prototype.draw = function (ctx) {
-    ctx.save();
+    //ctx.save();
     for (var i = 0; i < this.entities.length; i++) {
-        this.entities[i].draw(ctx);
+        var entity = this.entities[i];
+        entity.draw(ctx);
     }
-    ctx.restore();
+    //ctx.restore();
 };
 
 Scene.prototype.update = function () {
     var entitiesCount = this.entities.length;
-
     for (var i = 0; i < entitiesCount; i++) {
         var entity = this.entities[i];
-
         if (!entity.removeFromWorld) {
             entity.update();
         }

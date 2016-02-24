@@ -101,7 +101,10 @@ LevelScene.prototype.init = function (ctx) {
 
 LevelScene.prototype.startTimerToNextWave = function () {
     var that = this;
-    var wave = new Wave(levelWaves[this.level][this.wave]);
+    var i = this.level ? this.level : 0;
+    var j = this.wave ? this.wave : 0;
+    //if (!this.level || !this.wave) return;
+    var wave = new Wave(levelWaves[i][j]);
     console.log("New Wave:", wave);
     window.setTimeout(function () {
         that.sendEnemyInWave(wave);
@@ -298,7 +301,7 @@ LevelScene.prototype.update = function () {
         if (allEnemiesKilled) { // If all enemies dead, win!
             // TODO: replace with actual victory indicator
             console.log("You must be Katniss Everdeen, because you are a victor");
-            this.game.changeScene(new TitleScene(this.game));
+            this.game.changeScene(new WinScene(this.game));
         }
     }
 };
@@ -346,7 +349,7 @@ LevelScene.prototype.sendEnemy = function (row) {
         row = Math.floor(Math.random() * 5);
     }
     var prob = Math.floor(Math.random() * 100);
-    var x = this.cornerOffsetX + (this.numCols * this.colWidth);
+    var x = this.cornerOffsetX + (this.numCols * this.colWidth)+64;
     var y = this.cornerOffsetY + (row * this.rowHeight);
     var enemy = prob < 20 ? new Leia(this,x,y) : new Luke(this, x, y);
     this.addEntity(enemy, this.enemies, row);

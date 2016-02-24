@@ -40,4 +40,5 @@ ASSET_MANAGER.downloadAll(function () {
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
     gameEngine.start(new TitleScene(gameEngine));
+    //gameEngine.start(new WinScene(gameEngine));
 });
