@@ -1,23 +1,24 @@
-function randomColor () {
+function randomColor() {
     var str = "rgb(";
-    var num = Math.floor((Math.random()*1000) % 255);
+    var num = Math.floor((Math.random() * 1000) % 255);
     str += num;
     for (var i = 1; i < 3; i++) {
-        num = Math.floor((Math.random()*1000) % 255);
+        num = Math.floor((Math.random() * 1000) % 255);
         str += "," + num;
     }
     str += ")";
     return str;
-};
-/*
-function Background(game) {
-    Entity.call(this, game, 0, 0);
-    this.radius = 200;
-    this.spriteSheet = ASSET_MANAGER.getAsset("./assets/img/background.png");
 }
 
-Background.prototype = new Entity();
-Background.prototype.constructor = Background;*/
+/*
+ function Background(game) {
+ Entity.call(this, game, 0, 0);
+ this.radius = 200;
+ this.spriteSheet = ASSET_MANAGER.getAsset("./assets/img/background.png");
+ }
+
+ Background.prototype = new Entity();
+ Background.prototype.constructor = Background;*/
 
 function Play2(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
@@ -37,26 +38,26 @@ Play2.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 /*
-Background.prototype.draw = function (ctx) {
-    //I want a picture
-    ctx.drawImage(this.spriteSheet,
-        0, 0,  // source from sheet
-        801, 762,
-        0, 0,
-        this.game.game.surfaceWidth,
-        this.game.game.surfaceHeight);
-    Entity.prototype.draw.call(this);
-};*/
+ Background.prototype.draw = function (ctx) {
+ //I want a picture
+ ctx.drawImage(this.spriteSheet,
+ 0, 0,  // source from sheet
+ 801, 762,
+ 0, 0,
+ this.game.game.surfaceWidth,
+ this.game.game.surfaceHeight);
+ Entity.prototype.draw.call(this);
+ };*/
 
 function Firework(game) {
     //between 0 and 576
-    this.maxheight = Math.floor((Math.random()*1000)%500);
-    this.speed = Math.floor(Math.random()*10)+5;
-    this.candynum = Math.floor(Math.random()*10)+10;
+    this.maxheight = Math.floor((Math.random() * 1000) % 500);
+    this.speed = Math.floor(Math.random() * 10) + 5;
+    this.candynum = Math.floor(Math.random() * 10) + 10;
     //this.candynum = 1;
     this.state = "rising";
     this.color = randomColor();
-    var x = Math.floor((Math.random()*1000)%800);
+    var x = Math.floor((Math.random() * 1000) % 800);
     var y = 576;
     Entity.call(this, game, x, y);
     //console.log("Speed: " + this.speed);
@@ -80,42 +81,42 @@ Firework.prototype.update = function () {
         //console.log("Speed: " + this.speed);
         this.y -= this.speed;
     }
-}
+};
 
 Firework.prototype.draw = function (ctx) {
     switch (this.state) {
         case "rising":
             ctx.fillStyle = this.color;
             ctx.fillRect(this.x, this.y, 10, 20);
-        break;
+            break;
         case "exploding":
             for (var i = 0; i < this.candynum; i++) {
                 var negx = Math.random();
                 var negy = Math.random();
-                var x = Math.floor(Math.random()*5)+1;
-                var y = Math.floor(Math.random()*5)+1;
+                var x = Math.floor(Math.random() * 5) + 1;
+                var y = Math.floor(Math.random() * 5) + 1;
                 x = negx < .5 ? -x : x;
                 y = negy < .5 ? -y : y;
                 this.game.addEntity(new Firecandy(
                     this.game, this.x, this.y, {x: x, y: y}));
             }
-        break;
+            break;
     }
+};
+
+function distance(a, b) {
+    var diffx = a.x - b.x;
+    var diffy = a.y - b.y;
+    return Math.sqrt(diffx * diffx + diffy * diffy);
 }
 
-function distance (a, b) {
-    var diffx = a.x-b.x;
-    var diffy = a.y-b.y;
-    return Math.sqrt(diffx*diffx + diffy*diffy);
-}
-
-function Firecandy (game, x, y, velocity) {
+function Firecandy(game, x, y, velocity) {
     this.origin = {x: x, y: y};
     this.friction = .7;
     this.vi = velocity;
     this.velocity = velocity;
     this.color = randomColor();
-    this.maxdist = Math.floor(Math.random()*200)+30;
+    this.maxdist = Math.floor(Math.random() * 200) + 30;
     Entity.call(this, game, x, y);
 }
 
@@ -134,17 +135,17 @@ Firecandy.prototype.update = function () {
         this.velocity.x = fx;
         this.velocity.y = fy;
     }
-}
+};
 
 Firecandy.prototype.draw = function (ctx) {
     ctx.beginPath();
     ctx.fillStyle = this.color;
-    ctx.arc(this.x, this.y, 5, 0, Math.PI*2);
+    ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
-}
+};
 
-function Congrats (game, x, y, character) {
+function Congrats(game, x, y, character) {
     this.color = randomColor();
     this.timeout = 300;
     this.character = character;
@@ -161,16 +162,16 @@ Congrats.prototype.update = function () {
     } else {
         this.timeout -= 1;
     }
-}
+};
 
 Congrats.prototype.draw = function (ctx) {
     ctx.fillStyle = this.color;
     ctx.font = "92px Lucida Console";
     ctx.fillText(this.character, this.x, this.y);
     //console.log("Drawing Text: " + this.character);
-}
+};
 
-function TextBlock (game, x, y, block) {
+function TextBlock(game, x, y, block) {
     this.color = "White";
     this.block = block;
     Entity.call(this, game, x, y);
@@ -189,14 +190,14 @@ TextBlock.prototype.draw = function (ctx) {
         var c = this.block.charAt(i);
         if (c === "\n") {
             nc += 1;
-            ctx.fillText(str, this.x, this.y + (50*nc));
+            ctx.fillText(str, this.x, this.y + (50 * nc));
             str = "";
         } else {
             str += c;
         }
     }
-    
-}
+
+};
 
 function WinScene(gameEngine) {
     Scene.call(this, gameEngine);
@@ -214,30 +215,32 @@ WinScene.prototype.init = function (ctx) {
     this.totalfireworks = 0;
     var str = "Congratulations!";
     var pxw = 50;
-    for (var i = 0; i < str.length; i++) 
-        this.addEntity(new Congrats(this, 5+(i*pxw), 200,
+    for (var i = 0; i < str.length; i++)
+        this.addEntity(new Congrats(this, 5 + (i * pxw), 200,
             str.charAt(i)));
     this.tb = new TextBlock(this, 400, 250,
         "You have successfully defeated the rebel scum\n"
         + "and secured your Empire!\n");
     this.startInput();
-}
+};
 
 WinScene.prototype.startInput = function () {
     if (!this.ctx) return;
     var that = this;
-    this.ctx.canvas.addEventListener("click", function (e) {
+    var clickFunction = function () {
+        that.ctx.canvas.removeEventListener("click", clickFunction);
         that.game.changeScene(new LevelScene(that.game, 1));
-    });
-}
+    };
+    this.ctx.canvas.addEventListener("click", clickFunction);
+};
 
-WinScene.prototype.update = function() {
+WinScene.prototype.update = function () {
     if (this.totalfireworks < this.maxfireworks) {
         this.addEntity(new Firework(this));
         this.totalfireworks += 1;
     }
     Scene.prototype.update.call(this);
-}
+};
 
 WinScene.prototype.draw = function (ctx) {
     ctx.save();
@@ -246,4 +249,4 @@ WinScene.prototype.draw = function (ctx) {
     this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
-}
+};

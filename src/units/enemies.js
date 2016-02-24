@@ -107,3 +107,17 @@ Leia.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
 };
 
+function XWing(game, x, y) {
+    var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/xwing_sprite.png");
+    var approachAnim = new Animation(spritesheet, 0, 0, 64, 64, .5, 4, true, true, false, null, null, 0, 0);
+    var attackAnim = new Animation(spritesheet, 0, 64, 64, 64, .15, 4, true, false, false, null, null, 0, 0);
+    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, approachAnim, attackAnim);
+}
+
+XWing.prototype = new Enemy();
+XWing.prototype.constructor = XWing;
+
+XWing.prototype.setBoundaries = function () {
+    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
+};
+

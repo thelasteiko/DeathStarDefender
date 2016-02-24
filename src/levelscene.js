@@ -12,7 +12,7 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [1000, 4, [["Luke", 1]], 3000], // Wave data for level 1
+            [1000, 4, [["XWing", 1]], 3000], // Wave data for level 1
             [3000, 4, [["Luke", 0.5], ["Leia", 1]], 2000],
             [3000, 4, [["Leia", 1]], 1000]
         ]
@@ -21,12 +21,12 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [30000, 4, [["Luke", 0.75], ["Leia", 1]], 7500], // Wave data for level 1
-            [15000, 4, [["Luke", 0.75], ["Leia", 1]], 5000],
-            [15000, 4, [["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 8, [["Luke", 0.75], ["Leia", 1]], 500],
-            [5000, 4, [["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 10, [["Luke", 0.75], ["Leia", 1]], 300]
+            [30000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 7500], // Wave data for level 1
+            [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 5000],
+            [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
+            [10000, 8, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 500],
+            [5000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
+            [10000, 10, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 300]
         ]
     ];
 
@@ -43,15 +43,15 @@ BoardBase.prototype.draw = function (ctx) {
 };
 
 function BoardTop(game) {
-    Entity.call(this,game,0,0);
+    Entity.call(this, game, 0, 0);
 }
 
 BoardTop.prototype = new Entity();
 BoardTop.prototype.constructor = BoardTop;
 
 BoardTop.prototype.draw = function (ctx) {
-    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/boardtop.png"),this.x, this.y,800,576);
-}
+    ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/boardtop.png"), this.x, this.y, 800, 576);
+};
 
 function Wave(waveDataArray) {
     this.startDelay = waveDataArray[0]; // How long we wait before starting the wave
@@ -101,9 +101,8 @@ LevelScene.prototype.init = function (ctx) {
     var that = this;
 
     function gameOver() {
-        //if (that.enemyInterval) {
-        //    window.clearInterval(that.enemyInterval);
-        //}
+        this.ctx.canvas.removeEventListener("click", this.clickFunction);
+        this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
         that.game.changeScene(new TitleScene(that.game));
     }
 
@@ -177,16 +176,17 @@ LevelScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
-    this.ctx.canvas.addEventListener("mousemove", function (e) {
+    this.mouseMoveListener = function (e) {
         that.mouse = that.getRowAndCol(e.clientX, e.clientY);
-    }, false);
+    };
+    this.ctx.canvas.addEventListener("mousemove", this.mouseMoveListener, false);
 
     var clickSun = function (row, col) {
         that.suns[row][col].removeFromWorld = true;
         that.menu.counter.energycount += 25;
     };
 
-    this.ctx.canvas.addEventListener("click", function (e) {
+    this.clickFunction = function (e) {
         var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
         var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
 
@@ -227,7 +227,8 @@ LevelScene.prototype.startInput = function () {
         } else if (DEBUG && that.click && that.click.col == that.numCols
             && that.click.row < that.numRows && that.click.row >= 0)
             that.sendEnemy(that.click.row);
-    }, false);
+    };
+    this.ctx.canvas.addEventListener("click", this.clickFunction, false);
 
     console.log('Input started');
 };
@@ -314,8 +315,8 @@ LevelScene.prototype.update = function () {
             }
         }
         if (allEnemiesKilled) { // If all enemies dead, win!
-            // TODO: replace with actual victory indicator
-            console.log("You must be Katniss Everdeen, because you are a victor");
+            this.ctx.canvas.removeEventListener("click", this.clickFunction);
+            this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
             this.game.changeScene(new WinScene(this.game));
         }
     }
@@ -363,8 +364,7 @@ LevelScene.prototype.sendEnemy = function (row) {
     if (!row) {
         row = Math.floor(Math.random() * 5);
     }
-    var prob = Math.floor(Math.random() * 100);
-    var x = this.cornerOffsetX + (this.numCols * this.colWidth)+64;
+    var x = this.cornerOffsetX + (this.numCols * this.colWidth) + 64;
     var y = this.cornerOffsetY + (row * this.rowHeight);
     var enemyString;
     var rand = Math.random();
@@ -385,11 +385,14 @@ LevelScene.prototype.sendEnemy = function (row) {
         case "Leia":
             enemyType = Leia;
             break;
+        case "XWing":
+            enemyType = XWing;
+            break;
         default:
-            enemyType = Luke;
+            enemyType = XWing;
             break;
     }
-    var enemy = new enemyType(this,x,y);
+    var enemy = new enemyType(this, x, y);
     this.addEntity(enemy, this.enemies, row);
 };
 
