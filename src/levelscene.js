@@ -4,7 +4,10 @@
 // Each row is a level, each column is a wave in that level.
 // Probababilities for each enemy type are strictly increasing and
 // are calculated as the difference between the probability given
-// and the previous probability (which is 0 if first element).
+// and the previous probability (which is 0 if first element). 
+// Last probability must be 1. 
+// Ex: [["Luke", 0.3], ["Leia", 1]] gives a 30% chance of a Luke
+// and a 70% chance of a Leia.
 var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
