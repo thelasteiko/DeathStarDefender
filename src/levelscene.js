@@ -5,13 +5,23 @@
 var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
-        [[1000, 4, 1, 3000], [3000, 4, 1, 2000], [3000, 4, 1, 1000]] // Wave data for level 1
+        [
+            [1000, 4, [["Luke", 1]], 3000], // Wave data for level 1
+            [3000, 4, [["Luke", 0.5], ["Leia", 1]], 2000],
+            [3000, 4, [["Leia", 1]], 1000]
+        ]
     ]
     :
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
-        [[30000, 4, 1, 7500], [15000, 4, 1, 5000], [15000, 4, 1, 1000], // Wave data for level 1
-            [10000, 8, 1, 500], [5000, 4, 1, 1000], [10000, 10, 1, 300]]
+        [
+            [30000, 4, [["Luke", 0.75], ["Leia", 1]], 7500], // Wave data for level 1
+            [15000, 4, [["Luke", 0.75], ["Leia", 1]], 5000],
+            [15000, 4, [["Luke", 0.75], ["Leia", 1]], 1000],
+            [10000, 8, [["Luke", 0.75], ["Leia", 1]], 500],
+            [5000, 4, [["Luke", 0.75], ["Leia", 1]], 1000],
+            [10000, 10, [["Luke", 0.75], ["Leia", 1]], 300]
+        ]
     ];
 
 
@@ -243,7 +253,6 @@ LevelScene.prototype.update = function () {
                     this.allies[i][j].update();
                 }
             }
-            // 
             if (this.enemies[i] && this.enemies[i][j]) {
                 // Why are we checking enemies by their column?
                 if (!this.enemies[i][j].removeFromWorld) {
@@ -348,7 +357,30 @@ LevelScene.prototype.sendEnemy = function (row) {
     var prob = Math.floor(Math.random() * 100);
     var x = this.cornerOffsetX + (this.numCols * this.colWidth);
     var y = this.cornerOffsetY + (row * this.rowHeight);
-    var enemy = prob < 20 ? new Leia(this,x,y) : new Luke(this, x, y);
+    var enemyString;
+    var rand = Math.random();
+    var difficultyArray = levelWaves[this.level][this.wave][2];
+    for (var i = 0; i < difficultyArray.length; i++) {
+        if (rand < difficultyArray[i][1]) {
+            // console.log(rand, difficultyArray[i][1]);
+            enemyString = difficultyArray[i][0];
+            // console.log(enemyString);
+            break;
+        }
+    }
+    var enemyType;
+    switch (enemyString) {
+        case "Luke":
+            enemyType = Luke;
+            break;
+        case "Leia":
+            enemyType = Leia;
+            break;
+        default:
+            enemyType = Luke;
+            break;
+    }
+    var enemy = new enemyType(this,x,y);
     this.addEntity(enemy, this.enemies, row);
 };
 
