@@ -220,14 +220,14 @@ WinScene.prototype.init = function (ctx) {
     this.tb = new TextBlock(this, 400, 250,
         "You have successfully defeated the rebel scum\n"
         + "and secured your Empire!\n");
-    //this.startInput();
+    this.startInput();
 }
 
 WinScene.prototype.startInput = function () {
     if (!this.ctx) return;
     var that = this;
     this.ctx.canvas.addEventListener("click", function (e) {
-        that.game.changeScene(new LevelScene(that));
+        that.game.changeScene(new LevelScene(that.game, 1));
     });
 }
 
