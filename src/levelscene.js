@@ -2,6 +2,9 @@
 
 // Provides the data used to generate waves in each level. 
 // Each row is a level, each column is a wave in that level.
+// Probababilities for each enemy type are strictly increasing and
+// are calculated as the difference between the probability given
+// and the previous probability (which is 0 if first element).
 var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
