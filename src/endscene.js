@@ -259,14 +259,11 @@ GameOver.prototype.update = function () {
 
 GameOver.prototype.draw = function (ctx) {
     ctx.font = "92px Lucida Console";
-    for (var i = 0; i < this.text.length; i++) {
-        var c = this.text.charAt(i);
-        ctx.fillStyle = "rgb("
-            + this.color.r + ","
-            + this.color.g + ","
-            + this.color.b + ")";
-        ctx.fillText(c, this.x + (i * 50), this.y);
-    }
+    ctx.fillStyle = "rgb("
+        + this.color.r + ","
+        + this.color.g + ","
+        + this.color.b + ")";
+    ctx.fillText(this.text, this.x, this.y);
 };
 
 function LoseScene(gameEngine) {
