@@ -1,5 +1,6 @@
 function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim, attackInterval) {
     Unit.call(this, game, x, y, hp, ap);
+    this.jumpBase = y;
     this.speed = speed;
     this.waiting = false;
     this.attacking = false;
@@ -12,7 +13,7 @@ function Enemy(game, x, y, hp, ap, speed, approachAnim, waitAnim, attackAnim, at
 Enemy.prototype = new Unit();
 Enemy.prototype.constructor = Enemy;
 
-Enemy.prototype.update = function () {
+Enemy.prototype.update = function (jumpHeight) {
     if (this.x <= 0) {
         this.removeFromWorld = true;
         return;
@@ -28,7 +29,17 @@ Enemy.prototype.update = function () {
             window.setTimeout(function () {
                 that.waiting = false;
             }, this.attackInterval);
+        }
+        if (jumpHeight) {
+            var jumpDistance = this.attackAnim.elapsedTime / this.attackAnim.totalTime;
 
+            if (jumpDistance > 0.5) {
+                jumpDistance = 1 - jumpDistance;
+            }
+
+            //var height = jumpDistance * 2 * totalHeight;
+            var height = jumpHeight * (-4 * (jumpDistance * jumpDistance - jumpDistance));
+            this.y = this.jumpBase - height;
         }
     } else if (this.waiting) { // waiting between attacks
         if (this.target.hp <= 0) { //if someone else kills the target
@@ -87,6 +98,10 @@ function Luke(game, x, y) {
 
 Luke.prototype = new Enemy();
 Luke.prototype.constructor = Luke;
+
+Luke.prototype.update = function () {
+    Enemy.prototype.update.call(this, 30);
+}
 
 Luke.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
