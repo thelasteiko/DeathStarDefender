@@ -89,7 +89,7 @@ Luke.prototype = new Enemy();
 Luke.prototype.constructor = Luke;
 
 Luke.prototype.setBoundaries = function () {
-    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
+    Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
 };
 
 function Leia(game, x, y) {
@@ -104,7 +104,7 @@ Leia.prototype = new Enemy();
 Leia.prototype.constructor = Leia;
 
 Leia.prototype.setBoundaries = function () {
-    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
+    Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
 };
 
 function XWing(game, x, y) {
@@ -118,6 +118,6 @@ XWing.prototype = new Enemy();
 XWing.prototype.constructor = XWing;
 
 XWing.prototype.setBoundaries = function () {
-    Enemy.prototype.setBoundaries.call(this, this.x, this.x + 32, this.x, this.x + 32, this.x, this.x + 32);
+    Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
 };
 

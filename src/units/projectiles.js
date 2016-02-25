@@ -48,7 +48,7 @@ FlashProjectile.prototype.draw = function (ctx) {
 };
 
 FlashProjectile.prototype.setBoundaries = function () {
-    Projectile.prototype.setBoundaries.call(this, this.x, this.x + 64);
+    Projectile.prototype.setBoundaries.call(this, this.x + 24, this.x + 28);
 };
 
 // SUN (techinically a projectile, but not normally used as such)
