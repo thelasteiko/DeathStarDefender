@@ -45,6 +45,7 @@ FlashProjectile.prototype.constructor = FlashProjectile;
 
 FlashProjectile.prototype.draw = function (ctx) {
     this.animation.drawImage(ctx, this.x, this.y);
+    Entity.prototype.draw.call(this, ctx);
 };
 
 FlashProjectile.prototype.setBoundaries = function () {
@@ -63,5 +64,5 @@ Sun.prototype.constructor = Sun;
 
 Sun.prototype.draw = function (ctx) {
     this.animation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
-    Entity.prototype.draw.call(this);
+    Entity.prototype.draw.call(this, ctx);
 };

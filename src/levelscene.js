@@ -104,7 +104,7 @@ LevelScene.prototype.init = function (ctx) {
         //if (that.enemyInterval) {
         //    window.clearInterval(that.enemyInterval);
         //}
-        that.game.changeScene(new TitleScene(that.game));
+        that.game.changeScene(new LoseScene(that.game));
     }
 
     for (var i = 0; i < this.numRows; i++)
