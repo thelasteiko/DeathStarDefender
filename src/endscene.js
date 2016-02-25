@@ -279,6 +279,7 @@ LoseScene.prototype.init = function (ctx) {
     this.tb = new TextBlock(this, 415, 250,
         "Your hold on the universe has ended.\n"
         + "You may want to consider retiring.\n");
+    this.startInput();
 }
 
 LoseScene.prototype.draw = function (ctx) {
