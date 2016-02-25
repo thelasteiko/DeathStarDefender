@@ -99,10 +99,11 @@ LevelScene.prototype.init = function (ctx) {
     this.addEntity(this.menu);
 
     var that = this;
+
     function gameOver() {
         that.ctx.canvas.removeEventListener("click", this.clickFunction);
         that.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
-        that.game.changeScene(new TitleScene(that.game));
+        that.game.changeScene(new LoseScene(that.game));
     }
 
     for (var i = 0; i < this.numRows; i++)

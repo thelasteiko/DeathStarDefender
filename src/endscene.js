@@ -10,16 +10,6 @@ function randomColor() {
     return str;
 }
 
-/*
- function Background(game) {
- Entity.call(this, game, 0, 0);
- this.radius = 200;
- this.spriteSheet = ASSET_MANAGER.getAsset("./assets/img/background.png");
- }
-
- Background.prototype = new Entity();
- Background.prototype.constructor = Background;*/
-
 function Play2(game) {
     //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.playanimation = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 389, 128, 64, 0.1, 8, false, true, false);
@@ -37,17 +27,6 @@ Play2.prototype.draw = function (ctx) {
     this.playanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     Entity.prototype.draw.call(this);
 };
-/*
- Background.prototype.draw = function (ctx) {
- //I want a picture
- ctx.drawImage(this.spriteSheet,
- 0, 0,  // source from sheet
- 801, 762,
- 0, 0,
- this.game.game.surfaceWidth,
- this.game.game.surfaceHeight);
- Entity.prototype.draw.call(this);
- };*/
 
 function Firework(game) {
     //between 0 and 576
@@ -249,4 +228,78 @@ WinScene.prototype.draw = function (ctx) {
     this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
+};
+
+function GameOver(game, x, y) {
+    this.text = "Game Over";
+    this.color = {r: 204, g: 0, b: 0};
+    this.timeout = 10;
+    this.maxtime = 10;
+    this.offsetX = 10;
+    //this.offsetY = 10;
+    this.colorflip = false;
+    Entity.call(this, game, x, y);
+}
+
+GameOver.prototype = new Entity();
+GameOver.prototype.constructor = GameOver;
+
+GameOver.prototype.update = function () {
+    //this.y += this.offsetY;
+    //this.offsetY = -this.offsetY;
+    if (this.timeout <= 0) {
+        this.color.r = (this.color.r + 10) % 255;
+        this.color.g = (this.color.r + 10) % 100;
+        this.color.b = (this.color.r + 10) % 100;
+        this.timeout = this.maxtime;
+        this.x += this.offsetX;
+        this.offsetX = -this.offsetX;
+    } else this.timeout -= 1;
+};
+
+GameOver.prototype.draw = function (ctx) {
+    ctx.font = "92px Lucida Console";
+    for (var i = 0; i < this.text.length; i++) {
+        var c = this.text.charAt(i);
+        ctx.fillStyle = "rgb("
+            + this.color.r + ","
+            + this.color.g + ","
+            + this.color.b + ")";
+        ctx.fillText(c, this.x + (i * 50), this.y);
+    }
+};
+
+function LoseScene(gameEngine) {
+    Scene.call(this, gameEngine);
+}
+
+LoseScene.prototype = new Scene();
+LoseScene.prototype.constructor = LoseScene;
+
+LoseScene.prototype.init = function (ctx) {
+    Scene.prototype.init.call(this, ctx);
+    this.background = new Background(this);
+    this.play = new Play2(this);
+    this.addEntity(new GameOver(this, 185, 200));
+    this.tb = new TextBlock(this, 415, 250,
+        "Your hold on the universe has ended.\n"
+        + "You may want to consider retiring.\n");
+    this.startInput();
+};
+
+LoseScene.prototype.draw = function (ctx) {
+    ctx.save();
+    this.background.draw(ctx);
+    Scene.prototype.draw.call(this, ctx);
+    this.play.draw(ctx);
+    this.tb.draw(ctx);
+    ctx.restore();
+};
+
+LoseScene.prototype.startInput = function () {
+    if (!this.ctx) return;
+    var that = this;
+    this.ctx.canvas.addEventListener("click", function () {
+        that.game.changeScene(new LevelScene(that.game, 1));
+    });
 };
