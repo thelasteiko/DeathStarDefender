@@ -94,6 +94,7 @@ MenuItem.prototype.draw = function (ctx) {
         default:
             console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
+    ctx.textAlign = "left";
     ctx.fillText(this.title, this.x + 10, this.y + 50);
     ctx.fillText(this.price, this.x + 35, this.y + 70);
 };

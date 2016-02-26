@@ -37,7 +37,7 @@ Projectile.prototype.setBoundaries = function (left, right) {
 function FlashProjectile(game, x, y) {
     var bulletImage = new SpriteImage(ASSET_MANAGER.getAsset("./assets/img/ally/projectile.png"),
         0,0,24,64);
-    Projectile.call(this, game, x+44, y, 5, 50, bulletImage);
+    Projectile.call(this, game, x+44, y, 10, 100, bulletImage);
 }
 
 FlashProjectile.prototype = new Projectile();

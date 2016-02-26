@@ -16,23 +16,25 @@ Ally.prototype = new Unit();
 Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
-    if (this.attackAnim && this.attacking) {
-        if (this.attackAnim.isDone()) {
-            this.attackAnim.elapsedTime = 0;
-            this.attacking = false;
-            this.projectileTime = 0;
-        }
-    } else {
-        this.projectileTime += this.game.game.clockTick;
-        var row = this.game.getRowAndCol(this.x, this.y).row;
-        if (this.projectileTime >= this.projectileInterval) {
-            if (this.isOffensive && this.game.enemies[row].length > 0) {
+    if (this.row != null) { // Allows allies to be drawn in non-game conditions (about screen)
+        if (this.attackAnim && this.attacking) {
+            if (this.attackAnim.isDone()) {
+                this.attackAnim.elapsedTime = 0;
+                this.attacking = false;
                 this.projectileTime = 0;
-                this.attacking = true;
-                this.fireProjectile();
-            } else if (this.constructor.name === "Battery") {
-                this.projectileTime = 0;
-                this.fireProjectile();
+            }
+        } else {
+            this.projectileTime += this.game.game.clockTick;
+            var row = this.game.getRowAndCol(this.x, this.y).row;
+            if (this.projectileTime >= this.projectileInterval) {
+                if (this.isOffensive && this.game.enemies[row].length > 0) {
+                    this.projectileTime = 0;
+                    this.attacking = true;
+                    this.fireProjectile();
+                } else if (this.constructor.name === "Battery") {
+                    this.projectileTime = 0;
+                    this.fireProjectile();
+                }
             }
         }
     }
@@ -98,7 +100,7 @@ function TieFighter(game, x, y, col, row, attackCallback) {
     var pic = ASSET_MANAGER.getAsset("./assets/img/ally/tiefighter.png");
     var idleAnim = new Animation(pic, 0, 0, 64, 64, 0.2, 4, true, true, false);
     var attackAnim = new Animation(pic, 0, 64, 64, 64, 0.1, 4, true, false, false);
-    Ally.call(this, game, x, y, col, row, 25, idleAnim, attackAnim, attackCallback, FlashProjectile, 5, true, true);
+    Ally.call(this, game, x, y, col, row, 20, idleAnim, attackAnim, attackCallback, FlashProjectile, 5, true, true);
 }
 
 TieFighter.prototype = new Ally();

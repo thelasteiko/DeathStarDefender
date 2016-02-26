@@ -135,6 +135,9 @@ Ship.prototype.draw = function (ctx) {
     else if (this.reverse) {
         this.flyleft.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
+    if (this.flyleft.isDone()) {
+        this.game.titleflags[4] = true;
+    }
     Entity.prototype.draw.call(this);
 };
 
@@ -167,8 +170,8 @@ Play.prototype.draw = function (ctx) {
 
 function TitleScene(gameEngine) {
     Scene.call(this, gameEngine);
-    //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done]
-    this.titleflags = [false, false, false, false];
+    //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done, 4:ship done]
+    this.titleflags = [false, false, false, false, false];
     this.startInput();
 }
 
@@ -181,25 +184,32 @@ TitleScene.prototype.init = function () {
     this.addEntity(new Play(this));
     this.addEntity(new Ship(this));
     this.addEntity(new Title1(this));
+    this.addEntity(new TextBlock2(this, 400, 480,
+        "Right-click for instructions\n", "center", 20));
 };
 
 TitleScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
-    var getXandY = function (e) {
-        var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
-        var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
-        return {x: x, y: y};
+    var removeListeners = function () {
+        that.game.ctx.canvas.removeEventListener("click", clickListener);
+        that.game.ctx.canvas.removeEventListener("contextmenu", rightClickListener);
     };
 
-    var clickListener = function (e) {
-        that.click = getXandY(e);
+    var clickListener = function () {
         that.game.changeScene(new LevelScene(that.game, 1));
-        that.game.ctx.canvas.removeEventListener("click", clickListener);
+        removeListeners();
+    };
+
+    var rightClickListener = function (e) {
+        e.preventDefault();
+        that.game.changeScene(new AboutScene(that.game, 1));
+        removeListeners();
     };
 
     this.game.ctx.canvas.addEventListener("click", clickListener);
+    this.game.ctx.canvas.addEventListener("contextmenu", rightClickListener);
 
     console.log('Input started');
 };
