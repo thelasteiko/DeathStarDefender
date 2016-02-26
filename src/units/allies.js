@@ -16,23 +16,25 @@ Ally.prototype = new Unit();
 Ally.prototype.constructor = Ally;
 
 Ally.prototype.update = function () {
-    if (this.attackAnim && this.attacking) {
-        if (this.attackAnim.isDone()) {
-            this.attackAnim.elapsedTime = 0;
-            this.attacking = false;
-            this.projectileTime = 0;
-        }
-    } else {
-        this.projectileTime += this.game.game.clockTick;
-        var row = this.game.getRowAndCol(this.x, this.y).row;
-        if (this.projectileTime >= this.projectileInterval) {
-            if (this.isOffensive && this.game.enemies[row].length > 0) {
+    if (this.row) { // Allows allies to be drawn in non-game conditions (about screen)
+        if (this.attackAnim && this.attacking) {
+            if (this.attackAnim.isDone()) {
+                this.attackAnim.elapsedTime = 0;
+                this.attacking = false;
                 this.projectileTime = 0;
-                this.attacking = true;
-                this.fireProjectile();
-            } else if (this.constructor.name === "Battery") {
-                this.projectileTime = 0;
-                this.fireProjectile();
+            }
+        } else {
+            this.projectileTime += this.game.game.clockTick;
+            var row = this.game.getRowAndCol(this.x, this.y).row;
+            if (this.projectileTime >= this.projectileInterval) {
+                if (this.isOffensive && this.game.enemies[row].length > 0) {
+                    this.projectileTime = 0;
+                    this.attacking = true;
+                    this.fireProjectile();
+                } else if (this.constructor.name === "Battery") {
+                    this.projectileTime = 0;
+                    this.fireProjectile();
+                }
             }
         }
     }
