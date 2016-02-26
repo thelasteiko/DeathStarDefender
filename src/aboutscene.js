@@ -57,8 +57,6 @@ AboutScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.background = new Background(this);
     this.play = new Play2(this);
-    var str = "About";
-    var pxw = 50;
     this.addEntity(new TextBlock2(this, 400, 0,
         "Instructions\n", "center", 30));
     this.addEntity(new TextBlock2(this, 400, 45,

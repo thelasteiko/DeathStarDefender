@@ -296,7 +296,9 @@ LoseScene.prototype.draw = function (ctx) {
 LoseScene.prototype.startInput = function () {
     if (!this.ctx) return;
     var that = this;
-    this.ctx.canvas.addEventListener("click", function () {
+    var clickFunction = function () {
+        that.ctx.canvas.removeEventListener("click", clickFunction);
         that.game.changeScene(new LevelScene(that.game, 1));
-    });
+    };
+    this.ctx.canvas.addEventListener("click", clickFunction);
 };

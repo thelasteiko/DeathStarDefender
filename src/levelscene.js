@@ -21,12 +21,12 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [30000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 7500], // Wave data for level 1
+            [30000, 4, [["XWing", .75], ["Luke", 1]], 7500], // Wave data for level 1
             [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 5000],
             [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 8, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 500],
+            [10000, 8, [["XWing", .5], ["Leia", 1]], 500],
             [5000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 10, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 300]
+            [10000, 10, [["XWing", .5], ["Luke", 0.7], ["Leia", 1]], 300]
         ]
     ];
 
@@ -343,6 +343,8 @@ LevelScene.prototype.draw = function (ctx) {
         }
     }
 
+    this.boardtop.draw(ctx);
+
     // draw mouse shadow
     if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
         && this.mouse.col >= 0 && this.mouse.col < this.numCols && this.menu.current != null
@@ -353,7 +355,7 @@ LevelScene.prototype.draw = function (ctx) {
             this.mouse.col * this.colWidth + this.cornerOffsetX,
             this.mouse.row * this.rowHeight + this.cornerOffsetY);
     }
-    this.boardtop.draw(ctx);
+
     ctx.restore();
     Scene.prototype.draw.call(this, ctx);
 };

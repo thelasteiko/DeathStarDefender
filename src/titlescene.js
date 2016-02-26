@@ -192,19 +192,12 @@ TitleScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
-    //var getXandY = function (e) {
-    //    var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
-    //    var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
-    //    return {x: x, y: y};
-    //};
-
     var removeListeners = function () {
         that.game.ctx.canvas.removeEventListener("click", clickListener);
         that.game.ctx.canvas.removeEventListener("contextmenu", rightClickListener);
-    }
+    };
 
-    var clickListener = function (e) {
-        //that.click = getXandY(e);
+    var clickListener = function () {
         that.game.changeScene(new LevelScene(that.game, 1));
         removeListeners();
     };

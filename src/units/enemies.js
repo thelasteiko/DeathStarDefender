@@ -93,7 +93,7 @@ function Luke(game, x, y) {
         true, true, false, null, null, 0, 28 - 32);
     var attackAnim = new Animation(ASSET_MANAGER.getAsset("./assets/img/enemy/luke/LukeJumpAttack.png"), 0, 0, 128, 96,
         0.05, 10, true, false, false, null, null, -38, -6 - 32);
-    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitingAnim, attackAnim);
+    Enemy.call(this, game, x, y, 20, 10, -50, approachAnim, waitingAnim, attackAnim);
 }
 
 Luke.prototype = new Enemy();
@@ -101,7 +101,7 @@ Luke.prototype.constructor = Luke;
 
 Luke.prototype.update = function () {
     Enemy.prototype.update.call(this, 30);
-}
+};
 
 Luke.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
@@ -112,7 +112,7 @@ function Leia(game, x, y) {
     var approachAnim = new Animation(spritesheet, 0, 0, 64, 64, .1, 8, true, true, false, null, null, 0, 0);
     var waitAnim = new Animation(spritesheet, 0, 192, 64, 64, .3, 3, true, true, false, null, null, 0, 0);
     var attackAnim = new Animation(spritesheet, 0, 64, 96, 64, .1, 9, true, false, false, null, null, -32, 0);
-    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, waitAnim, attackAnim);
+    Enemy.call(this, game, x, y, 10, 20, -125, approachAnim, waitAnim, attackAnim);
 }
 
 Leia.prototype = new Enemy();
@@ -126,7 +126,7 @@ function XWing(game, x, y) {
     var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/xwing_sprite.png");
     var approachAnim = new Animation(spritesheet, 0, 0, 64, 64, .5, 4, true, true, false, null, null, 0, 0);
     var attackAnim = new Animation(spritesheet, 0, 64, 64, 64, .15, 4, true, false, false, null, null, 0, 0);
-    Enemy.call(this, game, x, y, 10, 10, -50, approachAnim, approachAnim, attackAnim);
+    Enemy.call(this, game, x, y, 30, 5, -25, approachAnim, approachAnim, attackAnim);
 }
 
 XWing.prototype = new Enemy();
