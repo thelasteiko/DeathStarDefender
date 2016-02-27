@@ -113,16 +113,9 @@ LevelScene.prototype.init = function (ctx) {
 };
 
 LevelScene.prototype.startTimerToNextWave = function () {
-    var that = this;
-    var i = this.level ? this.level : 0;
-    var j = this.wave ? this.wave : 0;
+    this.nextWaveTimer = 0;
     //if (!this.level || !this.wave) return;
-    var wave = new Wave(levelWaves[i][j]);
-    console.log("New Wave:", wave);
-    window.setTimeout(function () {
-        that.sendEnemyInWave(wave);
-    }, wave.startDelay);
-
+    this.waveData = new Wave(levelWaves[this.level][this.wave]);
 };
 
 LevelScene.prototype.sendEnemyInWave = function (wave) {
@@ -133,9 +126,7 @@ LevelScene.prototype.sendEnemyInWave = function (wave) {
     } else {
         this.sendEnemy();
         wave.remainingEnemies--;
-        window.setTimeout(function () {
-            that.sendEnemyInWave(wave);
-        }, wave.enemyInterval);
+        this.nextEnemyTimer = 0;
     }
 };
 
@@ -317,6 +308,19 @@ LevelScene.prototype.update = function () {
             this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
             this.game.changeScene(new WinScene(this.game));
         }
+    }
+
+    this.nextWaveTimer += this.game.clockTick * 1000;
+    this.nextEnemyTimer += this.game.clockTick * 1000;
+
+    if (this.waveData.startDelay && this.nextWaveTimer > this.waveData.startDelay) {
+        this.nextWaveTimer = Number.NEGATIVE_INFINITY;
+        this.sendEnemyInWave(this.waveData);
+    }
+
+    if (this.waveData.enemyInterval && this.nextEnemyTimer > this.waveData.enemyInterval) {
+        this.nextEnemyTimer = Number.NEGATIVE_INFINITY;
+        this.sendEnemyInWave(this.waveData);
     }
 };
 
