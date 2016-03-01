@@ -281,7 +281,7 @@ LevelScene.prototype.update = function () {
             }
             if (this.allies[i] && this.allies[i][j]
                 && this.allies[i][j].removeFromWorld) {
-                this.allies[i].splice(j, 1);
+                delete this.allies[i][j];
             }
             if (this.enemies[i] && this.enemies[i][j]
                 && this.enemies[i][j].removeFromWorld) {
