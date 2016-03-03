@@ -14,7 +14,7 @@ var levelWaves = DEBUG ?
         [
             [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
             [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
-            [3000, 4, [[Leia, 1]], 1000]
+            [3000, 40000, [[Leia, 1]], 1000]
         ]
     ]
     :
@@ -211,6 +211,10 @@ LevelScene.prototype.startInput = function () {
                     row * that.rowHeight + that.cornerOffsetY,
                     col, row, attackCallback);
                 if (obj) that.addEntity(obj, that.allies, row, col);
+            } else if (that.allies[row][col]
+                && that.menu.current === that.menu.shovel) {
+                that.menu.placeItem();
+                that.allies[row][col].triggerDeath();
             }
         } else if (DEBUG && that.click && that.click.col == that.numCols
             && that.click.row < that.numRows && that.click.row >= 0)
@@ -350,15 +354,23 @@ LevelScene.prototype.draw = function (ctx) {
 
     // draw mouse shadow
     if (this.mouse && this.mouse.row >= 0 && this.mouse.row < this.numRows
-        && this.mouse.col >= 0 && this.mouse.col < this.numCols && this.menu.current != null
-        && !(this.allies[this.mouse.row] && this.allies[this.mouse.row][this.mouse.col])) {
+        && this.mouse.col >= 0 && this.mouse.col < this.numCols) {
         ctx.globalAlpha = 0.5;
-        var img = this.menu.current.shadow;
-        img.drawImage(ctx,
-            this.mouse.col * this.colWidth + this.cornerOffsetX,
-            this.mouse.row * this.rowHeight + this.cornerOffsetY);
+        if (this.menu.current === this.menu.shovel) {
+            if (this.allies[this.mouse.row]
+                && this.allies[this.mouse.row][this.mouse.col]
+                && !this.allies[this.mouse.row][this.mouse.col].dying) {
+                this.menu.current.shadow.drawImage(ctx,
+                    this.mouse.col * this.colWidth + this.cornerOffsetX,
+                    this.mouse.row * this.rowHeight + this.cornerOffsetY);
+            }
+        } else if (this.menu.current != null && !(this.allies[this.mouse.row]
+            && this.allies[this.mouse.row][this.mouse.col])) {
+            this.menu.current.shadow.drawImage(ctx,
+                this.mouse.col * this.colWidth + this.cornerOffsetX,
+                this.mouse.row * this.rowHeight + this.cornerOffsetY);
+        }
     }
-
     ctx.restore();
     Scene.prototype.draw.call(this, ctx);
 };

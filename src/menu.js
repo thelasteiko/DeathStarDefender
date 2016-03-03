@@ -8,8 +8,9 @@ function SpriteImage(spritesheet, x, y, w, h) {
 }
 
 SpriteImage.prototype.drawImage = function (ctx, dx, dy) {
-    ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h,
-        dx, dy, this.w, this.h);
+    if (!!this.spritesheet)
+        ctx.drawImage(this.spritesheet, this.x, this.y, this.w, this.h,
+            dx, dy, this.w, this.h);
 };
 
 function MenuCounter(game, x, y) {
@@ -38,8 +39,9 @@ MenuCounter.prototype.draw = function (ctx) {
         this.x, this.y, 96, 96);
     ctx.font = "20px Verdana";
     ctx.fillStyle = "white";
+    ctx.textAlign = "Center";
     ctx.fillText(this.energycount,
-        this.x + this.textoffset.x, this.y + this.textoffset.y);
+        this.x + 48, this.y + this.textoffset.y, 96);
 };
 
 MenuCounter.prototype.payTheMan = function (cost) {
@@ -76,7 +78,7 @@ function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
 MenuItem.prototype = new Entity();
 MenuItem.prototype.constructor = MenuItem;
 
-MenuItem.prototype.draw = function (ctx) {
+MenuItem.prototype.draw = function (ctx, drawPrice) {
     switch (this.state) {
         case "ready": //charge has completed but price hasn't been met
             this.shadedpic.drawImage(ctx, this.x, this.y);
@@ -94,9 +96,12 @@ MenuItem.prototype.draw = function (ctx) {
         default:
             console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
-    ctx.textAlign = "left";
-    ctx.fillText(this.title, this.x + 10, this.y + 50);
-    ctx.fillText(this.price, this.x + 35, this.y + 70);
+    if (drawPrice) {
+        ctx.textAlign = "Center";
+        ctx.fillText(this.title, this.x + 48, this.y + 50, 96);
+        ctx.fillText(this.price, this.x + 48, this.y + 70, 96);
+    }
+
 };
 
 MenuItem.prototype.update = function (energy) {
@@ -118,11 +123,30 @@ MenuItem.prototype.trySelect = function () {
     return false;
 };
 
+function Shovel(game, x, y) {
+    this.spritesheet = ASSET_MANAGER.getAsset("./assets/img/menushovel.png");
+    MenuItem.call(this, game, x, y, "KILL", 0, "available", this.spritesheet, null);
+}
+
+Shovel.prototype = new MenuItem();
+Shovel.prototype.constructor = Shovel;
+
+Shovel.prototype.draw = function (ctx) {
+    if (!!this.spritesheet) {
+        MenuItem.prototype.draw.call(this, ctx);
+        ctx.textAlign = "Center";
+        ctx.fillStyle = "Black";
+        ctx.fillText(this.title, this.x + 48, this.y + 55, 96);
+        ctx.fillStyle = "White";
+    }
+};
+
 //items should appear in a row
 function Menu(game, x, y) {
     Entity.call(this, game, x, y);
     this.current = null;
     this.counter = new MenuCounter(game, this.x, this.y);
+    this.shovel = new Shovel(game, 96 * 6 - 32, this.y);
     this.items = [];
     this.addItem(game, "Battery", 50, ASSET_MANAGER.getAsset("./assets/img/menubattery.png"),
         Battery);
@@ -137,6 +161,7 @@ Menu.prototype.constructor = Menu;
 
 Menu.prototype.update = function () {
     this.counter.update();
+    this.shovel.update();
     for (var i = 0; i < this.items.length; i++) {
         this.items[i].update(this.counter.energycount);
     }
@@ -144,8 +169,9 @@ Menu.prototype.update = function () {
 
 Menu.prototype.draw = function (ctx) {
     this.counter.draw(ctx);
+    this.shovel.draw(ctx, false);
     for (var i = 0; i < this.items.length; i++) {
-        this.items[i].draw(ctx);
+        this.items[i].draw(ctx, true);
     }
 };
 
@@ -157,10 +183,20 @@ Menu.prototype.setSelection = function (x, y) {
     //bounds y > 0, y < 96
     if (y >= 0 && y <= 96) {
         var i = Math.floor(x / 96) - 1;
-        if (i >= 0 && i < this.items.length) {
+        if (x >= 96 * 6 - 32 && x < 96 * 7 - 32) {
             if (this.current)
                 this.current.state = "available";
-            if (this.items[i].trySelect()) {
+
+            if (this.current !== this.shovel && this.shovel.trySelect()) {
+                this.current = this.shovel;
+                return true;
+            } else {
+                this.current = null;
+            }
+        } else if (i >= 0 && i < this.items.length) {
+            if (this.current)
+                this.current.state = "available";
+            if (this.items[i] !== this.current && this.items[i].trySelect()) {
                 this.current = this.items[i];
                 return true;
             } else {
@@ -183,7 +219,10 @@ Menu.prototype.addItem = function (game, title, price, spritesheet, objtype) {
 
 Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
     /*Returns an item of the correct type or null if no item is selected.*/
-    if (this.current && this.counter.payTheMan(this.current.price)) {
+    if (this.current === this.shovel) {
+        this.shovel.state = "available";
+        return null;
+    } else if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";
         var obj = new this.current.objtype(this.game, x, y, col, row, attackCallBack);
         this.current = null;

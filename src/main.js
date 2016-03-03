@@ -20,6 +20,7 @@ ASSET_MANAGER.queueDownload("./assets/img/enemy/xwing_sprite.png");
 ASSET_MANAGER.queueDownload("./assets/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./assets/img/menubattery.png");
 ASSET_MANAGER.queueDownload("./assets/img/menutie.png");
+ASSET_MANAGER.queueDownload("./assets/img/menushovel.png");
 ASSET_MANAGER.queueDownload("./assets/img/menustormtrooper.png");
 
 ASSET_MANAGER.queueDownload("./assets/img/ally/battery.png");
