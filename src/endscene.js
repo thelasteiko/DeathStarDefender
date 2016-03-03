@@ -178,9 +178,11 @@ TextBlock.prototype.draw = function (ctx) {
 
 };
 
-function WinScene(gameEngine) {
+function WinScene(gameEngine, nextLevel, gameOver) {
     Scene.call(this, gameEngine);
     this.startInput();
+    this.nextLevel = nextLevel;
+    this.gameOver = gameOver;
 }
 
 WinScene.prototype = new Scene();
@@ -197,9 +199,14 @@ WinScene.prototype.init = function (ctx) {
     for (var i = 0; i < str.length; i++)
         this.addEntity(new Congrats(this, 5 + (i * pxw), 200,
             str.charAt(i)));
-    this.tb = new TextBlock(this, 400, 250,
+    var victoryText = this.gameOver ?
         "You have successfully defeated the rebel scum\n"
-        + "and secured your Empire!\n");
+        + "and secured your Empire!\n"
+        + "Click to return to the main menu.\n" :
+        "You have successfully held off the rebel scum\n"
+        + "... for now\n"
+        + "Click to start the next level.\n";
+    this.tb = new TextBlock(this, 400, 250, victoryText);
     this.startInput();
 };
 
@@ -208,7 +215,11 @@ WinScene.prototype.startInput = function () {
     var that = this;
     var clickFunction = function () {
         that.ctx.canvas.removeEventListener("click", clickFunction);
-        that.game.changeScene(new LevelScene(that.game, 1));
+        if (that.gameOver) {
+            that.game.changeScene(new TitleScene(that.game));
+        } else {
+            that.game.changeScene(new LevelScene(that.game, that.nextLevel));
+        }
     };
     this.ctx.canvas.addEventListener("click", clickFunction);
 };
@@ -225,7 +236,7 @@ WinScene.prototype.draw = function (ctx) {
     ctx.save();
     this.background.draw(ctx);
     Scene.prototype.draw.call(this, ctx);
-    this.play.draw(ctx);
+    //this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
 };
@@ -276,11 +287,12 @@ LoseScene.prototype.constructor = LoseScene;
 LoseScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.background = new Background(this);
-    this.play = new Play2(this);
+    //this.play = new Play2(this);
     this.addEntity(new GameOver(this, 185, 200));
     this.tb = new TextBlock(this, 415, 250,
         "Your hold on the universe has ended.\n"
-        + "You may want to consider retiring.\n");
+        + "You may want to consider retiring.\n"
+        + "Click to return to the main menu.\n");
     this.startInput();
 };
 
@@ -288,7 +300,7 @@ LoseScene.prototype.draw = function (ctx) {
     ctx.save();
     this.background.draw(ctx);
     Scene.prototype.draw.call(this, ctx);
-    this.play.draw(ctx);
+    //this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
 };
@@ -298,7 +310,7 @@ LoseScene.prototype.startInput = function () {
     var that = this;
     var clickFunction = function () {
         that.ctx.canvas.removeEventListener("click", clickFunction);
-        that.game.changeScene(new LevelScene(that.game, 1));
+        that.game.changeScene(new TitleScene(that.game));
     };
     this.ctx.canvas.addEventListener("click", clickFunction);
 };

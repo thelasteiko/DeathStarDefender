@@ -14,12 +14,25 @@ var levelWaves = DEBUG ?
         [
             [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
             [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
-            [3000, 40000, [[Leia, 1]], 1000]
+            [3000, 4, [[Leia, 1]], 1000]
+        ],
+        [
+            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
+            [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
+            [3000, 4, [[Leia, 1]], 1000]
         ]
     ]
     :
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
+        [
+            [30000, 4, [[XWing, .75], [Luke, 1]], 7500], // Wave data for level 1
+            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 5000],
+            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
+            [10000, 8, [[XWing, .5], [Leia, 1]], 500],
+            [5000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
+            [10000, 10, [[XWing, .5], [Luke, 0.7], [Leia, 1]], 300]
+        ],
         [
             [30000, 4, [[XWing, .75], [Luke, 1]], 7500], // Wave data for level 1
             [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 5000],
@@ -309,7 +322,9 @@ LevelScene.prototype.update = function () {
         if (allEnemiesKilled) { // If all enemies dead, win!
             this.ctx.canvas.removeEventListener("click", this.clickFunction);
             this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
-            this.game.changeScene(new WinScene(this.game));
+            var nextLevel = this.level + 1;
+            var gameOver = (nextLevel === levelWaves.length);
+            this.game.changeScene(new WinScene(this.game, nextLevel, gameOver));
         }
     }
 
