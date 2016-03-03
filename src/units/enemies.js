@@ -112,7 +112,7 @@ function Leia(game, x, y) {
     var approachAnim = new Animation(spritesheet, 0, 0, 64, 64, .1, 8, true, true, false, null, null, 0, 0);
     var waitAnim = new Animation(spritesheet, 0, 192, 64, 64, .3, 3, true, true, false, null, null, 0, 0);
     var attackAnim = new Animation(spritesheet, 0, 64, 96, 64, .1, 9, true, false, false, null, null, -32, 0);
-    Enemy.call(this, game, x, y, 10, 20, -125, approachAnim, waitAnim, attackAnim);
+    Enemy.call(this, game, x, y, 15, 20, -70, approachAnim, waitAnim, attackAnim);
 }
 
 Leia.prototype = new Enemy();
