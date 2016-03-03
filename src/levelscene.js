@@ -12,21 +12,21 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [1000, 4, [["XWing", 1]], 3000], // Wave data for level 1
-            [3000, 4, [["Luke", 0.5], ["Leia", 1]], 2000],
-            [3000, 4, [["Leia", 1]], 1000]
+            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
+            [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
+            [3000, 4, [[Leia, 1]], 1000]
         ]
     ]
     :
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [30000, 4, [["XWing", .75], ["Luke", 1]], 7500], // Wave data for level 1
-            [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 5000],
-            [15000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 8, [["XWing", .5], ["Leia", 1]], 500],
-            [5000, 4, [["XWing", .5], ["Luke", 0.75], ["Leia", 1]], 1000],
-            [10000, 10, [["XWing", .5], ["Luke", 0.7], ["Leia", 1]], 300]
+            [30000, 4, [[XWing, .75], [Luke, 1]], 7500], // Wave data for level 1
+            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 5000],
+            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
+            [10000, 8, [[XWing, .5], [Leia, 1]], 500],
+            [5000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
+            [10000, 10, [[XWing, .5], [Luke, 0.7], [Leia, 1]], 300]
         ]
     ];
 
@@ -119,7 +119,6 @@ LevelScene.prototype.startTimerToNextWave = function () {
 };
 
 LevelScene.prototype.sendEnemyInWave = function (wave) {
-    var that = this;
     if (wave.remainingEnemies <= 0) {
         console.log("end of wave");
         this.endWave();
@@ -281,7 +280,7 @@ LevelScene.prototype.update = function () {
             }
             if (this.allies[i] && this.allies[i][j]
                 && this.allies[i][j].removeFromWorld) {
-                this.allies[i].splice(j, 1);
+                delete this.allies[i][j];
             }
             if (this.enemies[i] && this.enemies[i][j]
                 && this.enemies[i][j].removeFromWorld) {
@@ -370,31 +369,14 @@ LevelScene.prototype.sendEnemy = function (row) {
     }
     var x = this.cornerOffsetX + (this.numCols * this.colWidth) + 64;
     var y = this.cornerOffsetY + (row * this.rowHeight);
-    var enemyString;
+    var enemyType;
     var rand = Math.random();
     var difficultyArray = levelWaves[this.level][this.wave][2];
     for (var i = 0; i < difficultyArray.length; i++) {
         if (rand < difficultyArray[i][1]) {
-            // console.log(rand, difficultyArray[i][1]);
-            enemyString = difficultyArray[i][0];
-            // console.log(enemyString);
+            enemyType = difficultyArray[i][0];
             break;
         }
-    }
-    var enemyType;
-    switch (enemyString) {
-        case "Luke":
-            enemyType = Luke;
-            break;
-        case "Leia":
-            enemyType = Leia;
-            break;
-        case "XWing":
-            enemyType = XWing;
-            break;
-        default:
-            enemyType = XWing;
-            break;
     }
     var enemy = new enemyType(this, x, y);
     this.addEntity(enemy, this.enemies, row);
