@@ -146,6 +146,7 @@ Congrats.prototype.update = function () {
 Congrats.prototype.draw = function (ctx) {
     ctx.fillStyle = this.color;
     ctx.font = "92px Lucida Console";
+    ctx.textAlign = "start";
     ctx.fillText(this.character, this.x, this.y);
     //console.log("Drawing Text: " + this.character);
 };
@@ -269,6 +270,7 @@ GameOver.prototype.update = function () {
 };
 
 GameOver.prototype.draw = function (ctx) {
+    ctx.textAlign = "start";
     ctx.font = "92px Lucida Console";
     ctx.fillStyle = "rgb("
         + this.color.r + ","

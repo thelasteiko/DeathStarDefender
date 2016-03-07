@@ -1,20 +1,3 @@
-function About(game, x, y, character) {
-    this.color = "Yellow";
-    this.timeout = 300;
-    this.character = character;
-    Entity.call(this, game, x, y);
-}
-
-About.prototype = new Entity();
-About.prototype.constructor = About;
-
-About.prototype.draw = function (ctx) {
-    ctx.fillStyle = this.color;
-    ctx.font = "92px Lucida Console";
-    ctx.fillText(this.character, this.x, this.y);
-    //console.log("Drawing Text: " + this.character);
-};
-
 function TextBlock2(game, x, y, block, align, fontSize) {
     this.color = "White";
     this.block = block;
