@@ -12,12 +12,12 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
-            [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
-            [3000, 4, [[Leia, 1]], 1000]
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 1
+            [3000, 4, [[RebelHero, 0.5], [RebelHero, 1]], 2000],
+            [3000, 4, [[RebelHero, 1]], 1000]
         ],
         [
-            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 1
             [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
             [3000, 4, [[Leia, 1]], 1000]
         ]
@@ -252,7 +252,9 @@ LevelScene.prototype.update = function () {
             });
         }
         // enemy vs allies check
+        //you guys are weird
         if (this.enemies[i] && that.allies[i]) {
+          //don't the callbacks need three arguments?
             this.enemies[i].forEach(function (enemy) {
                 return that.allies[i].some(function (ally) {
                     return enemy.attemptAttack(ally);
@@ -270,6 +272,9 @@ LevelScene.prototype.update = function () {
             }
             if (this.enemies[i] && this.enemies[i][j]) {
                 // Why are we checking enemies by their column?
+                //because I was taught that it's more efficient
+                //to check each row by column because of how
+                //arrays are stored in memory
                 if (!this.enemies[i][j].removeFromWorld) {
                     this.enemies[i][j].update();
                 }
@@ -353,6 +358,7 @@ LevelScene.prototype.draw = function (ctx) {
             if (this.allies[i] && this.allies[i][j]) {
                 this.allies[i][j].draw(ctx);
             }
+            //why are enemies not drawing over allies...?
             if (this.enemies[i] && this.enemies[i][j]) {
                 this.enemies[i][j].draw(ctx);
             }
