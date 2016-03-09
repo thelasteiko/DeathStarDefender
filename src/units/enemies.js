@@ -30,7 +30,7 @@ Enemy.prototype.update = function (jumpHeight) {
                 that.waiting = false;
             }, this.attackInterval);
         }
-        if (jumpHeight) {
+        if (jumpHeight) { //this only applies to luke...
             var jumpDistance = this.attackAnim.elapsedTime / this.attackAnim.totalTime;
 
             if (jumpDistance > 0.5) {
@@ -135,4 +135,19 @@ XWing.prototype.constructor = XWing;
 XWing.prototype.setBoundaries = function () {
     Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
 };
+
+function RebelHero(game, x, y) {
+  var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/theheroweneed.png");
+  var approachAnim = new Animation(spritesheet, 0, 0, 96, 64, .2, 11, true, true, false, null, null, -32, 0);
+  var waitAnim = new Animation(spritesheet, 0, 64, 64, 96, .3, 8, true, true, false, null, null, 0, -32);
+  var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .8, 5, true, true, false, null, null, -28, 0);
+  Enemy.call(this, game, x, y, 50, 25, -50, approachAnim, waitAnim, attackAnim);
+}
+
+RebelHero.prototype = new Enemy();
+RebelHero.prototype.constructor = RebelHero;
+
+RebelHero.prototype.setBoundaries = function () {
+  Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
+}
 

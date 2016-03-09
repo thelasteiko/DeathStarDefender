@@ -12,12 +12,12 @@ var levelWaves = DEBUG ?
     [
         [], // No waves in level 0 (does not exist... yet. Maybe this will be used for survival mode)
         [
-            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
-            [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
-            [3000, 4, [[Leia, 1]], 1000]
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 1
+            [3000, 4, [[RebelHero, 0.5], [RebelHero, 1]], 2000],
+            [3000, 4, [[RebelHero, 1]], 1000]
         ],
         [
-            [1000, 4, [[XWing, 1]], 3000], // Wave data for level 1
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 1
             [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
             [3000, 4, [[Leia, 1]], 1000]
         ]

@@ -154,7 +154,7 @@ function Menu(game, x, y) {
         TieFighter);
     this.addItem(game, "Trooper", 50, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
         Stormtrooper);
-    this.addItem(game, "AT-ST", 25, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
+    this.addItem(game, "AT-ST", 100, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
         ATST);
 }
 

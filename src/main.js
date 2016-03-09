@@ -16,6 +16,7 @@ ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeIdle.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/tiefighter.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/leia.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/xwing_sprite.png");
+ASSET_MANAGER.queueDownload("./assets/img/enemy/theheroweneed.png");
 
 ASSET_MANAGER.queueDownload("./assets/img/menucounter.png");
 ASSET_MANAGER.queueDownload("./assets/img/menubattery.png");
