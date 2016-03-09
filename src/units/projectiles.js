@@ -33,7 +33,6 @@ Projectile.prototype.setBoundaries = function (left, right) {
     Unit.prototype.setBoundaries.call(this, left, right);
 };
 
-// Luke Projectile
 function FlashProjectile(game, x, y) {
     var bulletImage = new SpriteImage(ASSET_MANAGER.getAsset("./assets/img/ally/projectile.png"),
         0,0,24,64);
@@ -49,6 +48,24 @@ FlashProjectile.prototype.draw = function (ctx) {
 };
 
 FlashProjectile.prototype.setBoundaries = function () {
+    Projectile.prototype.setBoundaries.call(this, this.x + 24, this.x + 28);
+};
+
+function ATSTProjectile(game, x, y) {
+    var bulletImage = new SpriteImage(ASSET_MANAGER.getAsset("./assets/img/ally/atstprojectile.png"),
+        0,0,24,64);
+    Projectile.call(this, game, x+44, y, 30, 70, bulletImage);
+}
+
+ATSTProjectile.prototype = new Projectile();
+ATSTProjectile.prototype.constructor = ATSTProjectile;
+
+ATSTProjectile.prototype.draw = function (ctx) {
+    this.animation.drawImage(ctx, this.x, this.y);
+    Entity.prototype.draw.call(this, ctx);
+};
+
+ATSTProjectile.prototype.setBoundaries = function () {
     Projectile.prototype.setBoundaries.call(this, this.x + 24, this.x + 28);
 };
 

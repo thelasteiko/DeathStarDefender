@@ -22,6 +22,7 @@ ASSET_MANAGER.queueDownload("./assets/img/menubattery.png");
 ASSET_MANAGER.queueDownload("./assets/img/menutie.png");
 ASSET_MANAGER.queueDownload("./assets/img/menushovel.png");
 ASSET_MANAGER.queueDownload("./assets/img/menustormtrooper.png");
+ASSET_MANAGER.queueDownload("./assets/img/menuatst.png");
 
 ASSET_MANAGER.queueDownload("./assets/img/ally/battery.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/stormt.png");
@@ -30,6 +31,8 @@ ASSET_MANAGER.queueDownload("./assets/img/ally/lightning.png");
 ASSET_MANAGER.queueDownload("./assets/img/expl.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/sun.png");
 ASSET_MANAGER.queueDownload("./assets/img/ally/projectile.png");
+ASSET_MANAGER.queueDownload("./assets/img/ally/atst.png");
+ASSET_MANAGER.queueDownload("./assets/img/ally/atstprojectile.png");
 
 //Audio
 ASSET_MANAGER.queueDownload("./assets/audio/bomb.mp3");

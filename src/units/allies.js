@@ -43,6 +43,7 @@ Ally.prototype.update = function () {
 
 Ally.prototype.draw = function (ctx) {
     var isDrawn = false;
+    //why?...
     if (this.attacking && this.attackAnim) {
         isDrawn = this.attackAnim.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
     }
@@ -109,3 +110,17 @@ TieFighter.prototype.constructor = TieFighter;
 TieFighter.prototype.setBoundaries = function () {
     Ally.prototype.setBoundaries.call(this, this.x + 32, this.x + 64, this.x + 32, this.x + 64);
 };
+
+function ATST(game, x, y, col, row, attackCallback) {
+  var pic = ASSET_MANAGER.getAsset("./assets/img/ally/atst.png");
+  var idleAnim = new Animation(pic, 0, 0, 64, 96, .5, 6, true, true, false, null, false, 0, -32);
+  var attackAnim = new Animation(pic, 0, 96, 64, 96, .3, 12, true, false, false, null, false, 0, -32);
+  Ally.call(this, game, x, y, col, row, 50, idleAnim, attackAnim, attackCallback, ATSTProjectile, 7, true, true);
+}
+
+ATST.prototype = new Ally();
+ATST.prototype.constructor = ATST;
+
+ATST.prototype.setBoundaries = function() {
+  Ally.prototype.setBoundaries.call(this, this.x+32, this.x + 64, this.x + 32, this.x + 64);
+}

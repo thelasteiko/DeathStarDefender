@@ -152,8 +152,10 @@ function Menu(game, x, y) {
         Battery);
     this.addItem(game, "Fighter", 75, ASSET_MANAGER.getAsset("./assets/img/menutie.png"),
         TieFighter);
-    this.addItem(game, "Trooper", 75, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
+    this.addItem(game, "Trooper", 50, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
         Stormtrooper);
+    this.addItem(game, "AT-ST", 25, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
+        ATST);
 }
 
 Menu.prototype = new Entity();
