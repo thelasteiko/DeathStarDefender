@@ -114,8 +114,11 @@ TieFighter.prototype.setBoundaries = function () {
 function ATST(game, x, y, col, row, attackCallback) {
   var pic = ASSET_MANAGER.getAsset("./assets/img/ally/atst.png");
   var idleAnim = new Animation(pic, 0, 0, 64, 96, .5, 6, true, true, false, null, false, 0, -32);
-  var attackAnim = new Animation(pic, 0, 96, 64, 96, .3, 12, true, false, false, null, false, 0, -32);
-  Ally.call(this, game, x, y, col, row, 50, idleAnim, attackAnim, attackCallback, ATSTProjectile, 7, true, true);
+  //needs to fire projectile at frame 8 of attack
+  //when attackAnim.elapsedTime = attackAnim.frameDuration * 8
+  var attackAnim = new Animation(pic, 0, 96, 64, 96, .2, 12, true, false, false, null, false, 0, -32);
+  this.hasFired = false;
+  Ally.call(this, game, x, y, col, row, 50, idleAnim, attackAnim, attackCallback, ATSTProjectile, 6, true, true);
 }
 
 ATST.prototype = new Ally();
@@ -124,3 +127,31 @@ ATST.prototype.constructor = ATST;
 ATST.prototype.setBoundaries = function() {
   Ally.prototype.setBoundaries.call(this, this.x+32, this.x + 64, this.x + 32, this.x + 64);
 }
+
+ATST.prototype.update = function () {
+    if (this.row != null) { // Allows allies to be drawn in non-game conditions (about screen)
+        if (this.attackAnim && this.attacking) {
+            if (this.attackAnim.isDone()) {
+              this.attackAnim.elapsedTime = 0;
+              this.attacking = false;
+              this.projectileTime = 0;
+              return;
+            } else if (this.attackAnim.elapsedTime >= this.attackAnim.frameDuration * 8 && !this.hasFired) {
+                this.fireProjectile();
+                this.hasFired = true;
+            }
+            
+        } else {
+            this.projectileTime += this.game.game.clockTick;
+            var row = this.game.getRowAndCol(this.x, this.y).row;
+            if (this.projectileTime >= this.projectileInterval) {
+                if (this.game.enemies[row].length > 0) {
+                    this.projectileTime = 0;
+                    this.attacking = true;
+                    this.hasFired = false;
+                }
+            }
+        }
+    }
+    //Unit.prototype.update.call(this);
+};
