@@ -168,11 +168,42 @@ Play.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
+function TitleButton(gameEngine, label, callback) {
+    Entity.call(this, game, x, y);
+    this.label = label;
+    this.callback = callback;
+}
+
+TitleButton.prototype = new Entity();
+TitleButton.prototype.constructor = TitleButton;
+
+TitleButton.draw = function (ctx) {
+
+}
+
+function TitleButtons(gameEngine) {
+    Entity.call(this, game, x, y);
+    this.buttons = [];
+    this.addItem(game, "Password");
+    this.addItem(game, "Instructions");
+    this.addItem(game, "About");
+}
+
+TitleButtons.prototype = new Entity();
+TitleButtons.prototype.constructor = TitleButtons;
+
+TitleButtons.prototype.addItem = function (game, label) {
+    var x = (this.buttons.length + 1) * 128;
+    var y = this.y;
+    this.buttons.push(new TitleButton(game, x, y, label, callback));
+}
+
 function TitleScene(gameEngine) {
     Scene.call(this, gameEngine);
     //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done, 4:ship done]
     this.titleflags = [false, false, false, false, false];
     this.startInput();
+    this.buttons = [];
 }
 
 TitleScene.prototype = new Scene();
@@ -184,8 +215,12 @@ TitleScene.prototype.init = function () {
     this.addEntity(new Play(this));
     this.addEntity(new Ship(this));
     this.addEntity(new Title1(this));
+    this.addEntity(new TextBlock2(this, 400, 460,
+        "P for Password\n", "center", 20));
     this.addEntity(new TextBlock2(this, 400, 480,
-        "Right-click for instructions\n", "center", 20));
+        "I for Instructions\n", "center", 20));
+    this.addEntity(new TextBlock2(this, 400, 500,
+        "A for About\n", "center", 20));
 };
 
 TitleScene.prototype.startInput = function () {
@@ -198,11 +233,19 @@ TitleScene.prototype.startInput = function () {
     };
 
     var clickListener = function () {
+        var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
+        var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
+        
         that.game.changeScene(new LevelScene(that.game, 1));
         removeListeners();
     };
 
     var rightClickListener = function (e) {
+        e.preventDefault();
+        removeListeners();
+    };
+
+    var keyDownListener = function (e) {
         e.preventDefault();
         that.game.changeScene(new AboutScene(that.game, 1));
         removeListeners();
