@@ -139,8 +139,8 @@ XWing.prototype.setBoundaries = function () {
 function RebelHero(game, x, y) {
   var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/theheroweneed.png");
   var approachAnim = new Animation(spritesheet, 0, 0, 96, 64, .2, 11, true, true, false, null, null, -32, 0);
-  var waitAnim = new Animation(spritesheet, 0, 64, 64, 96, .3, 8, true, true, false, null, null, 0, -32);
-  var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .8, 5, true, true, false, null, null, -28, 0);
+  var waitAnim = new Animation(spritesheet, 0, 128, 64, 96, .4, 8, true, true, false, null, null, 0, -32);
+  var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .5, 5, true, false, false, null, null, -8, 0);
   Enemy.call(this, game, x, y, 50, 25, -50, approachAnim, waitAnim, attackAnim);
 }
 

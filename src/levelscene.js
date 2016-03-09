@@ -252,7 +252,9 @@ LevelScene.prototype.update = function () {
             });
         }
         // enemy vs allies check
+        //you guys are weird
         if (this.enemies[i] && that.allies[i]) {
+          //don't the callbacks need three arguments?
             this.enemies[i].forEach(function (enemy) {
                 return that.allies[i].some(function (ally) {
                     return enemy.attemptAttack(ally);
@@ -270,6 +272,9 @@ LevelScene.prototype.update = function () {
             }
             if (this.enemies[i] && this.enemies[i][j]) {
                 // Why are we checking enemies by their column?
+                //because I was taught that it's more efficient
+                //to check each row by column because of how
+                //arrays are stored in memory
                 if (!this.enemies[i][j].removeFromWorld) {
                     this.enemies[i][j].update();
                 }
@@ -353,6 +358,7 @@ LevelScene.prototype.draw = function (ctx) {
             if (this.allies[i] && this.allies[i][j]) {
                 this.allies[i][j].draw(ctx);
             }
+            //why are enemies not drawing over allies...?
             if (this.enemies[i] && this.enemies[i][j]) {
                 this.enemies[i][j].draw(ctx);
             }
