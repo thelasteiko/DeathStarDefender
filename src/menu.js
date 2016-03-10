@@ -97,7 +97,7 @@ MenuItem.prototype.draw = function (ctx, drawPrice) {
             console.log("Assertion Failed: State was \"" + this.state + "\"");
     }
     if (drawPrice) {
-        ctx.textAlign = "Center";
+        ctx.textAlign = "center";
         ctx.fillText(this.title, this.x + 48, this.y + 50, 96);
         ctx.fillText(this.price, this.x + 48, this.y + 70, 96);
     }
@@ -135,9 +135,8 @@ Shovel.prototype.draw = function (ctx) {
     if (!!this.spritesheet) {
         MenuItem.prototype.draw.call(this, ctx);
         ctx.textAlign = "Center";
-        ctx.fillStyle = "Black";
-        ctx.fillText(this.title, this.x + 48, this.y + 55, 96);
         ctx.fillStyle = "White";
+        ctx.fillText(this.title, this.x + 48, this.y + 55, 96);
     }
 };
 

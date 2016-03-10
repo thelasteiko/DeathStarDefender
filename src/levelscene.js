@@ -110,6 +110,14 @@ LevelScene.prototype.init = function (ctx) {
     this.boardtop = new BoardTop(this);
     this.menu = new Menu(this, 0, 0);
     this.addEntity(this.menu);
+    this.levelText = new TextBlock2(this, 700, -10, 
+                                    "Level " + this.level + "\n",
+                                    "center", 20, "Verdana");
+    this.addEntity(this.levelText);
+    this.waveText = new TextBlock2(this, 700, 15, 
+                                    "", "center", 20, "Verdana");
+    this.addEntity(this.waveText);
+    this.updateWaveText();
 
     var that = this;
 
@@ -124,6 +132,11 @@ LevelScene.prototype.init = function (ctx) {
     this.startInput();
     this.startTimerToNextWave();
 };
+
+LevelScene.prototype.updateWaveText = function() {
+    this.waveText.block = "Wave " + (this.wave + 1) + "/" + 
+        levelWaves[this.level].length + "\n";
+}
 
 LevelScene.prototype.startTimerToNextWave = function () {
     this.nextWaveTimer = 0;
@@ -327,9 +340,8 @@ LevelScene.prototype.update = function () {
         if (allEnemiesKilled) { // If all enemies dead, win!
             this.ctx.canvas.removeEventListener("click", this.clickFunction);
             this.ctx.canvas.removeEventListener("mousemove", this.mouseMoveListener);
-            var nextLevel = this.level + 1;
-            var gameOver = (nextLevel === levelWaves.length);
-            this.game.changeScene(new WinScene(this.game, nextLevel, gameOver));
+            var nextLevel = (this.level + 1 === levelWaves.length) ? undefined : this.level + 1;
+            this.game.changeScene(new WinScene(this.game, nextLevel));
         }
     }
 
@@ -338,6 +350,7 @@ LevelScene.prototype.update = function () {
 
     if (this.waveData.startDelay && this.nextWaveTimer > this.waveData.startDelay) {
         this.nextWaveTimer = Number.NEGATIVE_INFINITY;
+        this.updateWaveText();
         this.sendEnemyInWave(this.waveData);
     }
 

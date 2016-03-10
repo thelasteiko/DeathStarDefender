@@ -34,7 +34,7 @@ Vader.prototype.update = function () {
 
     switch (this.state) {
         case "ready":
-            if (theEnemyHasBreachedOurDefenses(64)) {
+            if (theEnemyHasBreachedOurDefenses(96)) {
                 this.state = "popup";
             }
             break;

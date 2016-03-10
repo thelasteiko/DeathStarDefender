@@ -168,7 +168,7 @@ Play.prototype.draw = function (ctx) {
     Entity.prototype.draw.call(this);
 };
 
-function TitleButton(gameEngine, label, callback) {
+function TitleButton(game, x, y, label, callback) {
     Entity.call(this, game, x, y);
     this.label = label;
     this.callback = callback;
@@ -177,33 +177,65 @@ function TitleButton(gameEngine, label, callback) {
 TitleButton.prototype = new Entity();
 TitleButton.prototype.constructor = TitleButton;
 
-TitleButton.draw = function (ctx) {
-
+TitleButton.prototype.draw = function (ctx) {
+    ctx.fillStyle = "#CC2200";
+    ctx.fillRect(this.x, this.y, 150, 30);
+    ctx.fillStyle = "Black";
+    ctx.font = "20px Lucida Console";
+    ctx.textAlign = "center";
+    ctx.fillText(this.label, this.x + 75, this.y + 22);
+    
+    Entity.prototype.draw.call(this);
 }
 
-function TitleButtons(gameEngine) {
+TitleButton.prototype.isSelected = function(x, y) {
+    return x >= this.x && x <= this.x + 150 
+        && y >= this.y && y <= this.y + 30;
+}
+
+function TitleButtons(game, x, y, passwordCallback, 
+                        instructionsCallback, aboutCallback) {
     Entity.call(this, game, x, y);
     this.buttons = [];
-    this.addItem(game, "Password");
-    this.addItem(game, "Instructions");
-    this.addItem(game, "About");
+    this.addItem(game, "Password", passwordCallback);
+    this.addItem(game, "Instructions", instructionsCallback);
+    this.addItem(game, "About", aboutCallback);
 }
 
 TitleButtons.prototype = new Entity();
 TitleButtons.prototype.constructor = TitleButtons;
 
-TitleButtons.prototype.addItem = function (game, label) {
-    var x = (this.buttons.length + 1) * 128;
+TitleButtons.prototype.draw = function(ctx) {
+    for (var i = 0; i < this.buttons.length; i++) {
+        this.buttons[i].draw(ctx);
+    }
+};
+
+TitleButtons.prototype.addItem = function (game, label, callback) {
+    var x = (this.buttons.length + 1) * 172 - 8;
     var y = this.y;
     this.buttons.push(new TitleButton(game, x, y, label, callback));
-}
+};
+
+TitleButtons.prototype.getSelection = function (x, y) {
+    for (var i = 0; i < this.buttons.length; i++) {
+        var button = this.buttons[i];
+        if (button.isSelected(x, y)) {
+            button.callback();
+            return true;
+        }
+    }
+    return false;
+};
 
 function TitleScene(gameEngine) {
     Scene.call(this, gameEngine);
     //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done, 4:ship done]
     this.titleflags = [false, false, false, false, false];
-    this.startInput();
-    this.buttons = [];
+    this.buttons = new TitleButtons(this, 0, 520, 
+                                    this.password.bind(this), 
+                                    this.instructions.bind(this), 
+                                    this.about.bind(this));
 }
 
 TitleScene.prototype = new Scene();
@@ -215,40 +247,33 @@ TitleScene.prototype.init = function () {
     this.addEntity(new Play(this));
     this.addEntity(new Ship(this));
     this.addEntity(new Title1(this));
-    this.addEntity(new TextBlock2(this, 400, 460,
-        "P for Password\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 480,
-        "I for Instructions\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 500,
-        "A for About\n", "center", 20));
+    this.addEntity(this.buttons);
+    this.startInput();
 };
 
 TitleScene.prototype.startInput = function () {
     console.log('Starting input');
     var that = this;
 
-    var removeListeners = function () {
+    this.removeListeners = function () {
         that.game.ctx.canvas.removeEventListener("click", clickListener);
         that.game.ctx.canvas.removeEventListener("contextmenu", rightClickListener);
     };
 
-    var clickListener = function () {
+    var clickListener = function (e) {
         var x = e.clientX - that.game.ctx.canvas.getBoundingClientRect().left;
         var y = e.clientY - that.game.ctx.canvas.getBoundingClientRect().top;
+
+        if (that.buttons.getSelection(x, y)) {
+            return;
+        }
         
         that.game.changeScene(new LevelScene(that.game, 1));
-        removeListeners();
+        that.removeListeners();
     };
 
     var rightClickListener = function (e) {
         e.preventDefault();
-        removeListeners();
-    };
-
-    var keyDownListener = function (e) {
-        e.preventDefault();
-        that.game.changeScene(new AboutScene(that.game, 1));
-        removeListeners();
     };
 
     this.game.ctx.canvas.addEventListener("click", clickListener);
@@ -256,3 +281,28 @@ TitleScene.prototype.startInput = function () {
 
     console.log('Input started');
 };
+
+TitleScene.prototype.password = function() {
+    var password = prompt("Enter the password for a level:");
+    if (password != null) {
+        for (var i = 1; i < levelPasswords.length; i++) {
+            if (levelPasswords[i] === password) {
+                var start = confirm("Correct password! Start level " + i + "?");
+                if (start) {
+                    this.removeListeners();
+                    this.game.changeScene(new LevelScene(this.game, i));
+                    return;
+                }
+            } 
+        }
+        alert("Incorrect password!");
+    }
+}
+
+TitleScene.prototype.instructions = function() {
+    this.game.changeScene(new InstructionsScene(this.game, 1));
+}
+
+TitleScene.prototype.about = function() {
+    this.game.changeScene(new CreditsScene(this.game, 1));
+}

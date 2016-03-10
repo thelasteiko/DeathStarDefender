@@ -179,11 +179,10 @@ TextBlock.prototype.draw = function (ctx) {
 
 };
 
-function WinScene(gameEngine, nextLevel, gameOver) {
+function WinScene(gameEngine, nextLevel) {
     Scene.call(this, gameEngine);
     this.startInput();
-    this.nextLevel = nextLevel;
-    this.gameOver = gameOver;
+    this.nextLevel = nextLevel; // undefined if no next level
 }
 
 WinScene.prototype = new Scene();
@@ -200,13 +199,15 @@ WinScene.prototype.init = function (ctx) {
     for (var i = 0; i < str.length; i++)
         this.addEntity(new Congrats(this, 5 + (i * pxw), 200,
             str.charAt(i)));
-    var victoryText = this.gameOver ?
-        "You have successfully defeated the rebel scum\n"
-        + "and secured your Empire!\n"
-        + "Click to return to the main menu.\n" :
+    var victoryText = this.nextLevel ?
         "You have successfully held off the rebel scum\n"
         + "... for now\n"
-        + "Click to start the next level.\n";
+        + "Click to start level " + this.nextLevel + ".\n" 
+        + "\n"
+        + "Password: " + levelPasswords[this.nextLevel] + "\n" :
+        "You have successfully defeated the rebel scum\n"
+        + "and secured your Empire!\n"
+        + "Click to return to the main menu.\n"
     this.tb = new TextBlock(this, 400, 250, victoryText);
     this.startInput();
 };
@@ -216,10 +217,10 @@ WinScene.prototype.startInput = function () {
     var that = this;
     var clickFunction = function () {
         that.ctx.canvas.removeEventListener("click", clickFunction);
-        if (that.gameOver) {
-            that.game.changeScene(new TitleScene(that.game));
-        } else {
+        if (that.nextLevel) {
             that.game.changeScene(new LevelScene(that.game, that.nextLevel));
+        } else {
+            that.game.changeScene(new TitleScene(that.game));
         }
     };
     this.ctx.canvas.addEventListener("click", clickFunction);
