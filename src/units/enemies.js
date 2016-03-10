@@ -141,7 +141,7 @@ function RebelHero(game, x, y) {
   var approachAnim = new Animation(spritesheet, 0, 0, 96, 64, .2, 11, true, true, false, null, null, -32, 0);
   var waitAnim = new Animation(spritesheet, 0, 128, 64, 96, .4, 8, true, true, false, null, null, 0, -32);
   var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .5, 5, true, false, false, null, null, -8, 0);
-  Enemy.call(this, game, x, y, 50, 25, -50, approachAnim, waitAnim, attackAnim);
+  Enemy.call(this, game, x, y, 35, 50, -50, approachAnim, waitAnim, attackAnim);
 }
 
 RebelHero.prototype = new Enemy();
@@ -149,5 +149,5 @@ RebelHero.prototype.constructor = RebelHero;
 
 RebelHero.prototype.setBoundaries = function () {
   Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
-}
+};
 

@@ -126,7 +126,7 @@ ATST.prototype.constructor = ATST;
 
 ATST.prototype.setBoundaries = function() {
   Ally.prototype.setBoundaries.call(this, this.x+32, this.x + 64, this.x + 32, this.x + 64);
-}
+};
 
 ATST.prototype.update = function () {
     if (this.row != null) { // Allows allies to be drawn in non-game conditions (about screen)
@@ -135,7 +135,6 @@ ATST.prototype.update = function () {
               this.attackAnim.elapsedTime = 0;
               this.attacking = false;
               this.projectileTime = 0;
-              return;
             } else if (this.attackAnim.elapsedTime >= this.attackAnim.frameDuration * 8 && !this.hasFired) {
                 this.fireProjectile();
                 this.hasFired = true;

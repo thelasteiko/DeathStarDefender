@@ -222,6 +222,7 @@ Menu.prototype.placeItem = function (x, y, col, row, attackCallBack) {
     /*Returns an item of the correct type or null if no item is selected.*/
     if (this.current === this.shovel) {
         this.shovel.state = "available";
+        this.current = null;
         return null;
     } else if (this.current && this.counter.payTheMan(this.current.price)) {
         this.current.state = "charging";

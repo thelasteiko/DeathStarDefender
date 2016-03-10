@@ -34,12 +34,20 @@ var levelWaves = DEBUG ?
             [10000, 10, [[XWing, .5], [Luke, 0.7], [Leia, 1]], 300]
         ],
         [
-            [30000, 4, [[XWing, .75], [Luke, 1]], 7500], // Wave data for level 1
-            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 5000],
-            [15000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
+            [30000, 2, [[Leia, 1]], 10000], // Wave data for level 2
+            [15000, 4, [[XWing, .5], [Leia, 1]], 5000],
+            [15000, 4, [[XWing, .5], [Leia, 1]], 1000],
             [10000, 8, [[XWing, .5], [Leia, 1]], 500],
-            [5000, 4, [[XWing, .5], [Luke, 0.75], [Leia, 1]], 1000],
-            [10000, 10, [[XWing, .5], [Luke, 0.7], [Leia, 1]], 300]
+            [5000, 4, [[Luke, 0.75], [Leia, 1]], 1000],
+            [10000, 10, [[XWing, .25], [Leia, 1]], 300]
+        ],
+        [
+            [30000, 4, [[XWing, 1]], 8000], // Wave data for level 2
+            [15000, 4, [[XWing, .5], [RebelHero, .9], [Leia, 1]], 5000],
+            [15000, 4, [[XWing, .5], [Leia, 1]], 1000],
+            [10000, 8, [[XWing, .5], [Luke, 1]], 500],
+            [5000, 4, [[Luke, 0.75], [RebelHero, 1]], 1000],
+            [10000, 10, [[RebelHero, .5], [Leia, 1]], 300]
         ]
     ];
 
@@ -267,7 +275,7 @@ LevelScene.prototype.update = function () {
         // enemy vs allies check
         //you guys are weird
         if (this.enemies[i] && that.allies[i]) {
-          //don't the callbacks need three arguments?
+            //don't the callbacks need three arguments?
             this.enemies[i].forEach(function (enemy) {
                 return that.allies[i].some(function (ally) {
                     return enemy.attemptAttack(ally);
