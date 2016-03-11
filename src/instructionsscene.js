@@ -45,38 +45,45 @@ InstructionsScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.background = new Background(this);
     this.play = new Play2(this);
-    this.addEntity(new TextBlock2(this, 400, 0,
+    var x = 400;
+    var y = 0;
+    this.addEntity(new TextBlock2(this, x, y,
         "Instructions\n", "center", 30));
-    this.addEntity(new TextBlock2(this, 400, 45,
+    this.addEntity(new TextBlock2(this, x, y += 45,
         "Allies\n", "center", 24));
-    this.addEntity(new TextBlock2(this, 400, 80,
-        "Click on an ally in the menu and then \n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 100,
+    this.addEntity(new TextBlock2(this, x, y += 35,
+        "Click on an available ally in the menu and then \n", "center", 20));
+    this.addEntity(new TextBlock2(this, x, y += 20,
         "click on a grid square to place the ally.\n", "center", 20));
-    this.addEntity(new Battery(this, 168, 170));
-    this.addEntity(new TextBlock2(this, 200, 220,
-        "Makes Power\n", "center", 20));
-    this.addEntity(new TieFighter(this, 368, 170));
-    this.addEntity(new TextBlock2(this, 400, 220,
-        "Fires Bullets\n", "center", 20));
-    this.addEntity(new Stormtrooper(this, 568, 170));
-    this.addEntity(new TextBlock2(this, 600, 220,
-        "Absorbs Damage\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 260,
+        this.addEntity(new TextBlock2(this, x, y += 30,
+        "Use the KILL crosshair to remove an ally.\n", "center", 20));
+    this.addEntity(new Battery(this, x - 300 - 32, y += 70));
+    this.addEntity(new TieFighter(this, x - 100 - 32, y));
+    this.addEntity(new Stormtrooper(this, x + 100 - 32, y));
+    this.addEntity(new ATST(this, x + 300 - 32, y));
+    this.addEntity(new TextBlock2(this, x - 300, y += 50,
+        "Make Power\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x - 100, y,
+        "Fire Lasers\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x + 100, y,
+        "Absorb Damage\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x + 300, y,
+        "Strong Lasers\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x, y += 40,
         "Power\n", "center", 24));
-    this.addEntity(new Sun(this, 368, 310));
-    this.addEntity(new TextBlock2(this, 400, 340,
+    this.addEntity(new Sun(this, x - 32, y += 50));
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "Power is required to place allies.\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 360,
+    this.addEntity(new TextBlock2(this, x, y += 20,
         "Available power increases over time automatically.\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 380,
+    this.addEntity(new TextBlock2(this, x, y += 20,
         "Batteries produce more power (shown above). Click to harvest it.\n", "center", 20));
     
-    this.addEntity(new TextBlock2(this, 400, 450,
+    this.addEntity(new TextBlock2(this, x, y += 40,
         "Win by killing all enemies that attack your base.\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 470,
+    this.addEntity(new TextBlock2(this, x, y += 20,
         "Lose by allowing an enemy to reach your base twice in a lane.\n", "center", 20));
-    this.addEntity(new TextBlock2(this, 400, 500,
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "Click anywhere to return to the title screen.\n", "center", 16));
     this.startInput();
 };

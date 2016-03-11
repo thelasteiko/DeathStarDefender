@@ -116,7 +116,7 @@ LevelScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.boardbase = new BoardBase(this);
     this.boardtop = new BoardTop(this);
-    this.menu = new Menu(this, 0, 0);
+    this.menu = new Menu(this, 0, 0, this.level);
     this.addEntity(this.menu);
     this.levelText = new TextBlock2(this, 700, -10, 
                                     "Level " + this.level + "\n",

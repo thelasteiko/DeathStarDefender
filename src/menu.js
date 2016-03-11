@@ -141,7 +141,7 @@ Shovel.prototype.draw = function (ctx) {
 };
 
 //items should appear in a row
-function Menu(game, x, y) {
+function Menu(game, x, y, level) {
     Entity.call(this, game, x, y);
     this.current = null;
     this.counter = new MenuCounter(game, this.x, this.y);
@@ -153,8 +153,10 @@ function Menu(game, x, y) {
         TieFighter);
     this.addItem(game, "Trooper", 50, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
         Stormtrooper);
-    this.addItem(game, "AT-ST", 100, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
-        ATST);
+    if (level > 1) {
+        this.addItem(game, "AT-ST", 100, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
+            ATST);
+    }
 }
 
 Menu.prototype = new Entity();
