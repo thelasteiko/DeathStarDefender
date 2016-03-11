@@ -17,7 +17,12 @@ var levelWaves = DEBUG ?
             [3000, 4, [[RebelHero, 1]], 1000]
         ],
         [
-            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 1
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 2
+            [3000, 4, [[RebelHero, 0.5], [RebelHero, 1]], 2000],
+            [3000, 4, [[RebelHero, 1]], 1000]
+        ],
+        [
+            [1000, 4, [[RebelHero, 1]], 3000], // Wave data for level 3
             [3000, 4, [[Luke, 0.5], [Leia, 1]], 2000],
             [3000, 4, [[Leia, 1]], 1000]
         ]
@@ -118,12 +123,12 @@ LevelScene.prototype.init = function (ctx) {
     this.boardtop = new BoardTop(this);
     this.menu = new Menu(this, 0, 0, this.level);
     this.addEntity(this.menu);
-    this.levelText = new TextBlock2(this, 700, -10, 
-                                    "Level " + this.level + "\n",
-                                    "center", 20, "Verdana");
+    this.levelText = new TextBlock2(this, 700, -10,
+        "Level " + this.level + "\n",
+        "center", 20, "Verdana");
     this.addEntity(this.levelText);
-    this.waveText = new TextBlock2(this, 700, 15, 
-                                    "", "center", 20, "Verdana");
+    this.waveText = new TextBlock2(this, 700, 15,
+        "", "center", 20, "Verdana");
     this.addEntity(this.waveText);
     this.updateWaveText();
 
@@ -141,14 +146,13 @@ LevelScene.prototype.init = function (ctx) {
     this.startTimerToNextWave();
 };
 
-LevelScene.prototype.updateWaveText = function() {
-    this.waveText.block = "Wave " + (this.wave + 1) + "/" + 
+LevelScene.prototype.updateWaveText = function () {
+    this.waveText.block = "Wave " + (this.wave + 1) + "/" +
         levelWaves[this.level].length + "\n";
-}
+};
 
 LevelScene.prototype.startTimerToNextWave = function () {
     this.nextWaveTimer = 0;
-    //if (!this.level || !this.wave) return;
     this.waveData = new Wave(levelWaves[this.level][this.wave]);
 };
 
@@ -273,7 +277,6 @@ LevelScene.prototype.update = function () {
             });
         }
         // enemy vs allies check
-        //you guys are weird
         if (this.enemies[i] && that.allies[i]) {
             //don't the callbacks need three arguments?
             this.enemies[i].forEach(function (enemy) {
@@ -292,10 +295,6 @@ LevelScene.prototype.update = function () {
                 }
             }
             if (this.enemies[i] && this.enemies[i][j]) {
-                // Why are we checking enemies by their column?
-                //because I was taught that it's more efficient
-                //to check each row by column because of how
-                //arrays are stored in memory
                 if (!this.enemies[i][j].removeFromWorld) {
                     this.enemies[i][j].update();
                 }
@@ -379,7 +378,6 @@ LevelScene.prototype.draw = function (ctx) {
             if (this.allies[i] && this.allies[i][j]) {
                 this.allies[i][j].draw(ctx);
             }
-            //why are enemies not drawing over allies...?
             if (this.enemies[i] && this.enemies[i][j]) {
                 this.enemies[i][j].draw(ctx);
             }

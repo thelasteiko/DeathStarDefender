@@ -11,7 +11,6 @@ Background.prototype.update = function () {
 };
 
 Background.prototype.draw = function (ctx) {
-    //I want a picture
     ctx.drawImage(this.spriteSheet,
         0, 0,  // source from sheet
         801, 762,
@@ -22,7 +21,6 @@ Background.prototype.draw = function (ctx) {
 };
 
 function Title1(game) {
-    //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.growanimation = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 0, 640, 277, 0.05, 13, false, false, false);
     this.radius = 100;
     //calling the constructor of entity
@@ -33,14 +31,6 @@ function Title1(game) {
 Title1.prototype = new Entity();
 Title1.prototype.constructor = Title1;
 
-//this is where I would move the x and y if there is anything to move
-Title1.prototype.update = function () {
-
-    //calls the entity's update function which is not doing anything right now...
-    Entity.prototype.update.call(this);
-};
-
-//This is where I would change the animation
 Title1.prototype.draw = function (ctx) {
     if (this.growanimation.isDone()) {
         ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/title2.png"),
@@ -57,7 +47,6 @@ Title1.prototype.draw = function (ctx) {
 };
 
 function Title2(game) {
-    //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.swipeanimation = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 277, 496, 112, 0.05, 12, false, false, false);
     this.radius = 100;
     //calling the constructor of entity
@@ -68,14 +57,6 @@ function Title2(game) {
 Title2.prototype = new Entity();
 Title2.prototype.constructor = Title2;
 
-//this is where I would move the x and y if there is anything to move
-Title2.prototype.update = function () {
-
-    //calls the entity's update function which is not doing anything right now...
-    Entity.prototype.update.call(this);
-};
-
-//This is where I would change the animation
 Title2.prototype.draw = function (ctx) {
     if (this.swipeanimation.isDone()) {
         ctx.drawImage(ASSET_MANAGER.getAsset("./assets/img/title2.png"),
@@ -91,7 +72,6 @@ Title2.prototype.draw = function (ctx) {
 };
 
 function Ship(game) {
-    //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.flyright = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 453, 256, 125, 0.06, 2, false, true, false);
     this.flyleft = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 512, 453, 256, 125, 0.06, 2, false, true, false);
     this.radius = 100;
@@ -104,7 +84,6 @@ function Ship(game) {
 Ship.prototype = new Entity();
 Ship.prototype.constructor = Ship;
 
-//this is where I would move the x and y if there is anything to move
 Ship.prototype.update = function () {
     if (!this.reverse) {
         this.x = this.x + 10;
@@ -124,11 +103,8 @@ Ship.prototype.update = function () {
         if (this.x + 256 < 0)
             this.removeFromWorld = true;
     }
-    //calls the entity's update function which is not doing anything right now...
-    Entity.prototype.update.call(this);
 };
 
-//This is where I would change the animation
 Ship.prototype.draw = function (ctx) {
     if (!this.reverse)
         this.flyright.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -142,7 +118,6 @@ Ship.prototype.draw = function (ctx) {
 };
 
 function Play(game) {
-    //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.playanimation = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 389, 128, 64, 0.1, 8, false, true, false);
     this.radius = 100;
     //calling the constructor of entity
@@ -153,14 +128,6 @@ function Play(game) {
 Play.prototype = new Entity();
 Play.prototype.constructor = Play;
 
-//this is where I would move the x and y if there is anything to move
-Play.prototype.update = function () {
-
-    //calls the entity's update function which is not doing anything right now...
-    Entity.prototype.update.call(this);
-};
-
-//This is where I would change the animation
 Play.prototype.draw = function (ctx) {
     if (this.game.titleflags[2]) {
         this.playanimation.drawFrame(this.game.game.clockTick, ctx, this.x, this.y);
@@ -184,17 +151,17 @@ TitleButton.prototype.draw = function (ctx) {
     ctx.font = "20px Lucida Console";
     ctx.textAlign = "center";
     ctx.fillText(this.label, this.x + 75, this.y + 22);
-    
+
     Entity.prototype.draw.call(this);
-}
+};
 
-TitleButton.prototype.isSelected = function(x, y) {
-    return x >= this.x && x <= this.x + 150 
+TitleButton.prototype.isSelected = function (x, y) {
+    return x >= this.x && x <= this.x + 150
         && y >= this.y && y <= this.y + 30;
-}
+};
 
-function TitleButtons(game, x, y, passwordCallback, 
-                        instructionsCallback, aboutCallback) {
+function TitleButtons(game, x, y, passwordCallback,
+                      instructionsCallback, aboutCallback) {
     Entity.call(this, game, x, y);
     this.buttons = [];
     this.addItem(game, "Password", passwordCallback);
@@ -205,7 +172,7 @@ function TitleButtons(game, x, y, passwordCallback,
 TitleButtons.prototype = new Entity();
 TitleButtons.prototype.constructor = TitleButtons;
 
-TitleButtons.prototype.draw = function(ctx) {
+TitleButtons.prototype.draw = function (ctx) {
     for (var i = 0; i < this.buttons.length; i++) {
         this.buttons[i].draw(ctx);
     }
@@ -232,10 +199,10 @@ function TitleScene(gameEngine) {
     Scene.call(this, gameEngine);
     //[0:grow done, 1:ship @ x>=titlex-20, 2:ship @ x>=80+187, 3:title done, 4:ship done]
     this.titleflags = [false, false, false, false, false];
-    this.buttons = new TitleButtons(this, 0, 520, 
-                                    this.password.bind(this), 
-                                    this.instructions.bind(this), 
-                                    this.about.bind(this));
+    this.buttons = new TitleButtons(this, 0, 520,
+        this.password.bind(this),
+        this.instructions.bind(this),
+        this.about.bind(this));
 }
 
 TitleScene.prototype = new Scene();
@@ -267,7 +234,7 @@ TitleScene.prototype.startInput = function () {
         if (that.buttons.getSelection(x, y)) {
             return;
         }
-        
+
         that.game.changeScene(new LevelScene(that.game, 1));
         that.removeListeners();
     };
@@ -282,27 +249,27 @@ TitleScene.prototype.startInput = function () {
     console.log('Input started');
 };
 
-TitleScene.prototype.password = function() {
+TitleScene.prototype.password = function () {
     var password = prompt("Enter the password for a level:");
     if (password != null) {
         for (var i = 1; i < levelPasswords.length; i++) {
             if (levelPasswords[i] === password) {
-                var start = confirm("Correct password! Start level " + i + "?");
+                var start = confirm("Correct password! Start level " + (i + 1) + "?");
                 if (start) {
                     this.removeListeners();
-                    this.game.changeScene(new LevelScene(this.game, i));
+                    this.game.changeScene(new LevelScene(this.game, i + 1));
                     return;
                 }
-            } 
+            }
         }
         alert("Incorrect password!");
     }
-}
+};
 
-TitleScene.prototype.instructions = function() {
+TitleScene.prototype.instructions = function () {
     this.game.changeScene(new InstructionsScene(this.game, 1));
-}
+};
 
-TitleScene.prototype.about = function() {
+TitleScene.prototype.about = function () {
     this.game.changeScene(new CreditsScene(this.game, 1));
-}
+};

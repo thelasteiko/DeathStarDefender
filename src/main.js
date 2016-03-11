@@ -3,12 +3,9 @@ var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./assets/img/background.png");
 ASSET_MANAGER.queueDownload("./assets/img/title2.png");
 
-// Go specific; delete later
 ASSET_MANAGER.queueDownload("./assets/img/boardbase.png");
 ASSET_MANAGER.queueDownload("./assets/img/boardtop.png");
 
-// ENEMIES
-// Luke
 ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeImg.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeRun.png");
 ASSET_MANAGER.queueDownload("./assets/img/enemy/luke/LukeJumpAttack.png");
@@ -46,5 +43,4 @@ ASSET_MANAGER.downloadAll(function () {
     var gameEngine = new GameEngine();
     gameEngine.init(ctx);
     gameEngine.start(new TitleScene(gameEngine));
-    //gameEngine.start(new WinScene(gameEngine));
 });

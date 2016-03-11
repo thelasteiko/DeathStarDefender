@@ -55,7 +55,7 @@ InstructionsScene.prototype.init = function (ctx) {
         "Click on an available ally in the menu and then \n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "click on a grid square to place the ally.\n", "center", 20));
-        this.addEntity(new TextBlock2(this, x, y += 30,
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "Use the KILL crosshair to remove an ally.\n", "center", 20));
     this.addEntity(new Battery(this, x - 300 - 32, y += 70));
     this.addEntity(new TieFighter(this, x - 100 - 32, y));
@@ -78,12 +78,12 @@ InstructionsScene.prototype.init = function (ctx) {
         "Available power increases over time automatically.\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Batteries produce more power (shown above). Click to harvest it.\n", "center", 20));
-    
+
     this.addEntity(new TextBlock2(this, x, y += 40,
         "Win by killing all enemies that attack your base.\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Lose by allowing an enemy to reach your base twice in a lane.\n", "center", 20));
-    this.addEntity(new TextBlock2(this, x, y += 30,
+    this.addEntity(new TextBlock2(this, x, y + 30,
         "Click anywhere to return to the title screen.\n", "center", 16));
     this.startInput();
 };

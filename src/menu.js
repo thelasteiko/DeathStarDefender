@@ -56,8 +56,6 @@ function MenuItem(game, x, y, title, price, state, spritesheet, objtype) {
     /*Initializes a modular menu item.
      Each spritesheet should be layed out the same.*/
 
-    // TODO: pull the hard-coded numbers out into constructor variables
-
     this.title = title; //string to describe item
     this.price = price;
     //charging animation
@@ -153,7 +151,7 @@ function Menu(game, x, y, level) {
         TieFighter);
     this.addItem(game, "Trooper", 50, ASSET_MANAGER.getAsset("./assets/img/menustormtrooper.png"),
         Stormtrooper);
-    if (level > 1) {
+    if (level > 2) {
         this.addItem(game, "AT-ST", 100, ASSET_MANAGER.getAsset("./assets/img/menuatst.png"),
             ATST);
     }

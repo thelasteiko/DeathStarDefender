@@ -35,8 +35,8 @@ Projectile.prototype.setBoundaries = function (left, right) {
 
 function FlashProjectile(game, x, y) {
     var bulletImage = new SpriteImage(ASSET_MANAGER.getAsset("./assets/img/ally/projectile.png"),
-        0,0,24,64);
-    Projectile.call(this, game, x+44, y, 10, 100, bulletImage);
+        0, 0, 24, 64);
+    Projectile.call(this, game, x + 44, y, 10, 100, bulletImage);
 }
 
 FlashProjectile.prototype = new Projectile();
@@ -53,8 +53,8 @@ FlashProjectile.prototype.setBoundaries = function () {
 
 function ATSTProjectile(game, x, y) {
     var bulletImage = new SpriteImage(ASSET_MANAGER.getAsset("./assets/img/ally/atstprojectile.png"),
-        0,0,24,64);
-    Projectile.call(this, game, x+44, y, 30, 70, bulletImage);
+        0, 0, 24, 64);
+    Projectile.call(this, game, x + 44, y, 30, 70, bulletImage);
 }
 
 ATSTProjectile.prototype = new Projectile();

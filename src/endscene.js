@@ -11,7 +11,6 @@ function randomColor() {
 }
 
 function Play2(game) {
-    //spriteSheet, startX, startY, frameWidth, frameHeight, frameDuration, frames, loop, reverse
     this.playanimation = new Animation(ASSET_MANAGER.getAsset("./assets/img/title2.png"), 0, 389, 128, 64, 0.1, 8, false, true, false);
     this.radius = 100;
     //calling the constructor of entity
@@ -33,16 +32,11 @@ function Firework(game) {
     this.maxheight = Math.floor((Math.random() * 1000) % 500);
     this.speed = Math.floor(Math.random() * 10) + 5;
     this.candynum = Math.floor(Math.random() * 10) + 10;
-    //this.candynum = 1;
     this.state = "rising";
     this.color = randomColor();
     var x = Math.floor((Math.random() * 1000) % 800);
     var y = 576;
     Entity.call(this, game, x, y);
-    //console.log("Speed: " + this.speed);
-    //console.log("(" + x + "," + y + ")");
-    //console.log("Max: " + this.maxheight);
-    //console.log("Color: " + this.color);
 }
 
 Firework.prototype = new Entity();
@@ -57,7 +51,6 @@ Firework.prototype.update = function () {
     } else if (this.y <= this.maxheight) {
         this.state = "exploding";
     } else {
-        //console.log("Speed: " + this.speed);
         this.y -= this.speed;
     }
 };
@@ -148,7 +141,6 @@ Congrats.prototype.draw = function (ctx) {
     ctx.font = "92px Lucida Console";
     ctx.textAlign = "start";
     ctx.fillText(this.character, this.x, this.y);
-    //console.log("Drawing Text: " + this.character);
 };
 
 function TextBlock(game, x, y, block) {
@@ -200,14 +192,14 @@ WinScene.prototype.init = function (ctx) {
         this.addEntity(new Congrats(this, 5 + (i * pxw), 200,
             str.charAt(i)));
     var victoryText = this.nextLevel ?
-        "You have successfully held off the rebel scum\n"
-        + "... for now\n"
-        + "Click to start level " + this.nextLevel + ".\n" 
-        + "\n"
-        + "Password: " + levelPasswords[this.nextLevel] + "\n" :
-        "You have successfully defeated the rebel scum\n"
-        + "and secured your Empire!\n"
-        + "Click to return to the main menu.\n"
+    "You have successfully held off the rebel scum\n"
+    + "... for now\n"
+    + "Click to start level " + this.nextLevel + ".\n"
+    + "\n"
+    + "Password: " + levelPasswords[this.nextLevel - 1] + "\n" :
+    "You have successfully defeated the rebel scum\n"
+    + "and secured your Empire!\n"
+    + "Click to return to the main menu.\n";
     this.tb = new TextBlock(this, 400, 250, victoryText);
     this.startInput();
 };
@@ -238,7 +230,6 @@ WinScene.prototype.draw = function (ctx) {
     ctx.save();
     this.background.draw(ctx);
     Scene.prototype.draw.call(this, ctx);
-    //this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
 };
@@ -249,7 +240,6 @@ function GameOver(game, x, y) {
     this.timeout = 10;
     this.maxtime = 10;
     this.offsetX = 10;
-    //this.offsetY = 10;
     this.colorflip = false;
     Entity.call(this, game, x, y);
 }
@@ -258,8 +248,6 @@ GameOver.prototype = new Entity();
 GameOver.prototype.constructor = GameOver;
 
 GameOver.prototype.update = function () {
-    //this.y += this.offsetY;
-    //this.offsetY = -this.offsetY;
     if (this.timeout <= 0) {
         this.color.r = (this.color.r + 10) % 255;
         this.color.g = (this.color.r + 10) % 100;
@@ -290,7 +278,6 @@ LoseScene.prototype.constructor = LoseScene;
 LoseScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.background = new Background(this);
-    //this.play = new Play2(this);
     this.addEntity(new GameOver(this, 185, 200));
     this.tb = new TextBlock(this, 415, 250,
         "Your hold on the universe has ended.\n"
@@ -303,7 +290,6 @@ LoseScene.prototype.draw = function (ctx) {
     ctx.save();
     this.background.draw(ctx);
     Scene.prototype.draw.call(this, ctx);
-    //this.play.draw(ctx);
     this.tb.draw(ctx);
     ctx.restore();
 };

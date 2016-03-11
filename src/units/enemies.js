@@ -37,7 +37,6 @@ Enemy.prototype.update = function (jumpHeight) {
                 jumpDistance = 1 - jumpDistance;
             }
 
-            //var height = jumpDistance * 2 * totalHeight;
             var height = jumpHeight * (-4 * (jumpDistance * jumpDistance - jumpDistance));
             this.y = this.jumpBase - height;
         }
@@ -48,8 +47,6 @@ Enemy.prototype.update = function (jumpHeight) {
     } else { // approaching from the right
         this.x += this.speed * this.game.game.clockTick;
     }
-// something happens here
-    Entity.prototype.update.call(this);
 }
 ;
 
@@ -137,17 +134,17 @@ XWing.prototype.setBoundaries = function () {
 };
 
 function RebelHero(game, x, y) {
-  var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/theheroweneed.png");
-  var approachAnim = new Animation(spritesheet, 0, 0, 96, 64, .1, 11, true, true, false, null, null, 0, 0);
-  var waitAnim = new Animation(spritesheet, 0, 128, 64, 96, .4, 8, true, true, false, null, null, 0, -32);
-  var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .5, 5, true, false, false, null, null, -8, 0);
-  Enemy.call(this, game, x, y, 35, 50, -50, approachAnim, waitAnim, attackAnim);
+    var spritesheet = ASSET_MANAGER.getAsset("./assets/img/enemy/theheroweneed.png");
+    var approachAnim = new Animation(spritesheet, 0, 0, 96, 64, .1, 11, true, true, false, null, null, 0, 0);
+    var waitAnim = new Animation(spritesheet, 0, 128, 64, 96, .4, 8, true, true, false, null, null, 0, -32);
+    var attackAnim = new Animation(spritesheet, 0, 224, 96, 64, .15, 5, true, false, false, null, null, -8, 0);
+    Enemy.call(this, game, x, y, 35, 50, -50, approachAnim, waitAnim, attackAnim);
 }
 
 RebelHero.prototype = new Enemy();
 RebelHero.prototype.constructor = RebelHero;
 
 RebelHero.prototype.setBoundaries = function () {
-  Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
+    Enemy.prototype.setBoundaries.call(this, this.x + 8, this.x + 32, this.x + 8, this.x + 32, this.x + 8, this.x + 32);
 };
 

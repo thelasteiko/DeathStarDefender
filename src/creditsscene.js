@@ -10,8 +10,8 @@ CreditsScene.prototype.init = function (ctx) {
     Scene.prototype.init.call(this, ctx);
     this.background = new Background(this);
     this.play = new Play2(this);
-    x = 400;
-    y = 0;
+    var x = 400;
+    var y = 0;
     this.addEntity(new TextBlock2(this, 400, y,
         "Credits\n", "center", 30));
     
@@ -52,7 +52,7 @@ CreditsScene.prototype.init = function (ctx) {
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Lucas Studios\n", "center", 20));
     
-    this.addEntity(new TextBlock2(this, x, y += 30,
+    this.addEntity(new TextBlock2(this, x, y + 30,
         "All intellectual property ultimately belongs to Disney.\n", "center", 16));
     
     this.addEntity(new TextBlock2(this, x, 500,
