@@ -17,7 +17,7 @@ CreditsScene.prototype.init = function (ctx) {
     
     this.addEntity(new TextBlock2(this, x, y += 45,
         "Red One\n", "center", 24));
-    this.addEntity(new TextBlock2(this, x, y += 35,
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "UX Lead: Melinda Robertson\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "QA Lead: Grant Toepfer\n", "center", 20));
@@ -25,8 +25,8 @@ CreditsScene.prototype.init = function (ctx) {
         "Engine Lead: Julia Behnen\n", "center", 20));
         
     this.addEntity(new TextBlock2(this, x, y += 45,
-        "Artists\n", "center", 24));
-    this.addEntity(new TextBlock2(this, x, y += 35,
+        "Spritesheet Sources\n", "center", 24));
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "Big Tie-Fighter: kavinveldar\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Luke Skywalker: MetaKnightX\n", "center", 20));
@@ -37,16 +37,22 @@ CreditsScene.prototype.init = function (ctx) {
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Lightning: Pierluigi Pesenti\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
+        "AT-ST: Boarder\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x, y += 20,
+        "Batman: King Shyguy\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x, y += 20,
         "Sci-Fi Tiles: Sherman3D and DEGICA Co., LT\n", "center", 20));
         
     this.addEntity(new TextBlock2(this, x, y += 45,
-        "Special Thanks\n", "center", 24));
-    this.addEntity(new TextBlock2(this, x, y += 35,
+        "Original Sprite Creators\n", "center", 24));
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "Super NES Star Wars\n", "center", 20));
+    this.addEntity(new TextBlock2(this, x, y += 20,
+        "The Adventures of Batman and Robin\n", "center", 20));
     this.addEntity(new TextBlock2(this, x, y += 20,
         "Lucas Studios\n", "center", 20));
     
-    this.addEntity(new TextBlock2(this, x, y += 45,
+    this.addEntity(new TextBlock2(this, x, y += 30,
         "All intellectual property ultimately belongs to Disney.\n", "center", 16));
     
     this.addEntity(new TextBlock2(this, x, 500,
